@@ -3,38 +3,55 @@ package maxÆR.SwingExtensions;
 import java.awt.Color;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+
+import javax.swing.BorderFactory;
 import javax.swing.JPasswordField;
 
+
+/*
+ * Class: PromptPasswordField
+ * Author: Peter Kaminski
+ * Purpose: PromptPasswordField is an extension of the JPasswordField Swing component. 
+ *          PPF has the added ability of displaying a placeholder for a password field whenever it is currently empty.
+ *          This prevents programmers from having to implement the two component JLabel + JPasswordField combo and can make GUIs sexier
+ */
 public class PromptPasswordField extends JPasswordField implements FocusListener
 {
 
    private static final long serialVersionUID = 1L;
    private String promptText;
-   private Color promptTextColor;
+   private Color promptTextColor, borderColor;
    
    
-   //Default constructor for the textField accepts a string for the prompt message
+   //Default constructor for the pwfield accepts a string for the prompt message
    public PromptPasswordField(String promptText){
       this.promptText = promptText;
-      promptTextColor = Color.LIGHT_GRAY;
+      this.promptTextColor = Color.LIGHT_GRAY;
+      this.borderColor = Color.GREEN;
       
       setPromptMessage();
       addFocusListener(this);
+
+      setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
    }
    
    //Constructor to take the prompt message and the color of the prompt text
-   public PromptPasswordField(String promptText, Color promptTextColor){
+   public PromptPasswordField(String promptText, Color promptTextColor, Color borderColor){
       this.promptText = promptText;
       this.promptTextColor = promptTextColor;
+      this.borderColor = borderColor;
       
       setPromptMessage();
       addFocusListener(this);
+      
+      setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
    }
    
-  
+   
    private void setPromptMessage(){
       setForeground(promptTextColor);
       setText(promptText);
+      //This makes our prompt message readable to the user--no echo char set
       setEchoChar((char)0);
    }
    
@@ -42,11 +59,13 @@ public class PromptPasswordField extends JPasswordField implements FocusListener
    @Override
    public void focusGained(FocusEvent e)
    {
-      System.out.println(getPassword().length);
+
+      setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, borderColor));
       if(getPassword().length != 0){
          setText("");
-         setEchoChar('*');
-         setForeground(Color.BLACK);
+         //This is the character we will shadow the password with
+         setEchoChar('•');
+         setForeground(Color.WHITE);
       }
       
    }
@@ -54,6 +73,8 @@ public class PromptPasswordField extends JPasswordField implements FocusListener
    @Override
    public void focusLost(FocusEvent e)
    {
+
+      setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
       if(getPassword().length == 0){
          setPromptMessage(); 
       }

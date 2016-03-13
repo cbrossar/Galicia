@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JTextField;
 
 /*
@@ -18,27 +19,31 @@ public class PromptTextField extends JTextField implements FocusListener
 
    private static final long serialVersionUID = 1L;
    private String promptText;
-   private Color textColor, promptTextColor;
+   private Color textColor, promptTextColor, borderColor;
    
    
    //Default constructor for the textField accepts a string for the prompt message
    public PromptTextField(String promptText){
       this.promptText = promptText;
-      textColor = Color.BLACK;
-      promptTextColor = Color.LIGHT_GRAY;
+      this.textColor = Color.BLACK;
+      this.promptTextColor = Color.LIGHT_GRAY;
+      this.borderColor = Color.GREEN;
       
       setPromptMessage();
       addFocusListener(this);
+      setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
    }
    
    //Constructor to take prompt message and the color of the actual text component
    public PromptTextField(String promptText, Color textColor){
       this.promptText = promptText;
       this.textColor = textColor;
-      promptTextColor = Color.LIGHT_GRAY;
+      this.borderColor = Color.GREEN;
+      this.promptTextColor = Color.LIGHT_GRAY;
       
       setPromptMessage();
       addFocusListener(this);
+      setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
    }
    
    //Constructor to take the prompt message, the color of the text, and the color of the prompt text
@@ -46,9 +51,23 @@ public class PromptTextField extends JTextField implements FocusListener
       this.promptText = promptText;
       this.textColor = textColor;
       this.promptTextColor = promptTextColor;
+      this.borderColor = Color.GREEN;
       
       setPromptMessage();
       addFocusListener(this);
+      setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
+   }
+   
+ //Constructor to take the prompt message, the color of the text, and the color of the prompt text
+   public PromptTextField(String promptText, Color textColor, Color promptTextColor, Color borderColor){
+      this.promptText = promptText;
+      this.textColor = textColor;
+      this.promptTextColor = promptTextColor;
+      this.borderColor = borderColor;
+      
+      setPromptMessage();
+      addFocusListener(this);
+      setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
    }
 
    
@@ -61,6 +80,9 @@ public class PromptTextField extends JTextField implements FocusListener
    @Override
    public void focusGained(FocusEvent e)
    {
+      //Set an underlining border when focused 
+      setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, borderColor));
+      
       if(getText().equals(promptText)){
          setText("");
          setForeground(textColor);
@@ -74,6 +96,8 @@ public class PromptTextField extends JTextField implements FocusListener
       if(getText().equals("")){
          setPromptMessage(); 
       }
+      
+      setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
       
    }
    

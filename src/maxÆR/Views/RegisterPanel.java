@@ -1,14 +1,17 @@
 package maxÆR.Views;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import maxÆR.Constants.GUIConstants;
 import maxÆR.SwingExtensions.PromptPasswordField;
 import maxÆR.SwingExtensions.PromptTextField;
 
@@ -41,13 +44,18 @@ public class RegisterPanel extends JPanel
       createLayout(); 
       
       setVisible(true);
+     
+      setBackground(GUIConstants.thinMintGreen);
    }
    
    private void createGUI(){
       //Instantiate GUI components
       
       //Message
-      maxAerMessage = new JLabel("Create your MaxÆr account!");
+      maxAerMessage = new JLabel("Welcome to MaxÆR!");
+      maxAerMessage.setFont(new Font("Arial", Font.BOLD, 16));
+      //This makes the first focusable object our message, allowing the userNameField to have it's prompt show up initially
+      maxAerMessage.setFocusable(true);
       /*
        * NEED TO STYLE THIS MESSAGE
        */
@@ -59,12 +67,14 @@ public class RegisterPanel extends JPanel
       styleErrors(); 
       
       //Fields
-      userNameField = new PromptTextField("Username");
-      emailField = new PromptTextField("yourEmail@emailHost.com");
-      passwordField = new PromptPasswordField("Password (8 char)");
+      userNameField = new PromptTextField("Username", Color.WHITE, Color.LIGHT_GRAY, Color.WHITE);
+      emailField = new PromptTextField("yourEmail@emailHost.com", Color.WHITE, Color.LIGHT_GRAY, Color.WHITE);
+      passwordField = new PromptPasswordField("Password (8 char or more)", Color.LIGHT_GRAY, Color.WHITE);
       
       //Buttons
       registerBtn = new JButton("Register");
+      
+      styleComponents();
    }
    
    private void addActions(){
@@ -88,13 +98,65 @@ public class RegisterPanel extends JPanel
    }
    
    private void createLayout(){
-      setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+      setLayout(new GridLayout(3, 1));
       
-      add(maxAerMessage);
-      add(userNameField);
-      add(emailField);
-      add(passwordField);
-      add(registerBtn);
+      JPanel messagePanel = new JPanel(new GridLayout(3,1));
+      messagePanel.setBackground(GUIConstants.thinMintGreen);
+      messagePanel.add(maxAerMessage, BorderLayout.NORTH);
+      JLabel accountLabel = new JLabel("Please create a free user account");
+      accountLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+      accountLabel.setBackground(GUIConstants.thinMintGreen);
+      accountLabel.setForeground(Color.WHITE);
+      messagePanel.add(accountLabel);
+      messagePanel.add(getThinMintPanel());
+    
+      add(messagePanel);
+      
+      JPanel fieldsPanel = new JPanel(new GridLayout(3, 1));
+      fieldsPanel.add(userNameField);
+      fieldsPanel.add(emailField);
+      fieldsPanel.add(passwordField);
+      
+      add(fieldsPanel);
+      
+      JPanel buttonPanel = new JPanel(new GridLayout(1, 4));
+      buttonPanel.setBackground(GUIConstants.thinMintGreen);
+      buttonPanel.add(getThinMintPanel());
+      buttonPanel.add(getThinMintPanel());
+      buttonPanel.add(getThinMintPanel());
+      JPanel innerButtonPanel = new JPanel(new GridLayout(3, 1));
+      innerButtonPanel.add(getThinMintPanel());
+      innerButtonPanel.add(registerBtn);
+      innerButtonPanel.add(getThinMintPanel());
+      buttonPanel.add(innerButtonPanel);
+      
+      add(buttonPanel);
+   }
+   
+   private JPanel getThinMintPanel(){
+      return new JPanel(){
+         /**
+          * 
+          */
+         private static final long serialVersionUID = 1L;
+
+         @Override
+         public void setBackground(Color bg)
+         {
+            // TODO Auto-generated method stub
+            super.setBackground(GUIConstants.thinMintGreen);
+         }
+      };
+   }
+   
+   private void styleComponents(){
+      userNameField.setBackground(GUIConstants.thinMintGreen);
+      emailField.setBackground(GUIConstants.thinMintGreen);
+      passwordField.setBackground(GUIConstants.thinMintGreen);
+      maxAerMessage.setBackground(GUIConstants.thinMintGreen);
+      maxAerMessage.setForeground(Color.WHITE);
+      registerBtn.setBackground(GUIConstants.thinMintGreen);
+      registerBtn.setOpaque(true);
    }
    
    private void styleErrors(){
