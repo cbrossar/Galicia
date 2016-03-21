@@ -12,9 +12,10 @@ public class ApplicationWindow extends JFrame
    public ApplicationWindow(){
       setSize(400, 400);
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      setTitle("MaxÆR");
+      setTitle("maxÆR");
       
-      add(new RegisterPanel());
+      //add(new RegisterPanel());
+      add(new LoginPanel());
       setVisible(true);
    }
 
