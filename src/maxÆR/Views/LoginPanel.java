@@ -4,10 +4,8 @@ import javax.swing.*;
 import maxÆR.SwingExtensions.PromptPasswordField;
 import maxÆR.SwingExtensions.PromptTextField;
 import maxÆR.SwingExtensions.RegisteredFonts;
-import maxÆR.Views.RegisterPanel;
 
 import maxÆR.Constants.GUIConstants;
-import sun.jvm.hotspot.asm.Register;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
