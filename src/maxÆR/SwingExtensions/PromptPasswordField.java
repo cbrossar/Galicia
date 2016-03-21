@@ -49,6 +49,19 @@ public class PromptPasswordField extends JPasswordField implements FocusListener
       setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
    }
    
+   //Constructor to take the prompt message and the color of the prompt text
+   public PromptPasswordField(String promptText, Color textColor, Color promptTextColor, Color borderColor){
+       this.promptText = promptText;
+       this.promptTextColor = promptTextColor;
+       this.borderColor = borderColor;
+       this.textColor = textColor;
+      
+      setPromptMessage();
+      addFocusListener(this);
+      
+      setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
+   }
+   
    
    private void setPromptMessage(){
       setForeground(promptTextColor);
