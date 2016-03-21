@@ -27,10 +27,10 @@ public class RegisteredFonts {
         try {
 
             // gets path for ubuntu fonts
-            Path bebasPath = Paths.get("/Users/carleubanks/Desktop/maxaer/galicia/resources/fonts/bebasFonts/");
+            //Path bebasPath = Paths.get("/Users/carleubanks/Desktop/maxaer/galicia/resources/fonts/bebasFonts/BebasNeue Bold.ttf");
 
             // ubuntu Directory to get files
-            File[] bebasDirectory = new File(bebasPath.toString()).listFiles();
+            File[] bebasDirectory = new File("resources/fonts/bebasFonts/").listFiles();
 
             // inputs all files into hash map
             assert bebasDirectory != null;
