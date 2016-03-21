@@ -20,7 +20,7 @@ public class PromptPasswordField extends JPasswordField implements FocusListener
 
    private static final long serialVersionUID = 1L;
    private String promptText;
-   private Color promptTextColor, borderColor;
+   private Color promptTextColor, borderColor, textColor;
    
    
    //Default constructor for the pwfield accepts a string for the prompt message
@@ -28,6 +28,7 @@ public class PromptPasswordField extends JPasswordField implements FocusListener
       this.promptText = promptText;
       this.promptTextColor = Color.LIGHT_GRAY;
       this.borderColor = Color.GREEN;
+      this.textColor = Color.BLACK;
       
       setPromptMessage();
       addFocusListener(this);
@@ -37,9 +38,10 @@ public class PromptPasswordField extends JPasswordField implements FocusListener
    
    //Constructor to take the prompt message and the color of the prompt text
    public PromptPasswordField(String promptText, Color promptTextColor, Color borderColor){
-      this.promptText = promptText;
-      this.promptTextColor = promptTextColor;
-      this.borderColor = borderColor;
+       this.promptText = promptText;
+       this.promptTextColor = promptTextColor;
+       this.borderColor = borderColor;
+       this.textColor = Color.BLACK;
       
       setPromptMessage();
       addFocusListener(this);
@@ -65,7 +67,7 @@ public class PromptPasswordField extends JPasswordField implements FocusListener
          setText("");
          //This is the character we will shadow the password with
          setEchoChar('•');
-         setForeground(Color.WHITE);
+         setForeground(textColor);
       }
       
    }
