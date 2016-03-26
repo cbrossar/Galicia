@@ -52,7 +52,7 @@ public class GameWorld
       
       FixtureDef fixtureDef2 = new FixtureDef();
       PolygonShape edgeShape = new PolygonShape();
-      edgeShape.setAsBox(w, 25/PIXELS_TO_METERS);
+      edgeShape.setAsBox(w*2, 25/PIXELS_TO_METERS);
       fixtureDef2.shape = edgeShape;
       
       
