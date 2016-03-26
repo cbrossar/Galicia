@@ -31,13 +31,15 @@ public class Player
       Gdx.app.log("originy", + sprite.getOriginY() + " ");
       Gdx.app.log("height", + sprite.getHeight() + " ");
       Gdx.app.log("width", + sprite.getWidth() + " ");
+      
       sprite.setPosition(Gdx.graphics.getWidth()/2 - sprite.getWidth()/2, 
-            (Gdx.graphics.getHeight() - sprite.getHeight()));
+            (Gdx.graphics.getHeight() - sprite.getHeight() - 50));
       
       //Set the body definition for the player
       BodyDef bodyDef = new BodyDef();
       bodyDef.type = BodyDef.BodyType.DynamicBody;
-      bodyDef.position.set((sprite.getX() + sprite.getWidth()/2) /PIXELS_TO_METERS,
+      bodyDef.fixedRotation = true;
+      bodyDef.position.set((sprite.getX() + sprite.getWidth()/2) / PIXELS_TO_METERS,
               (sprite.getY() + sprite.getHeight()/2) / PIXELS_TO_METERS);
       
       //Create the body for the player
@@ -45,16 +47,18 @@ public class Player
       
       //Create the shape for our player
       PolygonShape shape = new PolygonShape();
-      shape.setAsBox(sprite.getWidth()/2 / PIXELS_TO_METERS, sprite.getHeight()
-              /2 / PIXELS_TO_METERS);
+      shape.setAsBox(sprite.getWidth()/2 / PIXELS_TO_METERS, sprite.getHeight()/2 / PIXELS_TO_METERS);
       //Now add that shape to the body
       FixtureDef playerDef = new FixtureDef();
       playerDef.shape = shape;
-      playerDef.density = 0.1f;
-      playerDef.restitution = 0f;
+      playerDef.density = 0.02f;
+      playerDef.restitution = 0.01f;
+      playerDef.friction = 0f;
+      
       body.createFixture(playerDef);
       //Free up the shape here
       shape.dispose();
+
    }
    
    public Sprite getPlayerSprite(){

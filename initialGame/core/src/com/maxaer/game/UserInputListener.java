@@ -25,21 +25,26 @@ public class UserInputListener implements InputProcessor
    @Override
    public boolean keyDown(int keycode)
    {
-      // TODO Auto-generated method stub
-      return false;
+      if(keycode == Input.Keys.RIGHT)
+         player.setLinearVelocity(3f, player.getLinearVelocity().y * .75f);
+     if(keycode == Input.Keys.LEFT)
+         player.setLinearVelocity(-3f,player.getLinearVelocity().y * .75f);
+     
+     return true;
    }
 
 
    @Override
    public boolean keyUp(int keycode) {
 
-       if(keycode == Input.Keys.RIGHT)
-           player.setLinearVelocity(1f, 0f);
+       if(keycode == Input.Keys.RIGHT){
+          player.setLinearVelocity(0, player.getLinearVelocity().y * .75f);
+       }
        if(keycode == Input.Keys.LEFT)
-           player.setLinearVelocity(-1f,0f);
+          player.setLinearVelocity(0, player.getLinearVelocity().y * .75f);
 
        if(keycode == Input.Keys.UP)
-           player.applyForceToCenter(0f,-10f,true);
+           player.applyForceToCenter(0f, -5f,true);
        //if(keycode == Input.Keys.DOWN)
           //No key down needed? 
           
