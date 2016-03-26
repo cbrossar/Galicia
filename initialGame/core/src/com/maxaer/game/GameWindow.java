@@ -18,6 +18,10 @@ import com.badlogic.gdx.physics.box2d.*;
 public class GameWindow extends ApplicationAdapter implements InputProcessor {
     SpriteBatch batch;
     Sprite sprite;
+    Sprite block;
+    Sprite platform;
+    Texture blockImg;
+    Texture platImg;
     Texture img;
     World world;
     Body body;
@@ -28,7 +32,8 @@ public class GameWindow extends ApplicationAdapter implements InputProcessor {
     BitmapFont font;
 
 
-    float torque = 0.0f;
+   // float torque = 0.0f;
+    float torque = 0;
     boolean drawSprite = true;
 
     final float PIXELS_TO_METERS = 100f;
@@ -37,20 +42,34 @@ public class GameWindow extends ApplicationAdapter implements InputProcessor {
     public void create() {
 
         batch = new SpriteBatch();
-        img = new Texture("thinmint2.png");
+        
+        blockImg = new Texture("thinmint2.png");
+        block = new Sprite(blockImg);
+        
+        //add a block to the left of the screen
+        BodyDef blockBody = new BodyDef();
+        blockBody.type = BodyDef.BodyType.KinematicBody;
+        blockBody.position.set(0,0);
+        
+        
+        
+        
+        img = new Texture("player.png");
         sprite = new Sprite(img);
 
         sprite.setPosition(-sprite.getWidth()/2,-sprite.getHeight()/2);
 
-        world = new World(new Vector2(0, -1f),true);
+        world = new World(new Vector2(0, -11f),true);
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set((sprite.getX() + sprite.getWidth()/2) /
-                        PIXELS_TO_METERS,
+        bodyDef.position.set((sprite.getX() + sprite.getWidth()/2) / PIXELS_TO_METERS,
                 (sprite.getY() + sprite.getHeight()/2) / PIXELS_TO_METERS);
-
         body = world.createBody(bodyDef);
+        
+        MassData data = new MassData();
+        data.mass = 0;
+        body.setMassData(data);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(sprite.getWidth()/2 / PIXELS_TO_METERS, sprite.getHeight()
@@ -63,25 +82,29 @@ public class GameWindow extends ApplicationAdapter implements InputProcessor {
 
         body.createFixture(fixtureDef);
         shape.dispose();
-
+        
+        platImg = new Texture("black.jpg");
+        platform = new Sprite(platImg);
+        platform.setPosition(-400, -250);		//hard code position
+        
+        
         BodyDef bodyDef2 = new BodyDef();
         bodyDef2.type = BodyDef.BodyType.StaticBody;
-        float w = Gdx.graphics.getWidth()/PIXELS_TO_METERS;
-        // Set the height to just 50 pixels above the bottom of the screen so we can see the edge in the
-        // debug renderer
-        float h = Gdx.graphics.getHeight()/PIXELS_TO_METERS- 50/PIXELS_TO_METERS;
-        //bodyDef2.position.set(0,
-//                h-10/PIXELS_TO_METERS);
-        bodyDef2.position.set(0,0);
+        bodyDef2.position.set((platform.getX() + platform.getWidth()/2) / PIXELS_TO_METERS,
+        (platform.getY() + platform.getHeight()/2) / PIXELS_TO_METERS);
+        
+        //creates the bottom platform
         FixtureDef fixtureDef2 = new FixtureDef();
-
-        EdgeShape edgeShape = new EdgeShape();
-        edgeShape.set(-w/2,-h/2,w/2,-h/2);
-        fixtureDef2.shape = edgeShape;
-
+        PolygonShape recShape = new PolygonShape();
+        recShape.setAsBox(platform.getWidth()/2 / PIXELS_TO_METERS, 
+        		platform.getHeight() /2 / PIXELS_TO_METERS);
+       
+        
+        fixtureDef2.shape = recShape;
         bodyEdgeScreen = world.createBody(bodyDef2);
         bodyEdgeScreen.createFixture(fixtureDef2);
-        edgeShape.dispose();
+        bodyEdgeScreen.getFixtureList().first().setFriction(0);
+        recShape.dispose();
 
         Gdx.input.setInputProcessor(this);
 
@@ -90,6 +113,34 @@ public class GameWindow extends ApplicationAdapter implements InputProcessor {
         font.setColor(Color.BLACK);
         camera = new OrthographicCamera(Gdx.graphics.getWidth(),Gdx.graphics.
                 getHeight());
+        world.setContactListener(new ContactListener() {
+            @Override
+            public void beginContact(Contact contact) {
+                // Check to see if the collision is between the second sprite and the bottom of the screen
+                // If so apply a random amount of upward force to both objects... just because
+                if((contact.getFixtureA().getBody() == bodyEdgeScreen &&
+                        contact.getFixtureB().getBody() == body)
+                        ||
+                        (contact.getFixtureA().getBody() == body &&
+                                contact.getFixtureB().getBody() == bodyEdgeScreen)) {
+
+                	body.applyForceToCenter(0, 50f, true);
+                }
+            }
+
+            @Override
+            public void endContact(Contact contact) {
+            }
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {
+            }
+
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {
+            }
+        });
+        
     }
 
     private float elapsed = 0;
@@ -100,6 +151,7 @@ public class GameWindow extends ApplicationAdapter implements InputProcessor {
         world.step(1f/60f, 6, 2);
 
         body.applyTorque(torque,true);
+        body.getFixtureList().first().setRestitution(0);
 
         sprite.setPosition((body.getPosition().x * PIXELS_TO_METERS) - sprite.
                         getWidth()/2 ,
@@ -116,15 +168,17 @@ public class GameWindow extends ApplicationAdapter implements InputProcessor {
         batch.begin();
 
         if(drawSprite)
+        {
             batch.draw(sprite, sprite.getX(), sprite.getY(),sprite.getOriginX(),
                     sprite.getOriginY(),
                     sprite.getWidth(),sprite.getHeight(),sprite.getScaleX(),sprite.
                             getScaleY(),sprite.getRotation());
-
-        font.draw(batch,
-                "Restitution: " + body.getFixtureList().first().getRestitution(),
-                -Gdx.graphics.getWidth()/2,
-               Gdx.graphics.getHeight()/2 );
+            batch.draw(platform, platform.getX(), platform.getY(), platform.getOriginX(),
+            		platform.getOriginY(), platform.getWidth(), platform.getHeight(), 
+            		platform.getScaleX(), platform.getScaleY(), platform.getRotation());
+            
+        }
+        
         batch.end();
 
         debugRenderer.render(world, debugMatrix);
@@ -146,24 +200,13 @@ public class GameWindow extends ApplicationAdapter implements InputProcessor {
 
 
         if(keycode == Input.Keys.RIGHT)
-            body.setLinearVelocity(1f, 0f);
+            body.applyForceToCenter(3f, 0f, true);
         if(keycode == Input.Keys.LEFT)
-            body.setLinearVelocity(-1f,0f);
+            body.applyForceToCenter(-3f,0f, true);
 
         if(keycode == Input.Keys.UP)
             body.applyForceToCenter(0f,10f,true);
-        if(keycode == Input.Keys.DOWN)
-            body.applyForceToCenter(0f, -10f, true);
 
-        // On brackets ( [ ] ) apply torque, either clock or counterclockwise
-        if(keycode == Input.Keys.RIGHT_BRACKET)
-            torque += 0.1f;
-        if(keycode == Input.Keys.LEFT_BRACKET)
-            torque -= 0.1f;
-
-        // Remove the torque using backslash /
-        if(keycode == Input.Keys.BACKSLASH)
-            torque = 0.0f;
 
         // If user hits spacebar, reset everything back to normal
         if(keycode == Input.Keys.SPACE|| keycode == Input.Keys.NUM_2) {
@@ -172,13 +215,6 @@ public class GameWindow extends ApplicationAdapter implements InputProcessor {
             torque = 0f;
             sprite.setPosition(0f,0f);
             body.setTransform(0f,0f,0f);
-        }
-
-        if(keycode == Input.Keys.COMMA) {
-            body.getFixtureList().first().setRestitution(body.getFixtureList().first().getRestitution()-0.1f);
-        }
-        if(keycode == Input.Keys.PERIOD) {
-            body.getFixtureList().first().setRestitution(body.getFixtureList().first().getRestitution()+0.1f);
         }
         if(keycode == Input.Keys.ESCAPE || keycode == Input.Keys.NUM_1)
             drawSprite = !drawSprite;
@@ -196,9 +232,7 @@ public class GameWindow extends ApplicationAdapter implements InputProcessor {
     // This could result in the object "spinning"
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        body.applyForce(1f,1f,screenX,screenY,true);
-        //body.applyTorque(0.4f,true);
-        return true;
+        return false;
     }
 
     @Override
