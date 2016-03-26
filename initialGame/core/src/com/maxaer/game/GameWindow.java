@@ -25,6 +25,7 @@ public class GameWindow extends ApplicationAdapter implements InputProcessor {
     Texture img;
     World world;
     Body body;
+    Body blockBody;
     Body bodyEdgeScreen;
     Box2DDebugRenderer debugRenderer;
     Matrix4 debugMatrix;
@@ -45,21 +46,38 @@ public class GameWindow extends ApplicationAdapter implements InputProcessor {
         
         blockImg = new Texture("thinmint2.png");
         block = new Sprite(blockImg);
+        block.setPosition(-200, 300);
         
         //add a block to the left of the screen
-        BodyDef blockBody = new BodyDef();
-        blockBody.type = BodyDef.BodyType.KinematicBody;
-        blockBody.position.set(0,0);
+        BodyDef bb = new BodyDef();
+        bb.type = BodyDef.BodyType.DynamicBody;
+        bb.position.set((block.getX() + block.getWidth()/2) / PIXELS_TO_METERS,
+                (block.getY() + block.getHeight()/2) / PIXELS_TO_METERS);
+        world = new World(new Vector2(0, -11f),true);
+        blockBody = world.createBody(bb);
+        blockBody.setLinearVelocity(0f, -2f);
+        blockBody.setGravityScale(0);
         
         
+        PolygonShape bshape = new PolygonShape();
+        bshape.setAsBox(block.getWidth()/2 / PIXELS_TO_METERS, block.getHeight()
+                /2 / PIXELS_TO_METERS);
+
+        FixtureDef fd = new FixtureDef();
+        fd.shape = bshape;
+        fd.density = 0;
+        fd.restitution = 0f;
         
+
+        blockBody.createFixture(fd);
+        bshape.dispose();
         
         img = new Texture("player.png");
         sprite = new Sprite(img);
 
         sprite.setPosition(-sprite.getWidth()/2,-sprite.getHeight()/2);
 
-        world = new World(new Vector2(0, -11f),true);
+        
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -67,9 +85,6 @@ public class GameWindow extends ApplicationAdapter implements InputProcessor {
                 (sprite.getY() + sprite.getHeight()/2) / PIXELS_TO_METERS);
         body = world.createBody(bodyDef);
         
-        MassData data = new MassData();
-        data.mass = 0;
-        body.setMassData(data);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(sprite.getWidth()/2 / PIXELS_TO_METERS, sprite.getHeight()
@@ -93,6 +108,8 @@ public class GameWindow extends ApplicationAdapter implements InputProcessor {
         bodyDef2.position.set((platform.getX() + platform.getWidth()/2) / PIXELS_TO_METERS,
         (platform.getY() + platform.getHeight()/2) / PIXELS_TO_METERS);
         
+        bodyEdgeScreen = world.createBody(bodyDef2);
+        
         //creates the bottom platform
         FixtureDef fixtureDef2 = new FixtureDef();
         PolygonShape recShape = new PolygonShape();
@@ -101,9 +118,8 @@ public class GameWindow extends ApplicationAdapter implements InputProcessor {
        
         
         fixtureDef2.shape = recShape;
-        bodyEdgeScreen = world.createBody(bodyDef2);
+        
         bodyEdgeScreen.createFixture(fixtureDef2);
-        bodyEdgeScreen.getFixtureList().first().setFriction(0);
         recShape.dispose();
 
         Gdx.input.setInputProcessor(this);
@@ -119,17 +135,21 @@ public class GameWindow extends ApplicationAdapter implements InputProcessor {
                 // Check to see if the collision is between the second sprite and the bottom of the screen
                 // If so apply a random amount of upward force to both objects... just because
                 if((contact.getFixtureA().getBody() == bodyEdgeScreen &&
-                        contact.getFixtureB().getBody() == body)
+                        contact.getFixtureB().getBody() == blockBody)
                         ||
-                        (contact.getFixtureA().getBody() == body &&
+                        (contact.getFixtureA().getBody() == blockBody &&
                                 contact.getFixtureB().getBody() == bodyEdgeScreen)) {
 
-                	body.applyForceToCenter(0, 50f, true);
+                	blockBody.setLinearVelocity(0f, 0f);
+                	System.out.println("hello");
                 }
+                
+               
             }
 
             @Override
             public void endContact(Contact contact) {
+            	 
             }
 
             @Override
@@ -155,8 +175,13 @@ public class GameWindow extends ApplicationAdapter implements InputProcessor {
 
         sprite.setPosition((body.getPosition().x * PIXELS_TO_METERS) - sprite.
                         getWidth()/2 ,
-                (body.getPosition().y * PIXELS_TO_METERS) -sprite.getHeight()/2 )
-        ;
+                (body.getPosition().y * PIXELS_TO_METERS) -sprite.getHeight()/2 );
+        
+        block.setPosition((blockBody.getPosition().x * PIXELS_TO_METERS) - block.
+                getWidth()/2 ,
+        (blockBody.getPosition().y * PIXELS_TO_METERS) -block.getHeight()/2 );
+
+        
         sprite.setRotation((float)Math.toDegrees(body.getAngle()));
 
         Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -176,7 +201,9 @@ public class GameWindow extends ApplicationAdapter implements InputProcessor {
             batch.draw(platform, platform.getX(), platform.getY(), platform.getOriginX(),
             		platform.getOriginY(), platform.getWidth(), platform.getHeight(), 
             		platform.getScaleX(), platform.getScaleY(), platform.getRotation());
-            
+            batch.draw(block, block.getX(), block.getY(), block.getOriginX(),
+            		block.getOriginY(), block.getWidth(), block.getHeight(), 
+            		block.getScaleX(), block.getScaleY(), block.getRotation());
         }
         
         batch.end();
