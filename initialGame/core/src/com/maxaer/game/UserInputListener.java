@@ -54,7 +54,7 @@ public class UserInputListener implements InputProcessor
           player.setLinearVelocity(0, player.getLinearVelocity().y * 1f);
 
        if(keycode == Input.Keys.UP){
-          player.applyForceToCenter(0f, -4f,true);
+          player.applyForceToCenter(0f, -2.5f,true);
        }
        
           

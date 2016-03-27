@@ -1,14 +1,18 @@
 package com.maxaer.gameworld;
 
-import com.maxaer.constants.GameConstants;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.maxaer.constants.GameConstants;
 
 /*
  * Class: GameRender
@@ -26,6 +30,7 @@ public class GameRenderer
    private OrthographicCamera camera;
    private Box2DDebugRenderer debug;
    private Matrix4 debugMatrix;
+   private BitmapFont font;
    
    public GameRenderer(GameWorld world){
       //Create the reference to the game world
@@ -40,8 +45,12 @@ public class GameRenderer
       
       batch.setProjectionMatrix(camera.combined);
       
+      font = new BitmapFont(true);
+          
+      font.setColor(Color.SALMON);
       
       debug = new Box2DDebugRenderer();
+      
       
    }
    
@@ -76,13 +85,12 @@ public class GameRenderer
       
       //Have the camera follow the player, but only in the y position
       batch.setProjectionMatrix(camera.combined);
-      camera.position.set(camera.position.x, world.getPlayerSprite().getY() - 50, 0);
+      camera.position.set(camera.position.x, world.getPlayerSprite().getY() - 75, 0);
       camera.update();
       
       //Begin batching sprites here. This will include blocks and the player
       batch.begin();
       
-
       debugMatrix = batch.getProjectionMatrix().cpy().scale(100f,
             100f, 0);
       
@@ -103,6 +111,9 @@ public class GameRenderer
               world.getBlockSprite().getHeight(),world.getPlatformSprite().getScaleX(),
               world.getBlockSprite().getScaleY(),world.getBlockSprite().getRotation());
       
+      
+      font.draw(batch, "Score:" + (int)Math.ceil(22-world.getPlayerBody().getPosition().y), 0, camera.position.y - 275);
+      
       batch.end();
       
 
@@ -111,12 +122,5 @@ public class GameRenderer
    
    }
    
-   private void moveCamera(float x, float y){
-      
-      if(y > camera.viewportHeight){
-         camera.position.set(x, y, 0);
-         camera.update();
-      }
-   }
 
 }
