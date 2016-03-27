@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.maxaer.constants.GameConstants;
 
 public class Player
 {
@@ -16,12 +17,12 @@ public class Player
    private Texture texture;
    private BodyDef bodyDef;
    
-   final float PIXELS_TO_METERS = 100f;
+   final float PIXELS_TO_METERS = GameConstants.PIXEL_TO_METERS;
    
    public Player(World world)
    {
       //Create the player to have the player image
-      texture = new Texture("green_player.png");
+      texture = new Texture("60x80player.png");
       sprite = new Sprite(texture);
       //Initialize with position in the middle of the screen
      

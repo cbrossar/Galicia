@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.maxaer.constants.GameConstants;
 
 public class Platform {
 	private Sprite sprite;
@@ -14,7 +15,7 @@ public class Platform {
 	private Texture texture;
 	private BodyDef bd;
    
-	final float PIXELS_TO_METERS = 100f;
+	final float PIXELS_TO_METERS = GameConstants.PIXEL_TO_METERS;
    
 	public Platform (World world)
 	{

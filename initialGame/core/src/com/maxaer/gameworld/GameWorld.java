@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.maxaer.game.CollisionListener;
 import com.maxaer.gameobjects.Block;
 import com.maxaer.gameobjects.Platform;
 import com.maxaer.gameobjects.Player;
@@ -41,19 +42,18 @@ public class GameWorld
    {
       //Initialize the world to have a slight gravitational pull
       world = new World(new Vector2(0, 3f), true);
+      world.setContactListener(new CollisionListener(this));
       player = new Player(world);
       platform = new Platform(world);
       block = new Block(world);
       
   }
       
-
-   
-   
    public void dispose(){
       world.dispose();
       player.dispose();
       platform.dispose();
+      block.dispose();
    }
    
    public void update(float delta){
@@ -92,6 +92,10 @@ public class GameWorld
    public Block getBlock()
    {
       return block;
+   }
+   
+   public Body getBlockBody(){
+      return block.getBody();
    }
    
 
