@@ -6,11 +6,17 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.maxaer.gameobjects.Block;
+import com.maxaer.gameobjects.Platform;
 import com.maxaer.gameobjects.Player;
 
 /*
@@ -27,44 +33,27 @@ public class GameWorld
    //Create a player and a world
    private Player player;
    private World world;
-   private final float PIXELS_TO_METERS = 100f;
+   private Platform platform;
+   private Block block;
+   
    
    public GameWorld()
    {
       //Initialize the world to have a slight gravitational pull
       world = new World(new Vector2(0, 3f), true);
       player = new Player(world);
-      createPlatform(); 
+      platform = new Platform(world);
+      block = new Block(world);
       
-   }
+  }
+      
+
    
-   private void createPlatform(){
-      
-      float w = Gdx.graphics.getWidth()/PIXELS_TO_METERS;
-      //The height will be starting at the bottom of the screen, 
-      float h = (Gdx.graphics.getHeight()/PIXELS_TO_METERS) - (10/PIXELS_TO_METERS);
-      
-      //Our platform will be static
-      BodyDef bodyDef2 = new BodyDef();
-      bodyDef2.type = BodyDef.BodyType.StaticBody;
-      //Set at the bottom of the screen, plus a padding of 10 px
-      bodyDef2.position.set(0,h);
-      
-      FixtureDef fixtureDef2 = new FixtureDef();
-      PolygonShape edgeShape = new PolygonShape();
-      edgeShape.setAsBox(w*2, 25/PIXELS_TO_METERS);
-      fixtureDef2.shape = edgeShape;
-      
-      
-      Body bodyEdgeScreen = world.createBody(bodyDef2);
-      bodyEdgeScreen.createFixture(fixtureDef2);
-      edgeShape.dispose();
-      
-   }
    
    public void dispose(){
       world.dispose();
       player.dispose();
+      platform.dispose();
    }
    
    public void update(float delta){
@@ -72,12 +61,22 @@ public class GameWorld
    }
    
    public Body getPlayerBody(){
-      return player.getPlayerBody();
+      return player.getBody();
    }
    
    public Sprite getPlayerSprite()
    {
-      return player.getPlayerSprite();
+      return player.getSprite();
+   }
+   
+   public Sprite getPlatformSprite()
+   {
+	   return platform.getPlatformSprite();
+   }
+   
+   public Sprite getBlockSprite()
+   {
+	   return block.getSprite();
    }
    
    public World getWorld()
@@ -88,6 +87,11 @@ public class GameWorld
    public Player getPlayer()
    {
       return player;
+   }
+   
+   public Block getBlock()
+   {
+      return block;
    }
    
 

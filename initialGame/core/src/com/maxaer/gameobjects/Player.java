@@ -21,7 +21,7 @@ public class Player
    public Player(World world)
    {
       //Create the player to have the player image
-      texture = new Texture("default_player.png");
+      texture = new Texture("green_player.png");
       sprite = new Sprite(texture);
       //Initialize with position in the middle of the screen
      
@@ -33,7 +33,7 @@ public class Player
       Gdx.app.log("width", + sprite.getWidth() + " ");
       
       sprite.setPosition(Gdx.graphics.getWidth()/2 - sprite.getWidth()/2, 
-            (Gdx.graphics.getHeight() - sprite.getHeight() - 50));
+            (Gdx.graphics.getHeight() - sprite.getHeight() - 200));
       
       //Set the body definition for the player
       BodyDef bodyDef = new BodyDef();
@@ -44,6 +44,7 @@ public class Player
       
       //Create the body for the player
       body = world.createBody(bodyDef);
+      body.setGravityScale(7);
       
       //Create the shape for our player
       PolygonShape shape = new PolygonShape();
@@ -61,11 +62,11 @@ public class Player
 
    }
    
-   public Sprite getPlayerSprite(){
+   public Sprite getSprite(){
       return sprite;
    }
    
-   public Body getPlayerBody()
+   public Body getBody()
    {
       return body;
    }
@@ -84,7 +85,7 @@ public class Player
    }
    
    //Update the position of the sprite based on the body's current position. 
-   public void updatePlayerPosition(){
+   public void updatePosition(){
       sprite.setPosition((body.getPosition().x * PIXELS_TO_METERS) - sprite.
             getWidth()/2 ,
     (body.getPosition().y * PIXELS_TO_METERS) - sprite.getHeight()/2 );

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
 /*
@@ -70,7 +71,8 @@ public class GameRenderer
       }
       
       //Access the world's reference to Player, and update the position of it's sprite with respect to the body
-      world.getPlayer().updatePlayerPosition();
+      world.getPlayer().updatePosition();
+      world.getBlock().updatePosition();
       
 //      camera.position.x = world.getPlayerBody().getPosition().x ;
 //      camera.position.y = world.getPlayerBody().getPosition().y ;
@@ -87,12 +89,23 @@ public class GameRenderer
 
       debugMatrix = batch.getProjectionMatrix().cpy().scale(100f,
             100f, 0);
+      
+      
       //Render the Player sprite here
       batch.draw(world.getPlayerSprite(), world.getPlayerSprite().getX(), world.getPlayerSprite().getY(),world.getPlayerSprite().getOriginX(),
             world.getPlayerSprite().getOriginY(),
             world.getPlayerSprite().getWidth(),world.getPlayerSprite().getHeight(),world.getPlayerSprite().getScaleX(),world.getPlayerSprite().
                     getScaleY(),world.getPlayerSprite().getRotation());
-      
+      batch.draw(world.getPlatformSprite(), world.getPlatformSprite().getX(),
+    		  world.getPlatformSprite().getY(),world.getPlatformSprite().getOriginX(),
+              world.getPlatformSprite().getOriginY(),world.getPlatformSprite().getWidth(),
+              world.getPlatformSprite().getHeight(),world.getPlatformSprite().getScaleX(),
+              world.getPlatformSprite().getScaleY(),world.getPlatformSprite().getRotation());
+      batch.draw(world.getBlockSprite(), world.getBlockSprite().getX(),
+    		  world.getBlockSprite().getY(),world.getBlockSprite().getOriginX(),
+              world.getBlockSprite().getOriginY(),world.getBlockSprite().getWidth(),
+              world.getBlockSprite().getHeight(),world.getPlatformSprite().getScaleX(),
+              world.getBlockSprite().getScaleY(),world.getBlockSprite().getRotation());
       
       batch.end();
       
