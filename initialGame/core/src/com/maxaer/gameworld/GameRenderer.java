@@ -74,13 +74,9 @@ public class GameRenderer
       world.getPlayer().updatePosition();
       world.getBlock().updatePosition();
       
-//      camera.position.x = world.getPlayerBody().getPosition().x ;
-//      camera.position.y = world.getPlayerBody().getPosition().y ;
-//      Gdx.app.log("X", world.getPlayerBody().getPosition().x + "");
-//      Gdx.app.log("Y", world.getPlayerBody().getPosition().y + "");
-//      Gdx.app.log("xcam", camera.position.x + "");
-//      Gdx.app.log("ycam", camera.position.y + "");
-      //Update the camera here
+      //Have the camera follow the player, but only in the y position
+      batch.setProjectionMatrix(camera.combined);
+      camera.position.set(camera.position.x, world.getPlayerSprite().getY() - 50, 0);
       camera.update();
       
       //Begin batching sprites here. This will include blocks and the player
@@ -113,6 +109,14 @@ public class GameRenderer
       debug.render(world.getWorld(), debugMatrix);
       
    
+   }
+   
+   private void moveCamera(float x, float y){
+      
+      if(y > camera.viewportHeight){
+         camera.position.set(x, y, 0);
+         camera.update();
+      }
    }
 
 }

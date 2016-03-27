@@ -8,12 +8,13 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.maxaer.constants.GameConstants;
 
 public class Block {
 	private Sprite sprite;
 	private Body body;
 	private Texture texture;   
-	final float PIXELS_TO_METERS = 100f;
+	final float PIXELS_TO_METERS = GameConstants.PIXEL_TO_METERS;
 	
 	public Block(World world)
 	{
@@ -41,13 +42,13 @@ public class Block {
 		PolygonShape shape = new PolygonShape();
 		shape.setAsBox(sprite.getWidth()/2 / PIXELS_TO_METERS, sprite.getHeight()/2 / PIXELS_TO_METERS);
 		//Now add that shape to the body
-		FixtureDef playerDef = new FixtureDef();
-		playerDef.shape = shape;
-		playerDef.density = 0.02f;
-		playerDef.restitution = 0f;
-		playerDef.friction = 0f;
+		FixtureDef boxDef = new FixtureDef();
+		boxDef.shape = shape;
+		boxDef.density = 1000f;
+		boxDef.restitution = 0f;
+		boxDef.friction = 0.1f;
       
-		body.createFixture(playerDef);
+		body.createFixture(boxDef);
 		//Free up the shape here
 		shape.dispose();
 		
@@ -66,6 +67,10 @@ public class Block {
 	public Body getBody()
 	{
 		return body;
+	}
+	
+	public void dispose(){
+	   texture.dispose();
 	}
 
 }
