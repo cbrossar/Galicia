@@ -32,12 +32,7 @@ public class CollisionListener implements ContactListener
       
       //The player is here--do something with it
       if(obj1.getBody().equals(world.getPlayerBody())){
-         Gdx.app.log("Player", "We have the player in obj1");
-         obj1.getBody().setLinearVelocity(new Vector2(obj1.getBody().getLinearVelocity().x * .1f,0));
-         if(obj2.getBody().equals(world.getBlockBody())){
-            Gdx.app.log("Body 2", "Hit");
-         }
-        
+                  
       }
       
       //It's here--do something with it
@@ -55,7 +50,6 @@ public class CollisionListener implements ContactListener
       Fixture obj1 = contact.getFixtureA();
       Fixture obj2 = contact.getFixtureB();
       
-      Gdx.app.log("Collision ended", obj1.toString() + " " + obj2.toString());
       
    }
 
