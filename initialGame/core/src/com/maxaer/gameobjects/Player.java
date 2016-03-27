@@ -21,7 +21,7 @@ public class Player
    public Player(World world)
    {
       //Create the player to have the player image
-      texture = new Texture("thinmint2.png");
+      texture = new Texture("default_player.png");
       sprite = new Sprite(texture);
       //Initialize with position in the middle of the screen
      
@@ -52,7 +52,7 @@ public class Player
       FixtureDef playerDef = new FixtureDef();
       playerDef.shape = shape;
       playerDef.density = 0.02f;
-      playerDef.restitution = 0.01f;
+      playerDef.restitution = 0.1f;
       playerDef.friction = 0f;
       
       body.createFixture(playerDef);
