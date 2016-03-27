@@ -22,7 +22,7 @@ public class Player
    public Player(World world)
    {
       //Create the player to have the player image
-      texture = new Texture("60x80player.png");
+      texture = new Texture("green_player.png");
       sprite = new Sprite(texture);
       //Initialize with position in the middle of the screen
      
