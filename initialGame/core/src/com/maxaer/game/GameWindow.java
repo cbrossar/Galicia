@@ -1,19 +1,17 @@
 package com.maxaer.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
+import com.maxaer.screens.GameScreen;
 
 public class GameWindow extends ApplicationAdapter implements InputProcessor {
     SpriteBatch batch;
@@ -38,9 +36,19 @@ public class GameWindow extends ApplicationAdapter implements InputProcessor {
     boolean drawSprite = true;
 
     final float PIXELS_TO_METERS = 100f;
+/*
+ * Class: GameWindow, extends Game
+ * Author: Peter Kaminski
+ * Purpose: GameWindow extends the game class to create a standard ApplicationAdapter. It's primary focus is to serve as the entry point
+ *          for our maxaer game. 
+ *          1. a gamescreen is created and set as the primary screen for the game. 
+ */
+public class GameWindow extends Game{
 
     @Override
     public void create() {
+       
+       setScreen(new GameScreen());
 
         batch = new SpriteBatch();
         
@@ -249,10 +257,6 @@ public class GameWindow extends ApplicationAdapter implements InputProcessor {
         return true;
     }
 
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
 
 
     // On touch we apply force from the direction of the users touch.
@@ -272,13 +276,5 @@ public class GameWindow extends ApplicationAdapter implements InputProcessor {
         return false;
     }
 
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
 
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
-    }
 }
