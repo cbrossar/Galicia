@@ -38,15 +38,14 @@ public class UserInputListener implements InputProcessor
    public boolean keyUp(int keycode) {
 
        if(keycode == Input.Keys.RIGHT){
-          player.setLinearVelocity(0, player.getLinearVelocity().y * .75f);
+          player.setLinearVelocity(0, player.getLinearVelocity().y * 1f);
        }
        if(keycode == Input.Keys.LEFT)
-          player.setLinearVelocity(0, player.getLinearVelocity().y * .75f);
+          player.setLinearVelocity(0, player.getLinearVelocity().y * 1f);
 
        if(keycode == Input.Keys.UP)
-           player.applyForceToCenter(0f, -1f,true);
-       //if(keycode == Input.Keys.DOWN)
-          //No key down needed? 
+           player.applyForceToCenter(0f, -2.2f,true);
+       
           
 
        return true;

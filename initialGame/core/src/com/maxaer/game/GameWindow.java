@@ -15,11 +15,7 @@ public class GameWindow extends Game{
     public void create() {
        
        setScreen(new GameScreen());
-
+        
     }
-
-
-
-
 
 }
