@@ -33,13 +33,14 @@ public class CollisionListener implements ContactListener
       
       //The player is here--do something with it
       if(obj1.getBody().equals(world.getPlayerBody())){
-    	
+    	  world.getPlayer().setJumpability(true);
                   
       }
-  
       
       //It's here--do something with it
       else if(obj2.getBody().equals(world.getPlayerBody())){
+    	 world.getPlayer().setJumpability(true);
+    	  
          Gdx.app.log("Player", "We have the player in obj2");
          obj1.getBody().setLinearVelocity(0, 0);
       }

@@ -8,10 +8,11 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.maxaer.constants.GameConstants;
 
-public class Block {
+public class Block extends Shape {
 	private Sprite sprite;
 	private Body body;
 	private Texture texture;   
@@ -84,6 +85,17 @@ public class Block {
 	
 	public void dispose(){
 	   texture.dispose();
+	}
+	
+	@Override
+	public String toString(){
+		return "Block";
+	}
+
+	@Override
+	public Type getType() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

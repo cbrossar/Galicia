@@ -27,10 +27,13 @@ public class UserInputListener implements InputProcessor
    {
 	   
 	   	if(keycode == Input.Keys.UP){
-	   		player.applyForceToCenter(0f, -2.5f,true);
+	   		if(world.getPlayer().canJump()){
+	   			player.applyForceToCenter(0f, -2.5f,true);
+	   			world.getPlayer().setJumpability(false);
+	   		}
 	   	}
 	   	
-	   	if(keycode == Input.Keys.RIGHT){
+	   	if(keycode == Input.Keys.RIGHT){   		
 	        player.setLinearVelocity(3f, player.getLinearVelocity().y);
 	    }
 	      
@@ -45,6 +48,7 @@ public class UserInputListener implements InputProcessor
 
    @Override
    public boolean keyUp(int keycode) {
+	  
 
        if(keycode == Input.Keys.RIGHT){
     	   player.setLinearVelocity(0, player.getLinearVelocity().y * 1f);
