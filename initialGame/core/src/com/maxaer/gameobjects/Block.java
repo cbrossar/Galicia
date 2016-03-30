@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -33,21 +34,22 @@ public class Block {
       
 		//Create the body for the player
 		body = world.createBody(bodyDef);
-		body.setGravityScale(0);
-		
+		body.setGravityScale(0);		
 		body.setLinearVelocity(0, 2f);
+	
+		
       
 		//Create the shape for our player
 		PolygonShape shape = new PolygonShape();
 		shape.setAsBox(sprite.getWidth()/2 / PIXELS_TO_METERS, sprite.getHeight()/2 / PIXELS_TO_METERS);
 		//Now add that shape to the body
-		FixtureDef playerDef = new FixtureDef();
-		playerDef.shape = shape;
-		playerDef.density = 0.02f;
-		playerDef.restitution = 0f;
-		playerDef.friction = 0f;
+		FixtureDef fd = new FixtureDef();
+		fd.shape = shape;
+		fd.density = 10000f;
+		fd.restitution = 0f;
+		fd.friction = 0f;
       
-		body.createFixture(playerDef);
+		body.createFixture(fd);
 		//Free up the shape here
 		shape.dispose();
 		

@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
 /*
@@ -48,10 +47,9 @@ public class GameRenderer
    /*
     * All rendering goes on here. Super important method
     */
-   public void render(){
+   public void render() {
       
-      
-      // Step the physics simulation forward at a rate of 45hz, recommended by LibGDX
+	  // Step the physics simulation forward at a rate of 45hz, recommended by LibGDX
       world.getWorld().step(1/45f, 6, 2);
       
       //Clear the screen here
@@ -80,6 +78,7 @@ public class GameRenderer
 //      Gdx.app.log("Y", world.getPlayerBody().getPosition().y + "");
 //      Gdx.app.log("xcam", camera.position.x + "");
 //      Gdx.app.log("ycam", camera.position.y + "");
+      
       //Update the camera here
       camera.update();
       
@@ -89,6 +88,7 @@ public class GameRenderer
 
       debugMatrix = batch.getProjectionMatrix().cpy().scale(100f,
             100f, 0);
+      
       
       
       //Render the Player sprite here

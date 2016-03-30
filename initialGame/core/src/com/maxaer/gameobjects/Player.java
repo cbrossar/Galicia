@@ -46,6 +46,7 @@ public class Player
       body = world.createBody(bodyDef);
       body.setGravityScale(7);
       
+      
       //Create the shape for our player
       PolygonShape shape = new PolygonShape();
       shape.setAsBox(sprite.getWidth()/2 / PIXELS_TO_METERS, sprite.getHeight()/2 / PIXELS_TO_METERS);
@@ -53,7 +54,7 @@ public class Player
       FixtureDef playerDef = new FixtureDef();
       playerDef.shape = shape;
       playerDef.density = 0.02f;
-      playerDef.restitution = 0.1f;
+      playerDef.restitution = 0f;
       playerDef.friction = 0f;
       
       body.createFixture(playerDef);
