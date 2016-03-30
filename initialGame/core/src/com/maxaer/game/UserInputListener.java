@@ -47,7 +47,7 @@ public class UserInputListener implements InputProcessor
    public boolean keyUp(int keycode) {
 
        if(keycode == Input.Keys.RIGHT){
-          player.setLinearVelocity(0, player.getLinearVelocity().y * 1f);
+    	   player.setLinearVelocity(0, player.getLinearVelocity().y * 1f);
        }
        if(keycode == Input.Keys.LEFT)
     	  player.setLinearVelocity(0, player.getLinearVelocity().y * 1f);

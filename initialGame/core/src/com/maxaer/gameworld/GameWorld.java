@@ -41,7 +41,7 @@ public class GameWorld
    //private Block block;
    private Vector<Block> blocks;
    private float lastDropTime = TimeUtils.nanoTime();
-   int lastHeight = -100;
+   float lastHeight = -500;
    
    
    public GameWorld()
@@ -65,9 +65,9 @@ public class GameWorld
       //Any updating for our world should go here
 	  if(TimeUtils.nanoTime() - lastDropTime > 1000000000.0){
 		  lastDropTime = TimeUtils.nanoTime();
-		  int heightToUse = (int) Math.min(lastHeight, player.getY()-300);
+		  int heightToUse = (int) Math.min(lastHeight, player.getSprite().getY()-600);
 		  Block b = new Block(world, heightToUse);
-		  lastHeight-=20;
+		  lastHeight=heightToUse;
 		  blocks.add(b);
 	  }
    }
