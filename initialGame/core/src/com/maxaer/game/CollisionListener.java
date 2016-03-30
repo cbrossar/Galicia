@@ -33,6 +33,7 @@ public class CollisionListener implements ContactListener
       
       //The player is here--do something with it
       if(obj1.getBody().equals(world.getPlayerBody())){
+    	
                   
       }
   
@@ -57,7 +58,6 @@ public class CollisionListener implements ContactListener
     //Get the two objects that are colliding
       Fixture obj1 = contact.getFixtureA();
       Fixture obj2 = contact.getFixtureB();
-      
       
    }
 
