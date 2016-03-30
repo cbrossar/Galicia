@@ -1,5 +1,7 @@
 package com.maxaer.gameworld;
 
+import java.util.Vector;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
@@ -14,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.maxaer.game.CollisionListener;
 import com.maxaer.gameobjects.Block;
@@ -35,7 +38,10 @@ public class GameWorld
    private Player player;
    private World world;
    private Platform platform;
-   private Block block;
+   //private Block block;
+   private Vector<Block> blocks;
+   private float lastDropTime = TimeUtils.nanoTime();
+   int lastHeight = -100;
    
    
    public GameWorld()
@@ -45,19 +51,25 @@ public class GameWorld
       world.setContactListener(new CollisionListener(this));
       player = new Player(world);
       platform = new Platform(world);
-      block = new Block(world);
-      
+      blocks = new Vector<Block>();
+  
   }
       
    public void dispose(){
       world.dispose();
       player.dispose();
       platform.dispose();
-      block.dispose();
    }
    
    public void update(float delta){
       //Any updating for our world should go here
+	  if(TimeUtils.nanoTime() - lastDropTime > 1000000000.0){
+		  lastDropTime = TimeUtils.nanoTime();
+		  int heightToUse = (int) Math.min(lastHeight, player.getY()-300);
+		  Block b = new Block(world, heightToUse);
+		  lastHeight-=20;
+		  blocks.add(b);
+	  }
    }
    
    public Body getPlayerBody(){
@@ -74,11 +86,6 @@ public class GameWorld
 	   return platform.getPlatformSprite();
    }
    
-   public Sprite getBlockSprite()
-   {
-	   return block.getSprite();
-   }
-   
    public World getWorld()
    {
       return world;
@@ -89,13 +96,8 @@ public class GameWorld
       return player;
    }
    
-   public Block getBlock()
-   {
-      return block;
-   }
-   
-   public Body getBlockBody(){
-      return block.getBody();
+   public Vector<Block> getBlocks(){
+	   return blocks;
    }
    
 

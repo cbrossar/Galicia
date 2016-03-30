@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.maxaer.gameobjects.Block;
 import com.maxaer.gameworld.GameWorld;
 
 /*
@@ -34,11 +35,18 @@ public class CollisionListener implements ContactListener
       if(obj1.getBody().equals(world.getPlayerBody())){
                   
       }
+  
       
       //It's here--do something with it
-      if(obj2.getBody().equals(world.getPlayerBody())){
+      else if(obj2.getBody().equals(world.getPlayerBody())){
          Gdx.app.log("Player", "We have the player in obj2");
          obj1.getBody().setLinearVelocity(0, 0);
+      }
+      
+      //Both objects are blocks (may have to adjust this if we add more classes with multiple objects)
+      else if(obj1.getClass().equals(obj2.getClass())) {
+    	  obj1.getBody().setAwake(false);
+    	  obj2.getBody().setAwake(false);
       }
       
    }
