@@ -1,6 +1,5 @@
 package com.maxaer.gameobjects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import java.util.Random;
@@ -47,14 +46,16 @@ public class Block extends Shape {
       
 		//Create the body for the player
 		body = world.createBody(bodyDef);
-		body.setGravityScale(0);
-		
+		body.setGravityScale(0);		
 		body.setLinearVelocity(0, 2f);
+	
+		
       
 		//Create the shape for our player
 		PolygonShape shape = new PolygonShape();
 		shape.setAsBox(sprite.getWidth()/2 / PIXELS_TO_METERS, sprite.getHeight()/2 / PIXELS_TO_METERS);
 		//Now add that shape to the body
+
 		FixtureDef boxDef = new FixtureDef();
 		boxDef.shape = shape;
 		boxDef.density = 10000f;
@@ -63,6 +64,7 @@ public class Block extends Shape {
 	
       
 		body.createFixture(boxDef);
+
 		//Free up the shape here
 		shape.dispose();
 		

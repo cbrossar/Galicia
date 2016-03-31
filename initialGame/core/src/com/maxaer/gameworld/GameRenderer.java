@@ -60,10 +60,9 @@ public class GameRenderer
    /*
     * All rendering goes on here. Super important method
     */
-   public void render(){
+   public void render() {
       
-      
-      // Step the physics simulation forward at a rate of 45hz, recommended by LibGDX
+	  // Step the physics simulation forward at a rate of 45hz, recommended by LibGDX
       world.getWorld().step(1/45f, 6, 2);
       
       //Clear the screen here
@@ -85,12 +84,14 @@ public class GameRenderer
       //Access the world's reference to Player, and update the position of it's sprite with respect to the body
       blocks = world.getBlocks();
       world.getPlayer().updatePosition();
+
       for(Block bl : blocks)
     	  bl.updatePosition();
       
       //Have the camera follow the player, but only in the y position
       batch.setProjectionMatrix(camera.combined);
       camera.position.set(camera.position.x, world.getPlayerSprite().getY() - 75, 0);
+
       camera.update();
       
       //Begin batching sprites here. This will include blocks and the player
@@ -98,6 +99,7 @@ public class GameRenderer
       
       debugMatrix = batch.getProjectionMatrix().cpy().scale(100f,
             100f, 0);
+      
       
       
       //Render the Player sprite here
