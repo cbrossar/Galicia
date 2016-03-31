@@ -25,36 +25,40 @@ public class UserInputListener implements InputProcessor
    @Override
    public boolean keyDown(int keycode)
    {
-      if(keycode == Input.Keys.RIGHT && keycode == Input.Keys.UP){
-         player.setLinearVelocity(3f, player.getLinearVelocity().y );
-         player.applyForceToCenter(0f, -4f,true);
-      } else if(keycode == Input.Keys.RIGHT){
-         player.setLinearVelocity(3f, player.getLinearVelocity().y);
-      }
-      
-      if(keycode == Input.Keys.LEFT && keycode == Input.Keys.UP){
-         player.setLinearVelocity(-3f,player.getLinearVelocity().y);
-         player.applyForceToCenter(0f, -4f,true);
-      } else if(keycode == Input.Keys.LEFT){
-         player.setLinearVelocity(-3f,player.getLinearVelocity().y);
-      }
-      
-     
-     return true;
+	   
+	   	if(keycode == Input.Keys.UP){
+	   		if(world.getPlayer().canJump()){
+	   			player.applyForceToCenter(0f, -2.5f,true);
+	   			world.getPlayer().setJumpability(false);
+	   		}
+	   	}
+	   	
+	   	if(keycode == Input.Keys.RIGHT){   		
+	        player.setLinearVelocity(3f, player.getLinearVelocity().y);
+	    }
+	      
+	    if(keycode == Input.Keys.LEFT){
+	        player.setLinearVelocity(-3f,player.getLinearVelocity().y);
+	     }   
+	     
+	    return true;
+	
    }
 
 
    @Override
    public boolean keyUp(int keycode) {
+	  
 
        if(keycode == Input.Keys.RIGHT){
-          player.setLinearVelocity(0, player.getLinearVelocity().y * 1f);
+    	   player.setLinearVelocity(0, player.getLinearVelocity().y * 1f);
        }
        if(keycode == Input.Keys.LEFT)
-          player.setLinearVelocity(0, player.getLinearVelocity().y * 1f);
+    	  player.setLinearVelocity(0, player.getLinearVelocity().y * 1f);
 
        if(keycode == Input.Keys.UP){
-          player.applyForceToCenter(0f, -2.5f,true);
+    	   if(player.getLinearVelocity().y == 0)
+    		   player.applyForceToCenter(0f, -2.5f,true);
        }
        
           

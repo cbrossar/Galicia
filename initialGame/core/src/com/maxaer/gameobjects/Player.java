@@ -16,6 +16,7 @@ public class Player
    private Body body;
    private Texture texture;
    private BodyDef bodyDef;
+   private Boolean jumpability;
    
    final float PIXELS_TO_METERS = GameConstants.PIXEL_TO_METERS;
    
@@ -63,6 +64,10 @@ public class Player
 
    }
    
+   public void setJumpability(Boolean b){
+	   jumpability = b;
+   }
+   
    public Sprite getSprite(){
       return sprite;
    }
@@ -83,6 +88,10 @@ public class Player
    //Clean up player here
    public void dispose(){
       texture.dispose();
+   }
+   
+   public Boolean canJump(){
+	   return jumpability;
    }
    
    //Update the position of the sprite based on the body's current position. 
