@@ -29,12 +29,14 @@ import com.maxaer.gameobjects.Block;
 public class GameRenderer
 {
    private SpriteBatch batch;
+   private SpriteBatch hudBatch;
    private GameWorld world;
    private OrthographicCamera camera;
    private ShapeRenderer shapeRenderer;
    private Box2DDebugRenderer debug;
    private Matrix4 debugMatrix;
    private BitmapFont font;
+   private BitmapFont deathFont;
    private int score = 0;
    private Vector<Block> blocks;
    
@@ -43,6 +45,8 @@ public class GameRenderer
       this.world = world;
       //Init the batch and the camera
       batch = new SpriteBatch();
+      hudBatch = new SpriteBatch();
+      
       shapeRenderer = new ShapeRenderer();
       
       camera = new OrthographicCamera();
@@ -53,9 +57,11 @@ public class GameRenderer
       batch.setProjectionMatrix(camera.combined);
       shapeRenderer.setProjectionMatrix(camera.combined);
       
-      font = new BitmapFont(true);
+      font = new BitmapFont(false);
+      deathFont = new BitmapFont(true);
           
-      font.setColor(Color.SALMON);
+      deathFont.setColor(Color.SALMON);
+      deathFont.setColor(Color.CHARTREUSE);
       
       debug = new Box2DDebugRenderer();
       
@@ -134,12 +140,16 @@ public class GameRenderer
       }
       
       score = Math.max(score,  (int)Math.ceil(22-world.getPlayerBody().getPosition().y));
+     
+      batch.end();
+      
+      hudBatch.begin();
       
       font.setUseIntegerPositions(false);
-      font.draw(batch, "Score: " + score, 0, camera.position.y - 275);
-      font.draw(batch, "" + (int)Math.ceil(22-world.getPlayerBody().getPosition().y), 0, camera.position.y-260);
+      font.draw(hudBatch, "Score: " + score, 0, Gdx.graphics.getHeight());
+      font.draw(hudBatch, "" + (int)Math.ceil(22-world.getPlayerBody().getPosition().y), 0, Gdx.graphics.getHeight() - 15);
       
-      batch.end();
+      hudBatch.end();
       
       //Render the lava here
       Gdx.gl.glEnable(GL30.GL_BLEND);
@@ -162,9 +172,9 @@ public class GameRenderer
       Gdx.gl.glClearColor(1, 1, 1, 1);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
       batch.begin();
-      font.draw(batch, "Game over", camera.position.x - 45, camera.position.y);
-      font.draw(batch, "(Press space to restart)", camera.position.x - 75, camera.position.y + 15);
-      font.draw(batch, "You suck! Score of: " + score, camera.position.x - 75, camera.position.y + 30);
+      deathFont.draw(batch, "Game over", camera.position.x - 45, camera.position.y);
+      deathFont.draw(batch, "(Press space to restart)", camera.position.x - 75, camera.position.y + 15);
+      deathFont.draw(batch, "You suck! Score of: " + score, camera.position.x - 75, camera.position.y + 30);
       batch.end();
    }
    
