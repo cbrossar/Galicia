@@ -54,7 +54,7 @@ public class GameWorld
       player = new Player(world);
       platform = new Platform(world);
       //Create the lava as a rectangle with the width of the screen and with 
-      lava = new Rectangle(0, Gdx.graphics.getHeight() + 60,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+      lava = new Rectangle(0, Gdx.graphics.getHeight() + 180,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
       blocks = new Vector<Block>();
       gameOver = false;
       //Set the input listener for this screen
@@ -77,7 +77,7 @@ public class GameWorld
 		  blocks.add(b);
 	  }
 	  //Update the position of the lava by a few pixels
-	  lava.setPosition(lava.getX(), lava.getY() - (15 * delta));
+	  lava.setPosition(lava.getX(), lava.getY() - (35 * delta));
 	  
 	  
    }

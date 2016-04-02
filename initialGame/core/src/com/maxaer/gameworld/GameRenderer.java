@@ -164,6 +164,7 @@ public class GameRenderer
       batch.begin();
       font.draw(batch, "Game over", camera.position.x - 45, camera.position.y);
       font.draw(batch, "(Press space to restart)", camera.position.x - 75, camera.position.y + 15);
+      font.draw(batch, "You suck! Score of: " + score, camera.position.x - 75, camera.position.y + 30);
       batch.end();
    }
    

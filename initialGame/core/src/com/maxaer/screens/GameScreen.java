@@ -2,7 +2,6 @@ package com.maxaer.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.maxaer.game.UserInputListener;
 import com.maxaer.gameworld.GameRenderer;
 import com.maxaer.gameworld.GameWorld;
 
