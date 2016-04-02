@@ -48,7 +48,6 @@ public class Block extends Shape {
 		body = world.createBody(bodyDef);
 		body.setGravityScale(0);		
 		body.setLinearVelocity(0, 2f);
-	
 		
       
 		//Create the shape for our player
@@ -61,9 +60,12 @@ public class Block extends Shape {
 		boxDef.density = 10000f;
 		boxDef.restitution = 0f;
 		boxDef.friction = 0.1f;
-	
+//		boxDef.filter.categoryBits = GameConstants.CATEGORY_BLOCK;
+//		boxDef.filter.maskBits = GameConstants.MASK_BLOCK;
+//	
       
 		body.createFixture(boxDef);
+		
 
 		//Free up the shape here
 		shape.dispose();

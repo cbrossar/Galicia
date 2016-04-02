@@ -23,17 +23,10 @@ public class Player
    public Player(World world)
    {
       //Create the player to have the player image
+      jumpability = true;
       texture = new Texture("green_player.png");
       sprite = new Sprite(texture);
-      //Initialize with position in the middle of the screen
-     
-      Gdx.app.log("Width", " " + Gdx.graphics.getWidth());
-      Gdx.app.log("Height", " " + Gdx.graphics.getHeight());
-      Gdx.app.log("originx", " " + sprite.getOriginX());
-      Gdx.app.log("originy", + sprite.getOriginY() + " ");
-      Gdx.app.log("height", + sprite.getHeight() + " ");
-      Gdx.app.log("width", + sprite.getWidth() + " ");
-      
+      //Initialize with position in the middle of the screen      
       sprite.setPosition(Gdx.graphics.getWidth()/2 - sprite.getWidth()/2, 
             (Gdx.graphics.getHeight() - sprite.getHeight() - 200));
       
@@ -58,7 +51,9 @@ public class Player
       playerDef.density = 0.02f;
       playerDef.restitution = 0f;
       playerDef.friction = 0f;
-      
+//      playerDef.filter.categoryBits = GameConstants.CATEGORY_PLAYER;
+//      playerDef.filter.maskBits = GameConstants.MASK_PLAYER;
+//      
       body.createFixture(playerDef);
       //Free up the shape here
       shape.dispose();

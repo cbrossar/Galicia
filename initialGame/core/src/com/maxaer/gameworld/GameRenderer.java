@@ -3,12 +3,14 @@ package com.maxaer.gameworld;
 import java.util.Vector;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -29,6 +31,7 @@ public class GameRenderer
    private SpriteBatch batch;
    private GameWorld world;
    private OrthographicCamera camera;
+   private ShapeRenderer shapeRenderer;
    private Box2DDebugRenderer debug;
    private Matrix4 debugMatrix;
    private BitmapFont font;
@@ -40,6 +43,7 @@ public class GameRenderer
       this.world = world;
       //Init the batch and the camera
       batch = new SpriteBatch();
+      shapeRenderer = new ShapeRenderer();
       
       camera = new OrthographicCamera();
       //Set the dimensions of the camera
@@ -47,6 +51,7 @@ public class GameRenderer
       
       
       batch.setProjectionMatrix(camera.combined);
+      shapeRenderer.setProjectionMatrix(camera.combined);
       
       font = new BitmapFont(true);
           
@@ -61,6 +66,13 @@ public class GameRenderer
     * All rendering goes on here. Super important method
     */
    public void render() {
+      
+      if(checkLavaDeath() || world.isGameOver()){
+         world.setGameOver(true);
+         world.setGameOver(true);
+         renderGameOverScreen();
+         return;
+      }
       
 	  // Step the physics simulation forward at a rate of 45hz, recommended by LibGDX
       world.getWorld().step(1/45f, 6, 2);
@@ -95,6 +107,7 @@ public class GameRenderer
       camera.update();
       
       //Begin batching sprites here. This will include blocks and the player
+      batch.enableBlending();
       batch.begin();
       
       debugMatrix = batch.getProjectionMatrix().cpy().scale(100f,
@@ -128,10 +141,36 @@ public class GameRenderer
       
       batch.end();
       
-
+      //Render the lava here
+      Gdx.gl.glEnable(GL30.GL_BLEND);
+      Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA,  GL20.GL_ONE_MINUS_SRC_ALPHA);
+      shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+      shapeRenderer.setTransformMatrix(batch.getTransformMatrix());
+      shapeRenderer.begin(ShapeType.Filled);
+      shapeRenderer.setColor(.95f, .95f, .95f, .95f);
+      shapeRenderer.rect(world.getLava().x, world.getLava().y, world.getLava().width, world.getLava().height);
+      shapeRenderer.end();
+      Gdx.gl.glDisable(GL30.GL_BLEND);
+      
       debug.render(world.getWorld(), debugMatrix);
       
    
+   }
+   
+   public void renderGameOverScreen(){
+      //Clear the screen here
+      Gdx.gl.glClearColor(1, 1, 1, 1);
+      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+      batch.begin();
+      font.draw(batch, "Game over", camera.position.x - 45, camera.position.y);
+      font.draw(batch, "(Press space to restart)", camera.position.x - 75, camera.position.y + 15);
+      batch.end();
+   }
+   
+   
+   //Check if the lava has surpassed the player
+   public boolean checkLavaDeath(){
+      return (world.getLava().getY() <= (world.getPlayer().getSprite().getY() + world.getPlayer().getSprite().getHeight()));
    }
    
 

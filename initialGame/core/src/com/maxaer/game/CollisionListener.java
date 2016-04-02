@@ -1,14 +1,11 @@
 package com.maxaer.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.maxaer.gameobjects.Block;
 import com.maxaer.gameworld.GameWorld;
 
 /*
@@ -34,7 +31,7 @@ public class CollisionListener implements ContactListener
       //The player is here--do something with it
       if(obj1.getBody().equals(world.getPlayerBody())){
     	  world.getPlayer().setJumpability(true);
-                  
+          //Gdx.app.error("Collision", "Collision with player in 2");        
       }
       
       //It's here--do something with it
@@ -43,7 +40,8 @@ public class CollisionListener implements ContactListener
     	  
          Gdx.app.log("Player", "We have the player in obj2");
          obj1.getBody().setLinearVelocity(0, 0);
-      }
+      } 
+      
       
       //Both objects are blocks (may have to adjust this if we add more classes with multiple objects)
       else if(obj1.getClass().equals(obj2.getClass())) {
@@ -56,9 +54,9 @@ public class CollisionListener implements ContactListener
    @Override
    public void endContact(Contact contact)
    {
-    //Get the two objects that are colliding
-      Fixture obj1 = contact.getFixtureA();
-      Fixture obj2 = contact.getFixtureB();
+//    //Get the two objects that are colliding
+//      Fixture obj1 = contact.getFixtureA();
+//      Fixture obj2 = contact.getFixtureB();
       
    }
 
@@ -75,5 +73,6 @@ public class CollisionListener implements ContactListener
       // TODO Auto-generated method stub
       
    }
+   
 
 }

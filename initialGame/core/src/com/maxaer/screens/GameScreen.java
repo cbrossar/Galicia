@@ -24,8 +24,6 @@ public class GameScreen implements Screen
       Gdx.app.log("Game Screen", "Initialized");
       world = new GameWorld();
       renderer = new GameRenderer(world); 
-      //Set the input listener for this screen
-      Gdx.input.setInputProcessor(new UserInputListener(world));
    }
 
    @Override

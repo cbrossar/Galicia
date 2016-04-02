@@ -39,7 +39,7 @@ public class UserInputListener implements InputProcessor
 	      
 	    if(keycode == Input.Keys.LEFT){
 	        player.setLinearVelocity(-3f,player.getLinearVelocity().y);
-	     }   
+	    }
 	     
 	    return true;
 	
@@ -48,6 +48,11 @@ public class UserInputListener implements InputProcessor
 
    @Override
    public boolean keyUp(int keycode) {
+      
+      //If the game is over, the user can press space to create a new game session
+      if(keycode == Input.Keys.SPACE && world.isGameOver()){
+         world.createNewGame(); 
+      }
 	  
 
        if(keycode == Input.Keys.RIGHT){
