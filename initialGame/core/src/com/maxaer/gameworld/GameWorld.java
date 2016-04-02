@@ -2,12 +2,15 @@ package com.maxaer.gameworld;
 
 import java.util.Vector;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.maxaer.game.CollisionListener;
+import com.maxaer.game.UserInputListener;
 import com.maxaer.gameobjects.Block;
 import com.maxaer.gameobjects.Platform;
 import com.maxaer.gameobjects.Player;
@@ -28,27 +31,40 @@ public class GameWorld
    private Player player;
    private World world;
    private Platform platform;
+   private Rectangle lava;
    //private Block block;
    private Vector<Block> blocks;
    private float lastDropTime = TimeUtils.nanoTime();
    float lastHeight = -500;
+   private boolean gameOver;
    
    
    public GameWorld()
    {
+      createNewGame(); 
+  
+  }
+   
+   public void createNewGame(){
+      //Get rid of any preexisting components
+      dispose();
       //Initialize the world to have a slight gravitational pull
       world = new World(new Vector2(0, 3f), true);
       world.setContactListener(new CollisionListener(this));
       player = new Player(world);
       platform = new Platform(world);
+      //Create the lava as a rectangle with the width of the screen and with 
+      lava = new Rectangle(0, Gdx.graphics.getHeight() + 180,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
       blocks = new Vector<Block>();
-  
-  }
+      gameOver = false;
+      //Set the input listener for this screen
+      Gdx.input.setInputProcessor(new UserInputListener(this));
+   }
       
    public void dispose(){
-      world.dispose();
-      player.dispose();
-      platform.dispose();
+      if(world != null) world.dispose();
+      if(player != null) player.dispose();
+      if(platform != null) platform.dispose();
    }
    
    public void update(float delta){
@@ -60,6 +76,15 @@ public class GameWorld
 		  lastHeight=heightToUse;
 		  blocks.add(b);
 	  }
+	  //Update the position of the lava by a few pixels
+	  lava.setPosition(lava.getX(), lava.getY() - (35 * delta));
+	  
+	  
+   }
+   
+   public Rectangle getLava()
+   {
+      return lava;
    }
    
    public Body getPlayerBody(){
@@ -89,6 +114,18 @@ public class GameWorld
    public Vector<Block> getBlocks(){
 	   return blocks;
    }
+   
+   public void setGameOver(boolean gameOver)
+   {
+      this.gameOver = gameOver;
+   }
+   
+   public boolean isGameOver()
+   {
+      return gameOver;
+   }
+   
+   
    
 
 }

@@ -39,6 +39,8 @@ public class Platform {
        
         
         fd.shape = recShape;
+//        fd.filter.categoryBits = GameConstants.CATEGORY_PLATFORM;
+//        fd.filter.maskBits = GameConstants.MASK_PLATFORM;
         
         body.createFixture(fd);
         recShape.dispose();

@@ -2,7 +2,6 @@ package com.maxaer.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.maxaer.game.UserInputListener;
 import com.maxaer.gameworld.GameRenderer;
 import com.maxaer.gameworld.GameWorld;
 
@@ -24,8 +23,6 @@ public class GameScreen implements Screen
       Gdx.app.log("Game Screen", "Initialized");
       world = new GameWorld();
       renderer = new GameRenderer(world); 
-      //Set the input listener for this screen
-      Gdx.input.setInputProcessor(new UserInputListener(world));
    }
 
    @Override
