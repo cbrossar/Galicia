@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
@@ -32,6 +34,7 @@ public class GameRenderer
 {
    private SpriteBatch batch;
    private SpriteBatch hudBatch;
+   private Sprite backgroundSprite;
    private GameWorld world;
    private OrthographicCamera camera;
    private ShapeRenderer shapeRenderer;
@@ -62,11 +65,14 @@ public class GameRenderer
       FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/MonaKo.ttf"));
       FreeTypeFontParameter parameter = new FreeTypeFontParameter();
       parameter.size = 22;
-      parameter.color = Color.CHARTREUSE;
+      parameter.color = Color.WHITE;
       font = generator.generateFont(parameter); // font size 12 pixels
       parameter.size = 30;
       deathFont = generator.generateFont(parameter);
       generator.dispose(); // don't forget to dispose to avoid memory leaks!
+      
+      Texture backgroundTexture = new Texture("background.png");
+      backgroundSprite = new Sprite(backgroundTexture);
       
       debug = new Box2DDebugRenderer();
       
@@ -84,6 +90,7 @@ public class GameRenderer
          renderGameOverScreen();
          return;
       }
+      
       
 	  // Step the physics simulation forward at a rate of 45hz, recommended by LibGDX
       world.getWorld().step(1/45f, 6, 2);
@@ -121,10 +128,11 @@ public class GameRenderer
       batch.enableBlending();
       batch.begin();
       
+
+      renderBackground();
+      
       debugMatrix = batch.getProjectionMatrix().cpy().scale(100f,
             100f, 0);
-      
-      
       
       //Render the Player sprite here
       batch.draw(world.getPlayerSprite(), world.getPlayerSprite().getX(), world.getPlayerSprite().getY(),world.getPlayerSprite().getOriginX(),
@@ -172,11 +180,17 @@ public class GameRenderer
    
    }
    
+   public void renderBackground(){
+      backgroundSprite.setPosition(0, camera.position.y - 600);
+      backgroundSprite.draw(batch);
+   }
+   
    public void renderGameOverScreen(){
       //Clear the screen here
       Gdx.gl.glClearColor(1, 1, 1, 1);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
       hudBatch.begin();
+      backgroundSprite.draw(hudBatch);
       deathFont.draw(hudBatch, "Game over", Gdx.graphics.getWidth()/2 - 100, Gdx.graphics.getHeight()/2);
       deathFont.draw(hudBatch, "(Press space to restart)", Gdx.graphics.getWidth()/2 - 125, Gdx.graphics.getHeight()/2 + 30);
       deathFont.draw(hudBatch, "You suck! Score of: " + score, Gdx.graphics.getWidth()/2 - 125, Gdx.graphics.getHeight()/2 + 60);

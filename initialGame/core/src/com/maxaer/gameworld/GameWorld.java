@@ -3,6 +3,7 @@ package com.maxaer.gameworld;
 import java.util.Vector;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -32,6 +33,7 @@ public class GameWorld
    private World world;
    private Platform platform;
    private Rectangle lava;
+   private Sprite background;
    //private Block block;
    private Vector<Block> blocks;
    private float lastDropTime = TimeUtils.nanoTime();
@@ -57,6 +59,7 @@ public class GameWorld
       lava = new Rectangle(0, Gdx.graphics.getHeight() + 200,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
       blocks = new Vector<Block>();
       gameOver = false;
+      
       //Set the input listener for this screen
       Gdx.input.setInputProcessor(new UserInputListener(this));
    }
@@ -80,6 +83,11 @@ public class GameWorld
 	  lava.setPosition(lava.getX(), lava.getY() - (30 * delta));
 	  
 	  
+   }
+   
+   public Sprite getBackground()
+   {
+      return background;
    }
    
    public Rectangle getLava()
