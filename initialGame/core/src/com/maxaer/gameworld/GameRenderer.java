@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Matrix4;
@@ -57,11 +59,14 @@ public class GameRenderer
       batch.setProjectionMatrix(camera.combined);
       shapeRenderer.setProjectionMatrix(camera.combined);
       
-      font = new BitmapFont(false);
-      deathFont = new BitmapFont(true);
-          
-      deathFont.setColor(Color.SALMON);
-      deathFont.setColor(Color.CHARTREUSE);
+      FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/MonaKo.ttf"));
+      FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+      parameter.size = 22;
+      parameter.color = Color.CHARTREUSE;
+      font = generator.generateFont(parameter); // font size 12 pixels
+      parameter.size = 30;
+      deathFont = generator.generateFont(parameter);
+      generator.dispose(); // don't forget to dispose to avoid memory leaks!
       
       debug = new Box2DDebugRenderer();
       
@@ -146,8 +151,8 @@ public class GameRenderer
       hudBatch.begin();
       
       font.setUseIntegerPositions(false);
-      font.draw(hudBatch, "Score: " + score, 0, Gdx.graphics.getHeight());
-      font.draw(hudBatch, "" + (int)Math.ceil(22-world.getPlayerBody().getPosition().y), 0, Gdx.graphics.getHeight() - 15);
+      font.draw(hudBatch, "Score: " + score, 0, Gdx.graphics.getHeight() - 10);
+      font.draw(hudBatch, "" + (int)Math.ceil(22-world.getPlayerBody().getPosition().y), 0, Gdx.graphics.getHeight() - 30);
       
       hudBatch.end();
       
@@ -171,11 +176,11 @@ public class GameRenderer
       //Clear the screen here
       Gdx.gl.glClearColor(1, 1, 1, 1);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-      batch.begin();
-      deathFont.draw(batch, "Game over", camera.position.x - 45, camera.position.y);
-      deathFont.draw(batch, "(Press space to restart)", camera.position.x - 75, camera.position.y + 15);
-      deathFont.draw(batch, "You suck! Score of: " + score, camera.position.x - 75, camera.position.y + 30);
-      batch.end();
+      hudBatch.begin();
+      deathFont.draw(hudBatch, "Game over", Gdx.graphics.getWidth()/2 - 100, Gdx.graphics.getHeight()/2);
+      deathFont.draw(hudBatch, "(Press space to restart)", Gdx.graphics.getWidth()/2 - 125, Gdx.graphics.getHeight()/2 + 30);
+      deathFont.draw(hudBatch, "You suck! Score of: " + score, Gdx.graphics.getWidth()/2 - 125, Gdx.graphics.getHeight()/2 + 60);
+      hudBatch.end();
    }
    
    

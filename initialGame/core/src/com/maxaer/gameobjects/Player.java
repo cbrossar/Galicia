@@ -24,7 +24,7 @@ public class Player
    {
       //Create the player to have the player image
       jumpability = true;
-      texture = new Texture("green_player.png");
+      texture = new Texture("45x60player.png");
       sprite = new Sprite(texture);
       //Initialize with position in the middle of the screen      
       sprite.setPosition(Gdx.graphics.getWidth()/2 - sprite.getWidth()/2, 

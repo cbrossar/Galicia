@@ -1,6 +1,5 @@
 package com.maxaer.screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.maxaer.gameworld.GameRenderer;
 import com.maxaer.gameworld.GameWorld;
@@ -20,7 +19,6 @@ public class GameScreen implements Screen
    private GameRenderer renderer;
    
    public GameScreen(){
-      Gdx.app.log("Game Screen", "Initialized");
       world = new GameWorld();
       renderer = new GameRenderer(world); 
    }
@@ -31,22 +29,18 @@ public class GameScreen implements Screen
 
    @Override
    public void show() {
-       Gdx.app.log("GameScreen", "show called");
    }
 
    @Override
-   public void hide() {
-       Gdx.app.log("GameScreen", "hide called");     
+   public void hide() {    
    }
 
    @Override
-   public void pause() {
-       Gdx.app.log("GameScreen", "pause called");        
+   public void pause() {       
    }
 
    @Override
-   public void resume() {
-       Gdx.app.log("GameScreen", "resume called");       
+   public void resume() {      
    }
 
    @Override
