@@ -37,7 +37,7 @@ public class GameRenderer
    private Matrix4 debugMatrix;
    private BitmapFont font;
    private BitmapFont deathFont;
-   private int score = 0;
+   private int score = 21;
    private Vector<Block> blocks;
    
    public GameRenderer(GameWorld world){
@@ -139,7 +139,7 @@ public class GameRenderer
               b.getSprite().getScaleY(),b.getSprite().getRotation());
       }
       
-      score = Math.max(score,  (int)Math.ceil(22-world.getPlayerBody().getPosition().y));
+      score = Math.max(score,  (int)Math.ceil(4- world.getPlayerBody().getPosition().y));
      
       batch.end();
       
@@ -147,7 +147,7 @@ public class GameRenderer
       
       font.setUseIntegerPositions(false);
       font.draw(hudBatch, "Score: " + score, 0, Gdx.graphics.getHeight());
-      font.draw(hudBatch, "" + (int)Math.ceil(22-world.getPlayerBody().getPosition().y), 0, Gdx.graphics.getHeight() - 15);
+      font.draw(hudBatch, "" + (int)Math.ceil(4-world.getPlayerBody().getPosition().y), 0, Gdx.graphics.getHeight() - 15);
       
       hudBatch.end();
       
