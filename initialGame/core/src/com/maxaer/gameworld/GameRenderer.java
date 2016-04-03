@@ -76,7 +76,6 @@ public class GameRenderer
       
       debug = new Box2DDebugRenderer();
       
-      
    }
    
    /*
@@ -139,11 +138,13 @@ public class GameRenderer
             world.getPlayerSprite().getOriginY(),
             world.getPlayerSprite().getWidth(),world.getPlayerSprite().getHeight(),world.getPlayerSprite().getScaleX(),world.getPlayerSprite().
                     getScaleY(),world.getPlayerSprite().getRotation());
+      
       batch.draw(world.getPlatformSprite(), world.getPlatformSprite().getX(),
     		  world.getPlatformSprite().getY(),world.getPlatformSprite().getOriginX(),
               world.getPlatformSprite().getOriginY(),world.getPlatformSprite().getWidth(),
               world.getPlatformSprite().getHeight(),world.getPlatformSprite().getScaleX(),
               world.getPlatformSprite().getScaleY(),world.getPlatformSprite().getRotation());
+      
       for(Block b : blocks){
     		  batch.draw(b.getSprite(), b.getSprite().getX(),
     		  b.getSprite().getY(),b.getSprite().getOriginX(),
@@ -152,7 +153,7 @@ public class GameRenderer
               b.getSprite().getScaleY(),b.getSprite().getRotation());
       }
       
-      score = Math.max(score,  (int)Math.ceil(22-world.getPlayerBody().getPosition().y));
+      score = Math.max(score,  (int)Math.abs(Math.ceil(world.getPlayerBody().getPosition().y - 5)));
      
       batch.end();
       
@@ -160,7 +161,7 @@ public class GameRenderer
       
       font.setUseIntegerPositions(false);
       font.draw(hudBatch, "Score: " + score, 0, Gdx.graphics.getHeight() - 10);
-      font.draw(hudBatch, "" + (int)Math.ceil(22-world.getPlayerBody().getPosition().y), 0, Gdx.graphics.getHeight() - 30);
+      font.draw(hudBatch, "" + (int)Math.abs(Math.ceil(world.getPlayerBody().getPosition().y - 5)), 0, Gdx.graphics.getHeight() - 30);
       
       hudBatch.end();
       
