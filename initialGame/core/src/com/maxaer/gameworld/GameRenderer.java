@@ -191,6 +191,7 @@ public class GameRenderer
       Gdx.gl.glClearColor(1, 1, 1, 1);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
       hudBatch.begin();
+      backgroundSprite.setPosition(0, 0);
       backgroundSprite.draw(hudBatch);
       deathFont.draw(hudBatch, "Game over", Gdx.graphics.getWidth()/2 - 100, Gdx.graphics.getHeight()/2);
       deathFont.draw(hudBatch, "(Press space to restart)", Gdx.graphics.getWidth()/2 - 125, Gdx.graphics.getHeight()/2 + 30);
