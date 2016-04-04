@@ -44,7 +44,7 @@ public class Player
       
       //Create the shape for our player
       PolygonShape shape = new PolygonShape();
-      shape.setAsBox(sprite.getWidth()/2 / PIXELS_TO_METERS, sprite.getHeight()/2 / PIXELS_TO_METERS);
+      shape.setAsBox((sprite.getWidth() - 2)/2 / PIXELS_TO_METERS, (sprite.getHeight() - 2)/2 / PIXELS_TO_METERS);
       //Now add that shape to the body
       FixtureDef playerDef = new FixtureDef();
       playerDef.shape = shape;

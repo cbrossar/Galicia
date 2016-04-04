@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -42,12 +43,14 @@ public class GameRenderer
    private Matrix4 debugMatrix;
    private BitmapFont font;
    private BitmapFont deathFont;
+   private GlyphLayout layout; 
    private int score = 0;
    private Vector<Block> blocks;
    
    public GameRenderer(GameWorld world){
       //Create the reference to the game world
       this.world = world;
+      
       //Init the batch and the camera
       batch = new SpriteBatch();
       hudBatch = new SpriteBatch();
@@ -58,7 +61,6 @@ public class GameRenderer
       //Set the dimensions of the camera
       camera.setToOrtho(true, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
       
-      
       batch.setProjectionMatrix(camera.combined);
       shapeRenderer.setProjectionMatrix(camera.combined);
       
@@ -66,7 +68,10 @@ public class GameRenderer
       FreeTypeFontParameter parameter = new FreeTypeFontParameter();
       parameter.size = 22;
       parameter.color = Color.WHITE;
-      font = generator.generateFont(parameter); // font size 12 pixels
+      font = generator.generateFont(parameter);
+      
+      layout = new GlyphLayout(); 
+      
       parameter.size = 30;
       deathFont = generator.generateFont(parameter);
       generator.dispose(); // don't forget to dispose to avoid memory leaks!
@@ -75,22 +80,14 @@ public class GameRenderer
       backgroundSprite = new Sprite(backgroundTexture);
       
       debug = new Box2DDebugRenderer();
-      
+            
    }
    
    /*
     * All rendering goes on here. Super important method
     */
    public void render() {
-      
-      if(checkLavaDeath() || world.isGameOver()){
-         world.setGameOver(true);
-         world.setGameOver(true);
-         renderGameOverScreen();
-         return;
-      }
-      
-      
+                       
 	  // Step the physics simulation forward at a rate of 45hz, recommended by LibGDX
       world.getWorld().step(1/45f, 6, 2);
       
@@ -129,7 +126,7 @@ public class GameRenderer
       
 
       renderBackground();
-      
+
       debugMatrix = batch.getProjectionMatrix().cpy().scale(100f,
             100f, 0);
       
@@ -153,7 +150,8 @@ public class GameRenderer
               b.getSprite().getScaleY(),b.getSprite().getRotation());
       }
       
-      score = Math.max(score,  (int)Math.abs(Math.ceil(world.getPlayerBody().getPosition().y - 5)));
+
+      score = Math.max(score,  (int)Math.floor(4.7*(4.7-world.getPlayerBody() .getPosition().y)));
      
       batch.end();
       
@@ -161,7 +159,7 @@ public class GameRenderer
       
       font.setUseIntegerPositions(false);
       font.draw(hudBatch, "Score: " + score, 0, Gdx.graphics.getHeight() - 10);
-      font.draw(hudBatch, "" + (int)Math.abs(Math.ceil(world.getPlayerBody().getPosition().y - 5)), 0, Gdx.graphics.getHeight() - 30);
+      font.draw(hudBatch, "" + (int)Math.floor(4.7*(4.7-world.getPlayerBody() .getPosition().y)), 0, Gdx.graphics.getHeight() - 30);
       
       hudBatch.end();
       
@@ -176,6 +174,14 @@ public class GameRenderer
       shapeRenderer.end();
       Gdx.gl.glDisable(GL30.GL_BLEND);
       
+      
+      if(checkLavaDeath() || world.isGameOver()){
+         //Update the delay time by adding the time passed since the last delay 
+         world.setGameOver(true);
+         renderGameOverScreen();
+      }
+      
+      
       debug.render(world.getWorld(), debugMatrix);
       
    
@@ -187,22 +193,28 @@ public class GameRenderer
    }
    
    public void renderGameOverScreen(){
-      //Clear the screen here
-      Gdx.gl.glClearColor(1, 1, 1, 1);
-      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+//      //Clear the screen here
+//      Gdx.gl.glClearColor(1, 1, 1, 1);
+//      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
       hudBatch.begin();
-      backgroundSprite.setPosition(0, 0);
-      backgroundSprite.draw(hudBatch);
-      deathFont.draw(hudBatch, "Game over", Gdx.graphics.getWidth()/2 - 100, Gdx.graphics.getHeight()/2);
-      deathFont.draw(hudBatch, "(Press space to restart)", Gdx.graphics.getWidth()/2 - 125, Gdx.graphics.getHeight()/2 + 30);
-      deathFont.draw(hudBatch, "You suck! Score of: " + score, Gdx.graphics.getWidth()/2 - 125, Gdx.graphics.getHeight()/2 + 60);
+//      backgroundSprite.setPosition(0, 0);
+//      backgroundSprite.draw(hudBatch);
+      deathFont.setColor(Color.BLACK);
+      layout.setText(deathFont, "Game over");
+      float h1 = layout.height;
+      deathFont.draw(hudBatch, "Game over", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - h1)/2);
+      layout.setText(deathFont, "Score: " + score);
+      float h2 = layout.height;
+      deathFont.draw(hudBatch, "Score: " + score, (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - h1)/2 - h2 - 5);
+      layout.setText(deathFont, "Press space to restart");
+      deathFont.draw(hudBatch, "Press space to restart", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - h1)/2 - h2 - layout.height - 5);
       hudBatch.end();
    }
    
-   
+
    //Check if the lava has surpassed the player
    public boolean checkLavaDeath(){
-      return (world.getLava().getY() <= (world.getPlayer().getSprite().getY() + world.getPlayer().getSprite().getHeight()));
+      return (world.getLava().getY() <= (world.getPlayer().getSprite().getY() + world.getPlayer().getSprite().getHeight() - 5)); 
    }
    
 

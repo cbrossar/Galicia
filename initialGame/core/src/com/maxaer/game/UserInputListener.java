@@ -26,18 +26,18 @@ public class UserInputListener implements InputProcessor
    public boolean keyDown(int keycode)
    {
 	   
-	   	if(keycode == Input.Keys.UP){
+	   	if(keycode == Input.Keys.UP && !world.isGameOver()){
 	   		if(world.getPlayer().canJump()){
 	   			player.applyForceToCenter(0f, -2.5f,true);
 	   			world.getPlayer().setJumpability(false);
 	   		}
 	   	}
 	   	
-	   	if(keycode == Input.Keys.RIGHT){   		
+	   	if(keycode == Input.Keys.RIGHT && !world.isGameOver()){   		
 	        player.setLinearVelocity(3f, player.getLinearVelocity().y);
 	    }
 	      
-	    if(keycode == Input.Keys.LEFT){
+	    if(keycode == Input.Keys.LEFT && !world.isGameOver()){
 	        player.setLinearVelocity(-3f,player.getLinearVelocity().y);
 	    }
 	     
@@ -55,13 +55,13 @@ public class UserInputListener implements InputProcessor
       }
 	  
 
-       if(keycode == Input.Keys.RIGHT){
+       if(keycode == Input.Keys.RIGHT && !world.isGameOver()){
     	   player.setLinearVelocity(0, player.getLinearVelocity().y * 1f);
        }
-       if(keycode == Input.Keys.LEFT)
+       if(keycode == Input.Keys.LEFT && !world.isGameOver())
     	  player.setLinearVelocity(0, player.getLinearVelocity().y * 1f);
 
-       if(keycode == Input.Keys.UP){
+       if(keycode == Input.Keys.UP && !world.isGameOver()){
     	   if(player.getLinearVelocity().y == 0)
     		   player.applyForceToCenter(0f, -2.5f,true);
        }

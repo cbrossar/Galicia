@@ -1,6 +1,6 @@
 package com.maxaer.game;
 
-import com.maxaer.screens.GameScreen;
+import com.maxaer.screens.MenuScreen;
 
 /*
  * Class: GameWindow, extends Game
@@ -14,7 +14,7 @@ public class GameWindow extends Game{
     @Override
     public void create() {
        
-       setScreen(new GameScreen());
+       setScreen(new MenuScreen(this));
         
     }
 
