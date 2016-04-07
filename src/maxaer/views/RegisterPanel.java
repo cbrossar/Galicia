@@ -1,4 +1,4 @@
-package maxÆR.Views;
+package maxaer.views;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -11,9 +11,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import maxÆR.Constants.GUIConstants;
-import maxÆR.SwingExtensions.PromptPasswordField;
-import maxÆR.SwingExtensions.PromptTextField;
+import maxaer.constants.GUIConstants;
+import maxaer.swingExtensions.PromptPasswordField;
+import maxaer.swingExtensions.PromptTextField;
 
 /*
  * Class: Register Panel
