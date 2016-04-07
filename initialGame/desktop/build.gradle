@@ -6,13 +6,6 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 project.ext.mainClassName = "com.maxaer.game.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../core/assets");
 
-dependencies {
-        compile project(":core")
-
-        compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-
-
-}
 
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName

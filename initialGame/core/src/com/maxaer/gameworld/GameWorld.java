@@ -55,7 +55,7 @@ public class GameWorld
       player = new Player(world);
       platform = new Platform(world);
       //Create the lava as a rectangle with the width of the screen and with 
-      lava = new Rectangle(0, Gdx.graphics.getHeight() + 200,Gdx.graphics.getWidth(), Gdx.graphics.getHeight() + 1000);
+      lava = new Rectangle(0, Gdx.graphics.getHeight() + 240,Gdx.graphics.getWidth(), Gdx.graphics.getHeight() + 1000);
       blocks = new Vector<Block>();
       gameOver = false;
       

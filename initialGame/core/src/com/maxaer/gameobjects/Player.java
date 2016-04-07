@@ -17,6 +17,7 @@ public class Player
    private Texture texture;
    private BodyDef bodyDef;
    private Boolean jumpability;
+   private int touchCount; 
    
    final float PIXELS_TO_METERS = GameConstants.PIXEL_TO_METERS;
    
@@ -24,6 +25,7 @@ public class Player
    {
       //Create the player to have the player image
       jumpability = true;
+      touchCount = 0; 
       texture = new Texture("45x60player.png");
       sprite = new Sprite(texture);
       //Initialize with position in the middle of the screen      
@@ -100,6 +102,16 @@ public class Player
    public BodyDef getBodyDef()
    {
       return bodyDef;
+   }
+   
+   public void setTouchCount(int touchCount)
+   {
+      this.touchCount = touchCount;
+   }
+   
+   public int getTouchCount()
+   {
+      return touchCount;
    }
 
 }
