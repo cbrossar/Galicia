@@ -17,6 +17,7 @@ public class Player
    private Texture texture;
    private BodyDef bodyDef;
    private Boolean jumpability;
+   private int touchCount; 
    
    final float PIXELS_TO_METERS = GameConstants.PIXEL_TO_METERS;
    
@@ -24,7 +25,8 @@ public class Player
    {
       //Create the player to have the player image
       jumpability = true;
-      texture = new Texture("green_player.png");
+      touchCount = 0; 
+      texture = new Texture("45x60player.png");
       sprite = new Sprite(texture);
       //Initialize with position in the middle of the screen      
       sprite.setPosition(Gdx.graphics.getWidth()/2 - sprite.getWidth()/2, 
@@ -44,7 +46,7 @@ public class Player
       
       //Create the shape for our player
       PolygonShape shape = new PolygonShape();
-      shape.setAsBox(sprite.getWidth()/2 / PIXELS_TO_METERS, sprite.getHeight()/2 / PIXELS_TO_METERS);
+      shape.setAsBox((sprite.getWidth() - 2)/2 / PIXELS_TO_METERS, (sprite.getHeight() - 2)/2 / PIXELS_TO_METERS);
       //Now add that shape to the body
       FixtureDef playerDef = new FixtureDef();
       playerDef.shape = shape;
@@ -100,6 +102,16 @@ public class Player
    public BodyDef getBodyDef()
    {
       return bodyDef;
+   }
+   
+   public void setTouchCount(int touchCount)
+   {
+      this.touchCount = touchCount;
+   }
+   
+   public int getTouchCount()
+   {
+      return touchCount;
    }
 
 }

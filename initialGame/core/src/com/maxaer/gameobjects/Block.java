@@ -52,7 +52,7 @@ public class Block extends Shape {
       
 		//Create the shape for our player
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(sprite.getWidth()/2 / PIXELS_TO_METERS, sprite.getHeight()/2 / PIXELS_TO_METERS);
+		shape.setAsBox((sprite.getWidth() - 2)/2 / PIXELS_TO_METERS, (sprite.getHeight() - 3)/2 / PIXELS_TO_METERS);
 		//Now add that shape to the body
 
 		FixtureDef boxDef = new FixtureDef();

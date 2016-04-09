@@ -1,4 +1,4 @@
-package maxÆR.SwingExtensions;
+package maxaer.swingExtensions;
 
 import java.awt.Color;
 import java.awt.event.FocusEvent;

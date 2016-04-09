@@ -1,11 +1,11 @@
-package maxÆR.Constants;
+package maxaer.constants;
 
 import java.awt.*;
 import java.util.HashMap;
 
-import maxÆR.SwingExtensions.RegisteredFonts;
-
 import javax.swing.*;
+
+import maxaer.swingExtensions.RegisteredFonts;
 
 //Class where we should add all our GUI Constants
 public class GUIConstants

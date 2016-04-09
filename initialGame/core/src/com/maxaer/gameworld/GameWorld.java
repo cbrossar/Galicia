@@ -32,6 +32,7 @@ public class GameWorld
    private World world;
    private Platform platform;
    private Rectangle lava;
+   private Sprite background;
    //private Block block;
    private Vector<Block> blocks;
    private float lastDropTime = TimeUtils.nanoTime();
@@ -54,9 +55,10 @@ public class GameWorld
       player = new Player(world);
       platform = new Platform(world);
       //Create the lava as a rectangle with the width of the screen and with 
-      lava = new Rectangle(0, Gdx.graphics.getHeight() + 180,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+      lava = new Rectangle(0, Gdx.graphics.getHeight() + 240,Gdx.graphics.getWidth(), Gdx.graphics.getHeight() + 1000);
       blocks = new Vector<Block>();
       gameOver = false;
+      
       //Set the input listener for this screen
       Gdx.input.setInputProcessor(new UserInputListener(this));
    }
@@ -77,9 +79,15 @@ public class GameWorld
 		  blocks.add(b);
 	  }
 	  //Update the position of the lava by a few pixels
-	  lava.setPosition(lava.getX(), lava.getY() - (35 * delta));
+	  if(lava.getY() > player.getSprite().getY() - (Gdx.graphics.getHeight()/2))
+	     lava.setPosition(lava.getX(), lava.getY() - (30 * delta));
 	  
 	  
+   }
+   
+   public Sprite getBackground()
+   {
+      return background;
    }
    
    public Rectangle getLava()

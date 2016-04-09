@@ -1,4 +1,4 @@
-package maxÆR.SwingExtensions;
+package maxaer.swingExtensions;
 
 import java.awt.*;
 import java.io.IOException;
