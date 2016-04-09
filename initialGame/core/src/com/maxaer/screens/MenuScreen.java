@@ -32,6 +32,8 @@ public class MenuScreen implements Screen
    private Stage stage;
    private TextButton playBtn, scoresBtn, registerBtn;
    
+   private static final float BTN_SPACING = 10f; 
+   
    public MenuScreen(GameWindow window){
       cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
       cam.setToOrtho(false);
@@ -51,9 +53,19 @@ public class MenuScreen implements Screen
       Gdx.input.setInputProcessor(stage);// Make the stage consume events
 
       createBasicSkin();
+      
       playBtn = new TextButton("Play", skin); // Use the initialized skin
       playBtn.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8 , Gdx.graphics.getHeight()/2);
       stage.addActor(playBtn);
+      
+      registerBtn = new TextButton("Sign up/in", skin);
+      registerBtn.setPosition(playBtn.getX(), playBtn.getY() - playBtn.getHeight() - BTN_SPACING);
+      stage.addActor(registerBtn);
+      
+      
+      scoresBtn = new TextButton("High Scores", skin);
+      scoresBtn.setPosition(playBtn.getX(), registerBtn.getY() - registerBtn.getHeight() - BTN_SPACING);
+      stage.addActor(scoresBtn);
       
       addActions(); 
       
@@ -61,7 +73,7 @@ public class MenuScreen implements Screen
    
    }
    
-   //Create a skin for the menu button's
+   //Create a skin for the menu button's -- found a tempate online for this code
    private void createBasicSkin(){
       //Create a font
       skin = new Skin();
@@ -93,6 +105,30 @@ public class MenuScreen implements Screen
          {
                 window.setScreen(new GameScreen());
                 dispose();
+            
+         }
+      });
+      
+      registerBtn.addListener(new ChangeListener()
+      {
+         
+         @Override
+         public void changed(ChangeEvent event, Actor actor)
+         {
+            //window.setScreen(new AccountScreen());
+            //dispose(); 
+            
+         }
+      });
+      
+      scoresBtn.addListener(new ChangeListener()
+      {
+         
+         @Override
+         public void changed(ChangeEvent event, Actor actor)
+         {
+            //window.setScreen(new HighScoresScreen());
+            //dispose(); 
             
          }
       });

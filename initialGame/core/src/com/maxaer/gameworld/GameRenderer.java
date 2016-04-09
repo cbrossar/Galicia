@@ -44,7 +44,7 @@ public class GameRenderer
    private BitmapFont font;
    private BitmapFont deathFont;
    private GlyphLayout layout; 
-   private int score = 0;
+   private int score = 21;
    private Vector<Block> blocks;
    
    public GameRenderer(GameWorld world){
