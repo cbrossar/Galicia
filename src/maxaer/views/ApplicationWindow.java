@@ -1,4 +1,4 @@
-package maxÆR.Views;
+package maxaer.views;
 
 import javax.swing.JFrame;
 

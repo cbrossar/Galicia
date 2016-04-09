@@ -1,11 +1,11 @@
-package maxÆR.Views;
+package maxaer.views;
 
 import javax.swing.*;
-import maxÆR.SwingExtensions.PromptPasswordField;
-import maxÆR.SwingExtensions.PromptTextField;
-import maxÆR.SwingExtensions.RegisteredFonts;
 
-import maxÆR.Constants.GUIConstants;
+import maxaer.constants.GUIConstants;
+import maxaer.swingExtensions.PromptPasswordField;
+import maxaer.swingExtensions.PromptTextField;
+import maxaer.swingExtensions.RegisteredFonts;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;

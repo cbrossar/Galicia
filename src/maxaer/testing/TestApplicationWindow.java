@@ -1,6 +1,6 @@
-package maxÆR.Testing;
+package maxaer.testing;
 
-import maxÆR.Views.ApplicationWindow;
+import maxaer.views.ApplicationWindow;
 
 public class TestApplicationWindow
 {
