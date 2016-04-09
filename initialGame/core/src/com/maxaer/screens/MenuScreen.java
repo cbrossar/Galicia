@@ -1,7 +1,6 @@
 package com.maxaer.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -10,6 +9,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
@@ -18,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.maxaer.game.GameWindow;
 
 public class MenuScreen implements Screen
@@ -31,6 +30,7 @@ public class MenuScreen implements Screen
    private Skin skin;
    private Stage stage;
    private TextButton playBtn, scoresBtn, registerBtn;
+   private Sprite backgroundSprite;
    
    private static final float BTN_SPACING = 10f; 
    
@@ -40,7 +40,11 @@ public class MenuScreen implements Screen
       
       batch = new SpriteBatch();
       
-      FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/MonaKo.ttf"));
+      Texture background = new Texture(Gdx.files.internal("Backgrounds/AltMaxaerBackground.png"));
+      backgroundSprite = new Sprite(background);
+      backgroundSprite.setPosition(0, 0);
+      
+      FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/BankGothic-Regular.ttf"));
       FreeTypeFontParameter parameter = new FreeTypeFontParameter();
       parameter.size = 26;
       parameter.color = Color.BLACK;
@@ -55,16 +59,19 @@ public class MenuScreen implements Screen
       createBasicSkin();
       
       playBtn = new TextButton("Play", skin); // Use the initialized skin
-      playBtn.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8 , Gdx.graphics.getHeight()/2);
+      playBtn.setPosition(420, Gdx.graphics.getHeight()/3 + 30);
+      playBtn.setWidth(200);
       stage.addActor(playBtn);
       
       registerBtn = new TextButton("Sign up/in", skin);
       registerBtn.setPosition(playBtn.getX(), playBtn.getY() - playBtn.getHeight() - BTN_SPACING);
+      registerBtn.setWidth(200);
       stage.addActor(registerBtn);
       
       
       scoresBtn = new TextButton("High Scores", skin);
       scoresBtn.setPosition(playBtn.getX(), registerBtn.getY() - registerBtn.getHeight() - BTN_SPACING);
+      scoresBtn.setWidth(200);
       stage.addActor(scoresBtn);
       
       addActions(); 
@@ -88,8 +95,8 @@ public class MenuScreen implements Screen
       //Create a button style
       TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
       textButtonStyle.up = skin.newDrawable("background", Color.WHITE);
-      textButtonStyle.down = skin.newDrawable("background", Color.LIGHT_GRAY);
-      textButtonStyle.checked = skin.newDrawable("background", Color.LIGHT_GRAY);
+      textButtonStyle.down = skin.newDrawable("background", Color.WHITE);
+      textButtonStyle.checked = skin.newDrawable("background", Color.WHITE);
       textButtonStyle.over = skin.newDrawable("background", Color.LIGHT_GRAY);
       textButtonStyle.font = skin.getFont("default");
       skin.add("default", textButtonStyle);
@@ -103,7 +110,7 @@ public class MenuScreen implements Screen
          @Override
          public void changed(ChangeEvent event, Actor actor)
          {
-                window.setScreen(new GameScreen());
+                window.setScreen(new GameScreen(window));
                 dispose();
             
          }
@@ -127,8 +134,8 @@ public class MenuScreen implements Screen
          @Override
          public void changed(ChangeEvent event, Actor actor)
          {
-            //window.setScreen(new HighScoresScreen());
-            //dispose(); 
+            window.setScreen(new HighScoreScreen(window));
+            dispose(); 
             
          }
       });
@@ -143,21 +150,22 @@ public class MenuScreen implements Screen
 
    @Override
    public void render(float delta) {
-       Gdx.gl.glClearColor(0.361f, 0.749f, 0.231f, 1);
+       Gdx.gl.glClearColor(0f, 0f, 0f, 1);
        
        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-       stage.act();
-       stage.draw();
-
+       
        cam.update();
        batch.setProjectionMatrix(cam.combined);
 
        batch.begin();
-       layout.setText(font, "MaxÆR");
-       font.draw(batch, "MaxÆR", (Gdx.graphics.getWidth() - layout.width)/2, Gdx.graphics.getHeight()/2 + 100);
       
+       backgroundSprite.draw(batch);
        batch.end();
+       
+       stage.act();
+       stage.draw();
+
 
       
    }

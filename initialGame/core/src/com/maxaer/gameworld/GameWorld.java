@@ -10,10 +10,12 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.maxaer.game.CollisionListener;
+import com.maxaer.game.GameWindow;
 import com.maxaer.game.UserInputListener;
 import com.maxaer.gameobjects.Block;
 import com.maxaer.gameobjects.Platform;
 import com.maxaer.gameobjects.Player;
+import com.maxaer.screens.MenuScreen;
 
 
 /*
@@ -38,10 +40,12 @@ public class GameWorld
    private float lastDropTime = TimeUtils.nanoTime();
    float lastHeight = -500;
    private boolean gameOver;
+   private boolean justDied;
+   private GameWindow window;
    
-   
-   public GameWorld()
+   public GameWorld(GameWindow window)
    {
+      this.window = window;
       createNewGame(); 
   
   }
@@ -58,6 +62,7 @@ public class GameWorld
       lava = new Rectangle(0, Gdx.graphics.getHeight() + 240,Gdx.graphics.getWidth(), Gdx.graphics.getHeight() + 1000);
       blocks = new Vector<Block>();
       gameOver = false;
+      justDied = true;
       
       //Set the input listener for this screen
       Gdx.input.setInputProcessor(new UserInputListener(this));
@@ -83,6 +88,12 @@ public class GameWorld
 	     lava.setPosition(lava.getX(), lava.getY() - (30 * delta));
 	  
 	  
+   }
+   
+   //Method to start the menu screen from game
+   public void showMenuScreen(){
+      window.setScreen(new MenuScreen(window));
+      this.dispose();
    }
    
    public Sprite getBackground()
@@ -132,6 +143,17 @@ public class GameWorld
    {
       return gameOver;
    }
+   
+   public boolean isJustDied()
+   {
+      return justDied;
+   }
+   
+   public void setJustDied(boolean justDied)
+   {
+      this.justDied = justDied;
+   }
+   
    
    
    

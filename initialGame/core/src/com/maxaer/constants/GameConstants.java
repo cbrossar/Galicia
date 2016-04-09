@@ -19,6 +19,7 @@ public class GameConstants
    public static final String LemonImg = "Cookies/Lemon.png";
    public static final String SamoaImg = "Cookies/SamoaFlake.png";
    public static final String ThanksALotImg = "Cookies/ThanksALot.png";
-   public static final String TrefoilImg = "Cookies/Trefoil72x72.png";
+   public static final String TrefoilImg = "Cookies/Trefoil.png";
+   
    
 }
