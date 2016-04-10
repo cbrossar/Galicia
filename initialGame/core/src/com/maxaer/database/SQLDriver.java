@@ -10,6 +10,11 @@ import java.util.ArrayList;
 
 import com.mysql.jdbc.Driver;
 
+/*
+ * Class: SQLDriver
+ * Author: Peter Kaminski
+ * Purpose: To create a connection for our game to store information in an SQL database 
+ */
 public class SQLDriver
 {
    private Connection conn;
@@ -30,6 +35,7 @@ public class SQLDriver
       }
    }
 
+   //Connect to the SQL server instance 
    public void connect(){
       try{
          conn = DriverManager.getConnection("jdbc:mysql://104.131.153.145:3306/maxaer?user=max&password=DoD2016&useSSL=false");
@@ -38,6 +44,7 @@ public class SQLDriver
       }
    }
 
+   //Close the connection
    public void stop(){
       try
       {
@@ -75,6 +82,7 @@ public class SQLDriver
       } 
    }
    
+   //Check to see if the user name is in SQL
    public boolean userNameExists(String uname){
       try{
          PreparedStatement statement = conn.prepareStatement(USER_EXISTS);
@@ -96,6 +104,7 @@ public class SQLDriver
       } 
    }
 
+   //Add a new score to the HighScores table
    public void addTopScore(int userID, int score){
       try{
          PreparedStatement statement = conn.prepareStatement(ADD_HIGH_SCORE);
@@ -110,6 +119,7 @@ public class SQLDriver
 
    }
    
+   //Register a new user with SQL 
    public void addUser(String userID, String passHash){
       try{
          PreparedStatement statement = conn.prepareStatement(ADD_USER);
@@ -124,6 +134,7 @@ public class SQLDriver
 
    }
    
+   //Return the top 10 scores from the DB
    public ArrayList<UserScore> getTopScores(){
       try{
          Statement statement = conn.createStatement();
@@ -144,6 +155,7 @@ public class SQLDriver
       }
    }
    
+   //Return the user's name by their ID
    public String getUserByID(int userID){
       String user = "Error";
       try{
@@ -162,7 +174,8 @@ public class SQLDriver
          return user;
       }
    }
-
+   
+   //Return the user id by name
    public int getUserByName(String userName){
       int user = 1;
       try{
@@ -170,7 +183,6 @@ public class SQLDriver
          statement.setString(1, userName);
          ResultSet results = statement.executeQuery();
          if(results.next()){
-            System.out.println(results.getInt("userID") + " userID");
             return results.getInt("userID");
          }
          

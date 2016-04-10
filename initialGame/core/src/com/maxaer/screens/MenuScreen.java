@@ -39,7 +39,7 @@ public class MenuScreen implements Screen
       
       batch = new SpriteBatch();
       
-      Texture background = new Texture(Gdx.files.internal("Backgrounds/AltMaxaerBackground.png"));
+      Texture background = new Texture(Gdx.files.internal("Backgrounds/600x600Background.png"));
       backgroundSprite = new Sprite(background);
       backgroundSprite.setPosition(0, 0);
       
@@ -57,24 +57,24 @@ public class MenuScreen implements Screen
       createBasicSkin();
       
       playBtn = new TextButton("Play", skin); // Use the initialized skin
-      playBtn.setPosition(420, Gdx.graphics.getHeight()/3 + 50);
-      playBtn.setWidth(200);
+      playBtn.setPosition(325, Gdx.graphics.getHeight()/3 + 50);
+      playBtn.setWidth(190);
       stage.addActor(playBtn);
       
       registerBtn = new TextButton("Sign up", skin);
       registerBtn.setPosition(playBtn.getX(), playBtn.getY() - playBtn.getHeight() - BTN_SPACING);
-      registerBtn.setWidth(200);
+      registerBtn.setWidth(190);
       stage.addActor(registerBtn);
       
       loginBtn = new TextButton("Login", skin);
       loginBtn.setPosition(registerBtn.getX(), registerBtn.getY() - registerBtn.getHeight() - BTN_SPACING);
-      loginBtn.setWidth(200);
+      loginBtn.setWidth(190);
       stage.addActor(loginBtn);
       
       
       scoresBtn = new TextButton("High Scores", skin);
       scoresBtn.setPosition(playBtn.getX(), loginBtn.getY() - loginBtn.getHeight() - BTN_SPACING);
-      scoresBtn.setWidth(200);
+      scoresBtn.setWidth(190);
       stage.addActor(scoresBtn);
       
       addActions(); 

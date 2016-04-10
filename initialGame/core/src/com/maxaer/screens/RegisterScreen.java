@@ -31,7 +31,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.maxaer.database.SQLDriver;
 import com.maxaer.database.User;
 import com.maxaer.game.GameWindow;
-import com.maxaer.threaded.SQLStoreUser;
 
 public class RegisterScreen implements Screen
 {
@@ -53,13 +52,13 @@ public class RegisterScreen implements Screen
       
       batch = new SpriteBatch();
       
-      Texture background = new Texture(Gdx.files.internal("Backgrounds/AltRegisterBackground.png"));
+      Texture background = new Texture(Gdx.files.internal("Backgrounds/600x600RegisterBackground.png"));
       backgroundSprite = new Sprite(background);
       backgroundSprite.setPosition(0, 0);
       
       FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/BankGothic-Regular.ttf"));
       FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-      parameter.size = 26;
+      parameter.size = 22;
       parameter.color = Color.BLACK;
       generator.generateData(parameter);
       font = generator.generateFont(parameter);
@@ -76,20 +75,20 @@ public class RegisterScreen implements Screen
       createBasicSkin();
       
       userNameField = new TextField("", skin); // Use the initialized skin
-      userNameField.setPosition(420, Gdx.graphics.getHeight()/3 + 50);
-      userNameField.setWidth(200);
+      userNameField.setPosition(330, Gdx.graphics.getHeight()/3 + 50);
+      userNameField.setWidth(170);
       stage.addActor(userNameField);
       
       passwordField = new TextField("", skin);
       passwordField.setPosition(userNameField.getX(), userNameField.getY() - userNameField.getHeight() - BTN_SPACING);
-      passwordField.setWidth(200);
+      passwordField.setWidth(170);
       passwordField.setPasswordMode(true);
       passwordField.setPasswordCharacter('*');
       stage.addActor(passwordField);
       
       confirmField = new TextField("", skin);
       confirmField.setPosition(passwordField.getX(), passwordField.getY() - passwordField.getHeight() - BTN_SPACING);
-      confirmField.setWidth(200);
+      confirmField.setWidth(170);
       confirmField.setPasswordMode(true);
       confirmField.setPasswordCharacter('*');
       stage.addActor(confirmField);
@@ -97,7 +96,7 @@ public class RegisterScreen implements Screen
       
       registerBtn = new TextButton("Register", skin);
       registerBtn.setPosition(userNameField.getX(), confirmField.getY() - confirmField.getHeight() - BTN_SPACING);
-      registerBtn.setWidth(200);
+      registerBtn.setWidth(170);
       stage.addActor(registerBtn);
       
       addActions(); 
@@ -172,8 +171,6 @@ public class RegisterScreen implements Screen
             if(verifyPassword(passwordField.getText(), confirmField.getText()) && userNameFree(userNameField.getText())){
                //Store the user into SQL 
                String hash = hashPassword(passwordField.getText());
-//               SQLStoreUser storeUser = new SQLStoreUser(userNameField.getText(), hash);
-//               storeUser.start();
                SQLDriver driver = new SQLDriver();
                driver.connect();
                driver.addUser(userNameField.getText(), hash);

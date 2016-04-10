@@ -47,7 +47,7 @@ public class Block extends Shape {
 		//Create the body for the player
 		body = world.createBody(bodyDef);
 		body.setGravityScale(0);		
-		body.setLinearVelocity(0, 2f);
+		body.setLinearVelocity(0, 3f);
 		
       
 		//Create the shape for our player

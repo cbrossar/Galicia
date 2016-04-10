@@ -51,7 +51,7 @@ public class LoginScreen implements Screen
       
       batch = new SpriteBatch();
       
-      Texture background = new Texture(Gdx.files.internal("Backgrounds/AltLoginBackground.png"));
+      Texture background = new Texture(Gdx.files.internal("Backgrounds/600x600Login.png"));
       backgroundSprite = new Sprite(background);
       backgroundSprite.setPosition(0, 0);
       
@@ -74,21 +74,21 @@ public class LoginScreen implements Screen
       createBasicSkin();
       
       userNameField = new TextField("", skin); // Use the initialized skin
-      userNameField.setPosition(420, Gdx.graphics.getHeight()/3 + 60);
-      userNameField.setWidth(200);
+      userNameField.setPosition(330, Gdx.graphics.getHeight()/3 + 60);
+      userNameField.setWidth(170);
       stage.addActor(userNameField);
       
       passwordField = new TextField("", skin);
       passwordField.setPasswordMode(true);
       passwordField.setPasswordCharacter('.');
       passwordField.setPosition(userNameField.getX(), userNameField.getY() - userNameField.getHeight() - BTN_SPACING);
-      passwordField.setWidth(200);
+      passwordField.setWidth(170);
       stage.addActor(passwordField);
       
       
       loginBtn = new TextButton("Login", skin);
       loginBtn.setPosition(userNameField.getX(), passwordField.getY() - passwordField.getHeight() - BTN_SPACING);
-      loginBtn.setWidth(200);
+      loginBtn.setWidth(170);
       stage.addActor(loginBtn);
       
       addActions(); 

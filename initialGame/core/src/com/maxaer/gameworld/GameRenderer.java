@@ -73,7 +73,7 @@ public class GameRenderer
       
       layout = new GlyphLayout(); 
       
-      parameter.size = 30;
+      parameter.size = 24;
       deathFont = generator.generateFont(parameter);
       generator.dispose(); // don't forget to dispose to avoid memory leaks!
       
