@@ -1,27 +1,34 @@
 package com.maxaer.screens;
 
+import java.util.regex.Pattern;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.maxaer.database.SQLDriver;
 import com.maxaer.game.GameWindow;
+import com.maxaer.threaded.SQLStoreUser;
 
 public class RegisterScreen implements Screen
 {
@@ -29,7 +36,6 @@ public class RegisterScreen implements Screen
    private SpriteBatch batch;
    private OrthographicCamera cam;
    private BitmapFont font, fieldFont;
-   private GlyphLayout layout;
    private Skin skin;
    private Stage stage;
    private TextButton registerBtn;
@@ -44,7 +50,7 @@ public class RegisterScreen implements Screen
       
       batch = new SpriteBatch();
       
-      Texture background = new Texture(Gdx.files.internal("Backgrounds/RegisterBackground.png"));
+      Texture background = new Texture(Gdx.files.internal("Backgrounds/AltRegisterBackground.png"));
       backgroundSprite = new Sprite(background);
       backgroundSprite.setPosition(0, 0);
       
@@ -55,30 +61,34 @@ public class RegisterScreen implements Screen
       generator.generateData(parameter);
       font = generator.generateFont(parameter);
       
-      parameter.size = 18;
+      FreeTypeFontGenerator fieldGenerator = new FreeTypeFontGenerator(Gdx.files.internal("data/Orbitron Light.ttf"));
+      parameter.size = 24;
       parameter.color = Color.GRAY;
-      fieldFont = generator.generateFont(parameter);
+      fieldFont = fieldGenerator.generateFont(parameter);
       
-      layout = new GlyphLayout();
       
       stage = new Stage();
       Gdx.input.setInputProcessor(stage);// Make the stage consume events
 
       createBasicSkin();
       
-      userNameField = new TextField("Username", skin); // Use the initialized skin
+      userNameField = new TextField("", skin); // Use the initialized skin
       userNameField.setPosition(420, Gdx.graphics.getHeight()/3 + 50);
       userNameField.setWidth(200);
       stage.addActor(userNameField);
       
-      passwordField = new TextField("Password", skin);
+      passwordField = new TextField("", skin);
       passwordField.setPosition(userNameField.getX(), userNameField.getY() - userNameField.getHeight() - BTN_SPACING);
       passwordField.setWidth(200);
+      passwordField.setPasswordMode(true);
+      passwordField.setPasswordCharacter('*');
       stage.addActor(passwordField);
       
-      confirmField = new TextField("Confirm", skin);
+      confirmField = new TextField("", skin);
       confirmField.setPosition(passwordField.getX(), passwordField.getY() - passwordField.getHeight() - BTN_SPACING);
       confirmField.setWidth(200);
+      confirmField.setPasswordMode(true);
+      confirmField.setPasswordCharacter('*');
       stage.addActor(confirmField);
       
       
@@ -131,6 +141,19 @@ public class RegisterScreen implements Screen
 
       skin.add("default", textStyle);
       
+      WindowStyle windowStyle = new WindowStyle();
+      windowStyle.titleFont = fieldFont;
+      windowStyle.background = skin.newDrawable("background", Color.WHITE);
+      
+      
+      Label.LabelStyle lblStyle = new Label.LabelStyle();
+      lblStyle.font = fieldFont;
+      lblStyle.background = skin.newDrawable("background", Color.LIGHT_GRAY);
+      
+      skin.add("default", lblStyle);
+      
+      skin.add("default", windowStyle);
+      
 
    }
    
@@ -142,12 +165,63 @@ public class RegisterScreen implements Screen
          @Override
          public void changed(ChangeEvent event, Actor actor)
          {
-            System.out.println(userNameField.getText() + " " + passwordField.getText());
-            window.setScreen(new GameScreen(window));
-            dispose(); 
+            
+            if(verifyPassword(passwordField.getText(), confirmField.getText()) && userNameFree(userNameField.getText())){
+               //Store the user into SQL 
+               SQLStoreUser storeUser = new SQLStoreUser(userNameField.getText(), passwordField.getText());
+               storeUser.start();
+               
+               //register user and change the screen
+               window.setScreen(new GameScreen(window));
+            } else{
+               Dialog dialog = new Dialog("", skin);
+               dialog.text("Username taken");
+               dialog.button("Ok", true);
+               dialog.key(Keys.ENTER, true);
+               dialog.show(stage);
+            }
             
          }
       });
+   }
+   
+   //Check SQL to make sure the username is free
+   public boolean userNameFree(String userName){
+      
+      SQLDriver driver = new SQLDriver();
+      driver.connect();
+      
+      boolean isFree = driver.userNameExists(userName);
+      
+      driver.stop();
+      
+      return !isFree;
+      
+   }
+   
+   //Method to check that the password has an uppercase and numerical character
+   private boolean verifyPassword(String password, String retype){
+      //Make sure the password is valid using regex
+      if(Pattern.compile("[A-Z]").matcher(password).find() && Pattern.compile("[0-9]").matcher(password).find()){
+         if(password.equals(retype)){
+            return true;
+         } else{
+            Dialog dialog = new Dialog("", skin);
+            dialog.text("Passwords don't match");
+            dialog.button("Ok", true);
+            dialog.key(Keys.ENTER, true);
+            dialog.show(stage);
+            
+            return false;
+         }
+      } else{
+         Dialog dialog = new Dialog("", skin);
+         dialog.text("Password needs a numerical and upper case character");
+         dialog.button("Ok", true);
+         dialog.key(Keys.ENTER, true);
+         dialog.show(stage);
+         return false;
+      }
    }
 
    @Override

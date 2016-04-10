@@ -17,7 +17,9 @@ public class SQLDriver
    private static final String GET_USER_BY_ID = "Select uname from User where userID=?";
    private static final String ADD_USER = "Insert into User (uname, passHash) values (?,?)";
    private static final String ADD_HIGH_SCORE = "Insert into HighScores (userID, score) values (?,?)";
-
+   private static final String USER_EXISTS = "select count(uname) from User where uname=?";
+   private static final String USER_AND_PASSWORD_EXIST = "select count(uname) from User where uname=? and passHash=?";
+   
    public SQLDriver()
    {
       try{
@@ -46,6 +48,52 @@ public class SQLDriver
          e.printStackTrace();
       }
    }
+   
+   //Return true or false, depending on whether the user name or passhash 
+   public boolean loginUser(String uname, String passHash){
+      
+      try{
+         PreparedStatement statement = conn.prepareStatement(USER_AND_PASSWORD_EXIST);
+         statement.setString(1, uname);
+         statement.setString(2, passHash);
+         ResultSet results = statement.executeQuery();
+         
+         if(results.next()){
+            int count = results.getInt("count(uname)");
+            if(count > 0){
+               return true;
+            } 
+         } 
+         
+         statement.close();
+         return false;
+         
+      } catch(SQLException e){
+         System.out.println("Login user err: " + e.getMessage() + " " + e.getSQLState());
+         return false;
+      } 
+   }
+   
+   public boolean userNameExists(String uname){
+      try{
+         PreparedStatement statement = conn.prepareStatement(USER_EXISTS);
+         statement.setString(1, uname);
+         ResultSet results = statement.executeQuery();
+         if(results.next()){
+            int count = results.getInt("count(uname)");
+            if(count > 0){
+               return true;
+            } 
+         } 
+
+         statement.close();
+         return false;
+         
+      } catch(SQLException e){
+         System.out.println("User exists err: " + e.getMessage() + " " + e.getSQLState());
+         return false;
+      } 
+   }
 
    public void addTopScore(int userID, int score){
       try{
@@ -53,6 +101,7 @@ public class SQLDriver
          statement.setInt(1, userID);
          statement.setInt(2, score);
          statement.executeUpdate();
+         statement.close();
 
       } catch(SQLException e){
          System.out.println("Post top scores err: " + e.getMessage() + " " + e.getSQLState());
@@ -60,15 +109,16 @@ public class SQLDriver
 
    }
    
-   public void addUser(String userID, int passHash){
+   public void addUser(String userID, String passHash){
       try{
          PreparedStatement statement = conn.prepareStatement(ADD_USER);
          statement.setString(1, userID);
-         statement.setInt(2, passHash);
-         statement.executeQuery();
+         statement.setString(2, passHash);
+         statement.executeUpdate();
+         statement.close();
 
       } catch(SQLException e){
-         System.out.println("Post top scores err: " + e.getMessage() + " " + e.getSQLState());
+         System.out.println("Add user err: " + e.getMessage() + " " + e.getSQLState());
       }
 
    }
@@ -84,6 +134,8 @@ public class SQLDriver
             count++;
          }
          
+         statement.close();
+         results.close();
          return highScores;
       } catch(SQLException e){
          System.out.println("Get top scores err: " + e.getMessage() + " " + e.getSQLState());
@@ -101,6 +153,8 @@ public class SQLDriver
             return results.getString("uName");
          }
          
+         statement.close();
+         results.close();
          return user;
       } catch(SQLException e){
          System.out.println("Get user id err: " + e.getMessage() + " " + e.getSQLState());

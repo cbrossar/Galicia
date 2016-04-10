@@ -10,15 +10,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.maxaer.database.SQLDriver;
 import com.maxaer.database.UserScore;
 import com.maxaer.game.GameWindow;
+import com.maxaer.threaded.SQLHighScoreRetriever;
 
 public class HighScoreScreen implements Screen
 {
@@ -26,10 +25,8 @@ public class HighScoreScreen implements Screen
    private SpriteBatch batch;
    private OrthographicCamera cam;
    private BitmapFont font;
-   private GlyphLayout layout;
    private Skin skin;
    private Sprite backgroundSprite;
-   private SQLDriver driver;
    private ArrayList<UserScore> topScores;
    
    public HighScoreScreen(GameWindow window)
@@ -41,8 +38,8 @@ public class HighScoreScreen implements Screen
       
       batch = new SpriteBatch();
       
-      driver = new SQLDriver();
-      topScores = getTopScores(); 
+      SQLHighScoreRetriever retrieveScores = new SQLHighScoreRetriever(this);
+      retrieveScores.start();
       
       Texture background = new Texture(Gdx.files.internal("Backgrounds/MaxaerHighScoresBackground.png"));
       backgroundSprite = new Sprite(background);
@@ -55,7 +52,11 @@ public class HighScoreScreen implements Screen
       generator.generateData(parameter);
       font = generator.generateFont(parameter);
       
-      layout = new GlyphLayout();
+   }
+   
+   public void setTopScores(ArrayList<UserScore> topScores)
+   {
+      this.topScores = topScores;
    }
    
 
@@ -91,16 +92,6 @@ public class HighScoreScreen implements Screen
          window.setScreen(new MenuScreen(window));
       }
    }
-   
-   private ArrayList<UserScore> getTopScores(){
-      driver.connect();
-      
-      ArrayList<UserScore> topScores = driver.getTopScores();
-      
-      driver.stop();
-      
-      return topScores;
-   }
 
    @Override
    public void resize(int width, int height)
@@ -135,7 +126,6 @@ public class HighScoreScreen implements Screen
    {
       // TODO Auto-generated method stub
       skin.dispose();
-      driver.stop();
    }
 
 }

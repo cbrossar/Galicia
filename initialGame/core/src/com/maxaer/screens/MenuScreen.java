@@ -17,9 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.maxaer.game.GameWindow;
 
 public class MenuScreen implements Screen
@@ -70,7 +68,7 @@ public class MenuScreen implements Screen
       registerBtn.setWidth(200);
       stage.addActor(registerBtn);
       
-      loginBtn = new TextButton("Login in", skin);
+      loginBtn = new TextButton("Login", skin);
       loginBtn.setPosition(registerBtn.getX(), registerBtn.getY() - registerBtn.getHeight() - BTN_SPACING);
       loginBtn.setWidth(200);
       stage.addActor(loginBtn);
