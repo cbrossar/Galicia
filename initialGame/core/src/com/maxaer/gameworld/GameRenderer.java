@@ -43,8 +43,8 @@ public class GameRenderer
    private Matrix4 debugMatrix;
    private BitmapFont font;
    private BitmapFont deathFont;
-   private int score = 21;
    private GlyphLayout layout; 
+   private int score = 21;
    private Vector<Block> blocks;
    
    public GameRenderer(GameWorld world){
@@ -158,7 +158,6 @@ public class GameRenderer
       hudBatch.begin();
       
       font.setUseIntegerPositions(false);
-
       font.draw(hudBatch, "Score: " + score, 0, Gdx.graphics.getHeight() - 10);
       font.draw(hudBatch, "" + (int)Math.floor(4.7*(4.7-world.getPlayerBody() .getPosition().y)), 0, Gdx.graphics.getHeight() - 30);
       

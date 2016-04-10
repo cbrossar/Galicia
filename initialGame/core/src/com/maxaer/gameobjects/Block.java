@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import java.util.Random;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
@@ -14,6 +15,7 @@ import com.maxaer.constants.GameConstants;
 public class Block extends Shape {
 	private Sprite sprite;
 	private Body body;
+	private Body bottomBlock;
 	private Texture texture;   
 	final float PIXELS_TO_METERS = GameConstants.PIXEL_TO_METERS;
 	private Random rand = new Random();
@@ -62,9 +64,33 @@ public class Block extends Shape {
 		boxDef.friction = 0.1f;
 //		boxDef.filter.categoryBits = GameConstants.CATEGORY_BLOCK;
 //		boxDef.filter.maskBits = GameConstants.MASK_BLOCK;
-//	
-      
+		
+		
 		body.createFixture(boxDef);
+		
+		
+		BodyDef bd2 = new BodyDef();
+		bd2.type = BodyDef.BodyType.DynamicBody;
+		bd2.fixedRotation = true;
+		bd2.position.set((pos) / PIXELS_TO_METERS,
+	             (sprite.getY()) / PIXELS_TO_METERS);
+		
+		bottomBlock = world.createBody(bd2);
+		
+		bottomBlock.setGravityScale(0);
+		bottomBlock.setLinearVelocity(0, 2f);
+		
+
+		FixtureDef fd2 = new FixtureDef();
+		EdgeShape bottom = new EdgeShape();
+		bottom.set(pos/ PIXELS_TO_METERS, (sprite.getY() + 20) / PIXELS_TO_METERS, 
+				(pos + sprite.getWidth()) / PIXELS_TO_METERS, (sprite.getY() + 20)/ PIXELS_TO_METERS );
+		fd2.shape = bottom;
+		
+		
+         bottomBlock.createFixture(fd2);
+         bottom.dispose();
+
 		
 
 		//Free up the shape here
@@ -85,6 +111,11 @@ public class Block extends Shape {
 	public Body getBody()
 	{
 		return body;
+	}
+	
+	public Body getBottomBlock()
+	{
+		return bottomBlock;
 	}
 	
 	public void dispose(){
