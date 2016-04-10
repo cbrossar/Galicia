@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -18,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.maxaer.database.User;
 import com.maxaer.game.GameWindow;
 
 public class MenuScreen implements Screen
@@ -26,7 +26,6 @@ public class MenuScreen implements Screen
    private SpriteBatch batch;
    private OrthographicCamera cam;
    private BitmapFont font;
-   private GlyphLayout layout;
    private Skin skin;
    private Stage stage;
    private TextButton playBtn, scoresBtn, registerBtn, loginBtn;
@@ -51,7 +50,6 @@ public class MenuScreen implements Screen
       generator.generateData(parameter);
       font = generator.generateFont(parameter);
       
-      layout = new GlyphLayout();
       
       stage = new Stage();
       Gdx.input.setInputProcessor(stage);// Make the stage consume events
@@ -116,7 +114,7 @@ public class MenuScreen implements Screen
          @Override
          public void changed(ChangeEvent event, Actor actor)
          {
-                window.setScreen(new GameScreen(window));
+                window.setScreen(new GameScreen(window, new User("", "", true)));
                 dispose();
             
          }

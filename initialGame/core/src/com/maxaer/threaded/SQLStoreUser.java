@@ -1,8 +1,5 @@
 package com.maxaer.threaded;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import com.maxaer.database.SQLDriver;
 
 public class SQLStoreUser extends Thread
@@ -19,24 +16,8 @@ public class SQLStoreUser extends Thread
       public SQLStoreUser(String userName, String password)
       {
          this.userName = userName;
-         this.passHash = hashPassword(password);
+         this.passHash = password;
          
-      }
-      
-      private String hashPassword(String password){
-
-         MessageDigest messageDigest;
-         try
-         {
-            messageDigest = MessageDigest.getInstance("SHA-256");
-            messageDigest.update(password.getBytes());
-            return new String(messageDigest.digest());
-         }
-         catch (NoSuchAlgorithmException e)
-         {
-            return "";
-         }
-      
       }
       
       

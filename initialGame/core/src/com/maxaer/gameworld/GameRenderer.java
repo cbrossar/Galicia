@@ -183,7 +183,7 @@ public class GameRenderer
          if(world.isJustDied()){
             world.setJustDied(false);
             
-            sendScoreToSQL(1, score); 
+            sendScoreToSQL(world.getUser().getUserID(), score); 
             
          }
       }
@@ -215,9 +215,10 @@ public class GameRenderer
    }
    
    private void sendScoreToSQL(int userID, int score){
-      //If logged in!
-      SQLScoreUpdater updater = new SQLScoreUpdater(userID, score);
-      updater.start();
+      if(!world.getUser().isGuest()){
+         SQLScoreUpdater updater = new SQLScoreUpdater(userID, score);
+         updater.start();
+      }
    }
    
 

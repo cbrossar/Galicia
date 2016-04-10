@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.maxaer.database.User;
 import com.maxaer.game.CollisionListener;
 import com.maxaer.game.GameWindow;
 import com.maxaer.game.UserInputListener;
@@ -42,9 +43,11 @@ public class GameWorld
    private boolean gameOver;
    private boolean justDied;
    private GameWindow window;
+   private User user;
    
-   public GameWorld(GameWindow window)
+   public GameWorld(GameWindow window, User user)
    {
+      this.user = user;
       this.window = window;
       createNewGame(); 
   
@@ -152,6 +155,11 @@ public class GameWorld
    public void setJustDied(boolean justDied)
    {
       this.justDied = justDied;
+   }
+   
+   public User getUser()
+   {
+      return user;
    }
    
    

@@ -15,6 +15,7 @@ public class SQLDriver
    private Connection conn;
    private static final String GET_TOP_SCORES = "Select score, userID from HighScores order by score desc";
    private static final String GET_USER_BY_ID = "Select uname from User where userID=?";
+   private static final String GET_USER_BY_NAME = "Select userID from User where uname=?";
    private static final String ADD_USER = "Insert into User (uname, passHash) values (?,?)";
    private static final String ADD_HIGH_SCORE = "Insert into HighScores (userID, score) values (?,?)";
    private static final String USER_EXISTS = "select count(uname) from User where uname=?";
@@ -151,6 +152,26 @@ public class SQLDriver
          ResultSet results = statement.executeQuery();
          if(results.next()){
             return results.getString("uName");
+         }
+         
+         statement.close();
+         results.close();
+         return user;
+      } catch(SQLException e){
+         System.out.println("Get user id err: " + e.getMessage() + " " + e.getSQLState());
+         return user;
+      }
+   }
+
+   public int getUserByName(String userName){
+      int user = 1;
+      try{
+         PreparedStatement statement = conn.prepareStatement(GET_USER_BY_NAME);
+         statement.setString(1, userName);
+         ResultSet results = statement.executeQuery();
+         if(results.next()){
+            System.out.println(results.getInt("userID") + " userID");
+            return results.getInt("userID");
          }
          
          statement.close();

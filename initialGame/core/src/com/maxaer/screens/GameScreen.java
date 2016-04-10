@@ -1,6 +1,7 @@
 package com.maxaer.screens;
 
 import com.badlogic.gdx.Screen;
+import com.maxaer.database.User;
 import com.maxaer.game.GameWindow;
 import com.maxaer.gameworld.GameRenderer;
 import com.maxaer.gameworld.GameWorld;
@@ -19,8 +20,8 @@ public class GameScreen implements Screen
    private GameWorld world;
    private GameRenderer renderer;
    
-   public GameScreen(GameWindow window){
-      world = new GameWorld(window);
+   public GameScreen(GameWindow window, User user){
+      world = new GameWorld(window, user);
       renderer = new GameRenderer(world); 
    }
 

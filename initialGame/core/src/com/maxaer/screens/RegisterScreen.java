@@ -1,11 +1,13 @@
 package com.maxaer.screens;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.regex.Pattern;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -27,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.maxaer.database.SQLDriver;
+import com.maxaer.database.User;
 import com.maxaer.game.GameWindow;
 import com.maxaer.threaded.SQLStoreUser;
 
@@ -168,21 +171,37 @@ public class RegisterScreen implements Screen
             
             if(verifyPassword(passwordField.getText(), confirmField.getText()) && userNameFree(userNameField.getText())){
                //Store the user into SQL 
-               SQLStoreUser storeUser = new SQLStoreUser(userNameField.getText(), passwordField.getText());
-               storeUser.start();
+               String hash = hashPassword(passwordField.getText());
+//               SQLStoreUser storeUser = new SQLStoreUser(userNameField.getText(), hash);
+//               storeUser.start();
+               SQLDriver driver = new SQLDriver();
+               driver.connect();
+               driver.addUser(userNameField.getText(), hash);
+               driver.stop();
                
+               User user = new User(userNameField.getText(), hash, false);
                //register user and change the screen
-               window.setScreen(new GameScreen(window));
-            } else{
-               Dialog dialog = new Dialog("", skin);
-               dialog.text("Username taken");
-               dialog.button("Ok", true);
-               dialog.key(Keys.ENTER, true);
-               dialog.show(stage);
-            }
+               window.setScreen(new GameScreen(window, user));
+            } 
             
          }
       });
+   }
+   
+   private String hashPassword(String password){
+
+      MessageDigest messageDigest;
+      try
+      {
+         messageDigest = MessageDigest.getInstance("SHA-256");
+         messageDigest.update(password.getBytes());
+         return new String(messageDigest.digest());
+      }
+      catch (NoSuchAlgorithmException e)
+      {
+         return "";
+      }
+   
    }
    
    //Check SQL to make sure the username is free
@@ -191,11 +210,19 @@ public class RegisterScreen implements Screen
       SQLDriver driver = new SQLDriver();
       driver.connect();
       
-      boolean isFree = driver.userNameExists(userName);
+      boolean exists = driver.userNameExists(userName);
       
       driver.stop();
       
-      return !isFree;
+      if(exists){
+         Dialog dialog = new Dialog("", skin);
+         dialog.text("Username taken");
+         dialog.button("Ok", true);
+         dialog.key(Keys.ENTER, true);
+         dialog.show(stage);
+      }
+      
+      return !exists;
       
    }
    
