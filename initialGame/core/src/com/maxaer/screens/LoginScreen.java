@@ -1,6 +1,7 @@
 package com.maxaer.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -48,7 +49,7 @@ public class LoginScreen implements Screen
       
       batch = new SpriteBatch();
       
-      Texture background = new Texture(Gdx.files.internal("Backgrounds/AltMaxaerBackground.png"));
+      Texture background = new Texture(Gdx.files.internal("Backgrounds/LoginBackground.png"));
       backgroundSprite = new Sprite(background);
       backgroundSprite.setPosition(0, 0);
       
@@ -176,6 +177,11 @@ public class LoginScreen implements Screen
        stage.act();
        stage.draw();
 
+       
+       if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){
+          window.setScreen(new MenuScreen(window));
+          dispose();
+       }
 
       
    }
@@ -214,6 +220,7 @@ public class LoginScreen implements Screen
       // TODO Auto-generated method stub
       stage.dispose();
       batch.dispose();
+      skin.dispose();
    }
 
    
