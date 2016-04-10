@@ -216,6 +216,7 @@ public class GameRenderer
    
    private void sendScoreToSQL(int userID, int score){
       if(!world.getUser().isGuest()){
+         System.out.println("Sending score to SQL");
          SQLScoreUpdater updater = new SQLScoreUpdater(userID, score);
          updater.start();
       }

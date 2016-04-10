@@ -28,12 +28,12 @@ public class MenuScreen implements Screen
    private BitmapFont font;
    private Skin skin;
    private Stage stage;
-   private TextButton playBtn, scoresBtn, registerBtn, loginBtn;
+   private TextButton playBtn, scoresBtn, registerBtn, loginBtn, myStatsBtn;
    private Sprite backgroundSprite;
    
    private static final float BTN_SPACING = 10f; 
    
-   public MenuScreen(GameWindow window){
+   public MenuScreen(GameWindow window, User user){
       cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
       cam.setToOrtho(false);
       
@@ -64,18 +64,33 @@ public class MenuScreen implements Screen
       registerBtn = new TextButton("Sign up", skin);
       registerBtn.setPosition(playBtn.getX(), playBtn.getY() - playBtn.getHeight() - BTN_SPACING);
       registerBtn.setWidth(190);
-      stage.addActor(registerBtn);
       
       loginBtn = new TextButton("Login", skin);
       loginBtn.setPosition(registerBtn.getX(), registerBtn.getY() - registerBtn.getHeight() - BTN_SPACING);
       loginBtn.setWidth(190);
-      stage.addActor(loginBtn);
       
-      
+
       scoresBtn = new TextButton("High Scores", skin);
-      scoresBtn.setPosition(playBtn.getX(), loginBtn.getY() - loginBtn.getHeight() - BTN_SPACING);
       scoresBtn.setWidth(190);
       stage.addActor(scoresBtn);
+      
+      if(user.isGuest()){
+         
+         stage.addActor(registerBtn);
+         stage.addActor(loginBtn);
+         
+         scoresBtn.setPosition(playBtn.getX(), loginBtn.getY() - loginBtn.getHeight() - BTN_SPACING);
+      } else{
+         myStatsBtn = new TextButton("My Stats", skin);
+         myStatsBtn.setPosition(playBtn.getX(), playBtn.getY() - playBtn.getHeight() - BTN_SPACING);
+         stage.addActor(myStatsBtn);
+         
+         scoresBtn.setPosition(playBtn.getX(), myStatsBtn.getY() - myStatsBtn.getHeight() - BTN_SPACING);
+      }
+      
+      stage.addActor(scoresBtn);
+     
+
       
       addActions(); 
       

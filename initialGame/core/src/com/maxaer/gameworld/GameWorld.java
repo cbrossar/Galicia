@@ -95,7 +95,7 @@ public class GameWorld
    
    //Method to start the menu screen from game
    public void showMenuScreen(){
-      window.setScreen(new MenuScreen(window));
+      window.setScreen(new MenuScreen(window, user));
       this.dispose();
    }
    

@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.maxaer.database.User;
 import com.maxaer.database.UserScore;
 import com.maxaer.game.GameWindow;
 import com.maxaer.threaded.SQLHighScoreRetriever;
@@ -89,7 +90,7 @@ public class HighScoreScreen implements Screen
       batch.end();
       
       if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){
-         window.setScreen(new MenuScreen(window));
+         window.setScreen(new MenuScreen(window, new User("", "", true)));
       }
    }
 

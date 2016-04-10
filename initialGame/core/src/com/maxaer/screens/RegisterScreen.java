@@ -274,7 +274,7 @@ public class RegisterScreen implements Screen
        stage.draw();
 
        if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){
-          window.setScreen(new MenuScreen(window));
+          window.setScreen(new MenuScreen(window, new User("", "", true)));
           dispose();
        }
 
