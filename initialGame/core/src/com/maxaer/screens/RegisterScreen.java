@@ -75,7 +75,7 @@ public class RegisterScreen implements Screen
       createBasicSkin();
       
       userNameField = new TextField("", skin); // Use the initialized skin
-      userNameField.setPosition(330, Gdx.graphics.getHeight()/3 + 50);
+      userNameField.setPosition(330, Gdx.graphics.getHeight()/3 + 75);
       userNameField.setWidth(170);
       stage.addActor(userNameField);
       

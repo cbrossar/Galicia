@@ -57,7 +57,7 @@ public class LoginScreen implements Screen
       
       FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/BankGothic-Regular.ttf"));
       FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-      parameter.size = 26;
+      parameter.size = 22;
       parameter.color = Color.BLACK;
       generator.generateData(parameter);
       font = generator.generateFont(parameter);
@@ -80,7 +80,7 @@ public class LoginScreen implements Screen
       
       passwordField = new TextField("", skin);
       passwordField.setPasswordMode(true);
-      passwordField.setPasswordCharacter('.');
+      passwordField.setPasswordCharacter('*');
       passwordField.setPosition(userNameField.getX(), userNameField.getY() - userNameField.getHeight() - BTN_SPACING);
       passwordField.setWidth(170);
       stage.addActor(passwordField);
