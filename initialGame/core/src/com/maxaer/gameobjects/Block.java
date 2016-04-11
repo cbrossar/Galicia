@@ -16,6 +16,7 @@ public class Block extends Shape {
 	private Sprite sprite;
 	private Body body;
 	private Body bottomBlock;
+	private Body rightBlock;
 	private Texture texture;   
 	final float PIXELS_TO_METERS = GameConstants.PIXEL_TO_METERS;
 	private Random rand = new Random();
@@ -31,6 +32,7 @@ public class Block extends Shape {
 		//Randomly determine whether block is small or large
 		float small = rand.nextFloat();
 		if(small <= .50f) isSmall = true;
+		isSmall = false;
 		if(isSmall) sprite.setSize(sprite.getWidth()/2, sprite.getHeight()/2);
 		
 		int p = rand.nextInt(800);
@@ -43,6 +45,7 @@ public class Block extends Shape {
 		
 		//Randomize drop location on screen
 		int pos = rand.nextInt(650);
+		//pos = 200;
 		bodyDef.position.set((pos) / PIXELS_TO_METERS,
               (sprite.getY() + sprite.getHeight()/2) / PIXELS_TO_METERS);
       
@@ -74,7 +77,7 @@ public class Block extends Shape {
 		bd2.type = BodyDef.BodyType.DynamicBody;
 		bd2.fixedRotation = true;
 		bd2.position.set((pos) / PIXELS_TO_METERS,
-	              (sprite.getY() + sprite.getHeight() + 10) /PIXELS_TO_METERS);
+	              (sprite.getY() + sprite.getHeight() + 20) /PIXELS_TO_METERS);
 	
 		bottomBlock = world.createBody(bd2);
 	
@@ -90,12 +93,40 @@ public class Block extends Shape {
 		fd2.restitution = 0f;
 		fd2.friction = 0f;
 		
+		//Free up the shape here
+		shape.dispose();
+		
 		
          bottomBlock.createFixture(fd2);
          bottom.dispose();
+         
+//         BodyDef bd3 = new BodyDef();	
+//         bd3.type = BodyDef.BodyType.DynamicBody;
+//         bd3.fixedRotation = true;
+////         bd3.position.set((pos + sprite.getWidth()/2 ) / PIXELS_TO_METERS,
+//// 	              (sprite.getY() + sprite.getHeight()/2) /PIXELS_TO_METERS);
+////         
+//		rightBlock = world.createBody(bd3);
+//		rightBlock.setTransform((pos + sprite.getWidth()/2 + 3) / PIXELS_TO_METERS,
+//	              (sprite.getY() + sprite.getHeight()/2) /PIXELS_TO_METERS, -1/PIXELS_TO_METERS);
+//		
+//		rightBlock.setGravityScale(0);
+//		rightBlock.setLinearVelocity(0, 3f);
+//		
+//	
+//		FixtureDef fd3 = new FixtureDef();
+//		PolygonShape right = new PolygonShape();
+//		right.setAsBox((1 / PIXELS_TO_METERS), ((sprite.getHeight()/2 - 5) / PIXELS_TO_METERS));
+//		fd3.shape = right;
+//		fd3.density = 100000f;
+//		fd3.restitution = 0f;
+//		fd3.friction = 9000f;
+//		
+//		
+//		rightBlock.createFixture(fd3);
+//	    right.dispose();
 
-		//Free up the shape here
-		shape.dispose();
+		
 		
 	}
 	
@@ -117,6 +148,9 @@ public class Block extends Shape {
 	public Body getBottomBlock()
 	{
 		return bottomBlock;
+	}
+	public Body getRightBlock() {
+		return rightBlock;
 	}
 	
 	public void dispose(){

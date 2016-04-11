@@ -50,6 +50,8 @@ public class GameRenderer
    private Vector<Block> blocks;
    
    public GameRenderer(GameWorld world){
+	   
+	   
       //Create the reference to the game world
       this.world = world;
       
@@ -89,7 +91,7 @@ public class GameRenderer
     * All rendering goes on here. Super important method
     */
    public void render() {
-                       
+	   
 	  // Step the physics simulation forward at a rate of 45hz, recommended by LibGDX
       world.getWorld().step(1/45f, 6, 2);
       
