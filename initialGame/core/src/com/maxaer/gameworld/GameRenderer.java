@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.maxaer.constants.GameConstants;
 import com.maxaer.gameobjects.Block;
@@ -91,6 +92,18 @@ public class GameRenderer
                        
 	  // Step the physics simulation forward at a rate of 45hz, recommended by LibGDX
       world.getWorld().step(1/45f, 6, 2);
+      
+      
+      
+      Vector<Body> ibb = world.getInactiveBottomBlocks();
+      if(!ibb.isEmpty()) {
+    	  for(int i = 0; i < ibb.size(); i++) {
+        	  ibb.get(i).setActive(false);
+        	  ibb.remove(ibb.get(i));
+          }
+      }
+      
+      
       
       //Clear the screen here
       Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -180,18 +193,16 @@ public class GameRenderer
          //Update the delay time by adding the time passed since the last delay 
          world.setGameOver(true);
          renderGameOverScreen();
+         score = 21;
          if(world.isJustDied()){
             world.setJustDied(false);
-            
             sendScoreToSQL(1, score); 
             
          }
       }
+
+      debug.render(world.getWorld(), debugMatrix);
       
-      
-      //debug.render(world.getWorld(), debugMatrix);
-      
-   
    }
    
    public void renderBackground(){

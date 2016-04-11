@@ -42,6 +42,7 @@ public class GameWorld
    private boolean gameOver;
    private boolean justDied;
    private GameWindow window;
+   private Vector<Body> inActiveBottomBlocks;
    
    public GameWorld(GameWindow window)
    {
@@ -63,6 +64,7 @@ public class GameWorld
       blocks = new Vector<Block>();
       gameOver = false;
       justDied = true;
+      inActiveBottomBlocks = new Vector<Body>();
       
       //Set the input listener for this screen
       Gdx.input.setInputProcessor(new UserInputListener(this));
@@ -153,6 +155,16 @@ public class GameWorld
    {
       this.justDied = justDied;
    }
+
+	public void addToBottomBlocksInactive(Body bottomBlock) {
+		inActiveBottomBlocks.add(bottomBlock);	
+		
+	}
+
+	public Vector<Body> getInactiveBottomBlocks() {
+		return inActiveBottomBlocks;
+	}
+
    
    
    

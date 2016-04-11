@@ -31,6 +31,7 @@ public class Block extends Shape {
 		//Randomly determine whether block is small or large
 		float small = rand.nextFloat();
 		if(small <= .50f) isSmall = true;
+		//isSmall = false;
 		if(isSmall) sprite.setSize(sprite.getWidth()/2, sprite.getHeight()/2);
 		
 		int p = rand.nextInt(800);
@@ -43,6 +44,7 @@ public class Block extends Shape {
 		
 		//Randomize drop location on screen
 		int pos = rand.nextInt(800);
+	//	pos = 200;
 		bodyDef.position.set((pos) / PIXELS_TO_METERS,
               (sprite.getY() + sprite.getHeight()/2) / PIXELS_TO_METERS);
       
@@ -59,7 +61,7 @@ public class Block extends Shape {
 
 		FixtureDef boxDef = new FixtureDef();
 		boxDef.shape = shape;
-		boxDef.density = 10000f;
+		boxDef.density = 1000000f;
 		boxDef.restitution = 0f;
 		boxDef.friction = 0.1f;
 //		boxDef.filter.categoryBits = GameConstants.CATEGORY_BLOCK;
@@ -73,19 +75,21 @@ public class Block extends Shape {
 		bd2.type = BodyDef.BodyType.DynamicBody;
 		bd2.fixedRotation = true;
 		bd2.position.set((pos) / PIXELS_TO_METERS,
-	             (sprite.getY()) / PIXELS_TO_METERS);
-		
+	              (sprite.getY() + sprite.getHeight() + 20) /PIXELS_TO_METERS);
+	
 		bottomBlock = world.createBody(bd2);
-		
+	
 		bottomBlock.setGravityScale(0);
 		bottomBlock.setLinearVelocity(0, 2f);
 		
 
 		FixtureDef fd2 = new FixtureDef();
-		EdgeShape bottom = new EdgeShape();
-		bottom.set(pos/ PIXELS_TO_METERS, (sprite.getY() + 20) / PIXELS_TO_METERS, 
-				(pos + sprite.getWidth()) / PIXELS_TO_METERS, (sprite.getY() + 20)/ PIXELS_TO_METERS );
+		PolygonShape bottom = new PolygonShape();
+		bottom.setAsBox((sprite.getWidth() / 3 / PIXELS_TO_METERS), (1/ PIXELS_TO_METERS));
 		fd2.shape = bottom;
+		fd2.density = 100000f;
+		fd2.restitution = 0f;
+		fd2.friction = 0f;
 		
 		
          bottomBlock.createFixture(fd2);
