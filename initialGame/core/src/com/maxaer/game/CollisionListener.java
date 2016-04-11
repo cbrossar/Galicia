@@ -35,7 +35,7 @@ public class CollisionListener implements ContactListener
     //Death by blocks attempt #2      
       Vector<Block> v = world.getBlocks();
       
-      
+      //check all bottom blocks for death conditions
       for(int i = 0; i < v.size(); i++) {
     	  if(obj2.getBody().equals(v.get(i).getBottomBlock())) {  
     		  if(obj1.getBody().equals(world.getPlayerBody())) {

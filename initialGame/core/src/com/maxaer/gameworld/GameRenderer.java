@@ -188,15 +188,22 @@ public class GameRenderer
       shapeRenderer.end();
       Gdx.gl.glDisable(GL30.GL_BLEND);
       
+      //if player is crushed by block end the game 
+      if (world.isGameOver()) {
+    	  world.getPlayerBody().setLinearVelocity(0, 0);
+    	  world.setGameOver(true);
+          renderGameOverScreen();  
+          score = 21;
+      }
       
       if(checkLavaDeath() || world.isGameOver()){
          //Update the delay time by adding the time passed since the last delay 
          
-    	  world.getPlayerBody().setLinearVelocity(0, 0);
+    	  
     	  world.setGameOver(true);
-         renderGameOverScreen();
+          renderGameOverScreen();
          
-         score = 21;
+          score = 21;
          if(world.isJustDied()) { 
             world.setJustDied(false);
             sendScoreToSQL(1, score); 

@@ -69,6 +69,7 @@ public class Block extends Shape {
 		body.createFixture(boxDef);
 		
 		
+		//create  small body under blocks to detect for collisions
 		BodyDef bd2 = new BodyDef();
 		bd2.type = BodyDef.BodyType.DynamicBody;
 		bd2.fixedRotation = true;
