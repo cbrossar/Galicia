@@ -44,6 +44,8 @@ public class GameWorld
    private boolean gameOver;
    private boolean justDied;
    private GameWindow window;
+   private Vector<Body> inActiveBottomBlocks;
+   
    private User user;
    
    //Game speeds
@@ -76,6 +78,7 @@ public class GameWorld
       justDied = true;
       GAME_SPEED = DEFAULT_SPEED;
       lastHeight = -500;
+      inActiveBottomBlocks = new Vector<Body>();
       
       //Set the input listener for this screen
       Gdx.input.setInputProcessor(new UserInputListener(this));
@@ -105,6 +108,7 @@ public class GameWorld
    
    //Method to start the menu screen from game
    public void showMenuScreen(){
+
       window.setScreen(new MenuScreen(window, user));
       this.dispose();
    }
@@ -178,6 +182,16 @@ public class GameWorld
    {
       this.justDied = justDied;
    }
+
+	public void addToBottomBlocksInactive(Body bottomBlock) {
+		inActiveBottomBlocks.add(bottomBlock);	
+		
+	}
+
+	public Vector<Body> getInactiveBottomBlocks() {
+		return inActiveBottomBlocks;
+	}
+
    
    public User getUser()
    {

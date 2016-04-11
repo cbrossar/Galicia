@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.maxaer.constants.GameConstants;
 import com.maxaer.gameobjects.Block;
@@ -94,6 +95,18 @@ public class GameRenderer
                        
 	  // Step the physics simulation forward at a rate of 45hz, recommended by LibGDX
       world.getWorld().step(1/45f, 6, 2);
+      
+      
+      
+      Vector<Body> ibb = world.getInactiveBottomBlocks();
+      if(!ibb.isEmpty()) {
+    	  for(int i = 0; i < ibb.size(); i++) {
+        	  ibb.get(i).setActive(false);
+        	  ibb.remove(ibb.get(i));
+          }
+      }
+      
+      
       
       //Clear the screen here
       Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -179,22 +192,30 @@ public class GameRenderer
       shapeRenderer.end();
       Gdx.gl.glDisable(GL30.GL_BLEND);
       
+      //if player is crushed by block end the game 
+      if (world.isGameOver()) {
+    	  world.getPlayerBody().setLinearVelocity(0, 0);
+    	  world.setGameOver(true);
+          renderGameOverScreen();  
+          score = 21;
+      }
       
       if(checkLavaDeath() || world.isGameOver()){
          //Update the delay time by adding the time passed since the last delay 
-         world.setGameOver(true);
-         renderGameOverScreen();
-         if(world.isJustDied()){
+    	  world.setGameOver(true);
+          renderGameOverScreen();
+         
+          score = 21;
+          if(world.isJustDied()) { 
             world.setJustDied(false);
             sendScoreToSQL(world.getUser().getUserID(), score); 
+
             
          }
       }
       
+      debug.render(world.getWorld(), debugMatrix);
       
-      //debug.render(world.getWorld(), debugMatrix);
-      
-   
    }
    
    public void renderBackground(){
@@ -218,6 +239,7 @@ public class GameRenderer
    }
    
    private void sendScoreToSQL(int userID, int score){
+
       if(!world.getUser().isGuest()){
          SQLScoreUpdater updater = new SQLScoreUpdater(userID, score);
          updater.start();

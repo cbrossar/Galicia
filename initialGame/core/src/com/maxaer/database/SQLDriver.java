@@ -10,11 +10,7 @@ import java.util.ArrayList;
 
 import com.mysql.jdbc.Driver;
 
-/*
- * Class: SQLDriver
- * Author: Peter Kaminski
- * Purpose: To create a connection for our game to store information in an SQL database 
- */
+
 public class SQLDriver
 {
    private Connection conn;
@@ -35,6 +31,7 @@ public class SQLDriver
       }
    }
 
+
    //Connect to the SQL server instance 
    public void connect(){
       try{
@@ -43,6 +40,7 @@ public class SQLDriver
          err.printStackTrace();
       }
    }
+
 
    //Close the connection
    public void stop(){
@@ -82,6 +80,7 @@ public class SQLDriver
       } 
    }
    
+
    //Check to see if the user name is in SQL
    public boolean userNameExists(String uname){
       try{
@@ -103,6 +102,7 @@ public class SQLDriver
          return false;
       } 
    }
+
 
    //Add a new score to the HighScores table
    public void addTopScore(int userID, int score){

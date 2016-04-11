@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import java.util.Random;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
@@ -15,6 +16,7 @@ import com.maxaer.constants.GameConstants;
 public class Block extends Shape {
 	private Sprite sprite;
 	private Body body;
+	private Body bottomBlock;
 	private Texture texture;   
 	final float PIXELS_TO_METERS = GameConstants.PIXEL_TO_METERS;
 	private Random rand = new Random();
@@ -41,7 +43,8 @@ public class Block extends Shape {
 		bodyDef.fixedRotation = true;
 		
 		//Randomize drop location on screen
-		int pos = rand.nextInt(Gdx.graphics.getWidth());
+		int pos = rand.nextInt(Gdx.graphics.getWidth() + 50);
+
 		bodyDef.position.set((pos) / PIXELS_TO_METERS,
               (sprite.getY() + sprite.getHeight()/2) / PIXELS_TO_METERS);
       
@@ -58,15 +61,40 @@ public class Block extends Shape {
 
 		FixtureDef boxDef = new FixtureDef();
 		boxDef.shape = shape;
-		boxDef.density = 10000f;
+		boxDef.density = 1000000f;
 		boxDef.restitution = 0f;
 		boxDef.friction = 0.1f;
 //		boxDef.filter.categoryBits = GameConstants.CATEGORY_BLOCK;
 //		boxDef.filter.maskBits = GameConstants.MASK_BLOCK;
-//	
-      
+		
+		
 		body.createFixture(boxDef);
 		
+		
+		//create  small body under blocks to detect for collisions
+		BodyDef bd2 = new BodyDef();
+		bd2.type = BodyDef.BodyType.DynamicBody;
+		bd2.fixedRotation = true;
+		bd2.position.set((pos) / PIXELS_TO_METERS,
+	              (sprite.getY() + sprite.getHeight() + 15) /PIXELS_TO_METERS);
+	
+		bottomBlock = world.createBody(bd2);
+	
+		bottomBlock.setGravityScale(0);
+		bottomBlock.setLinearVelocity(0, 3f);
+		
+
+		FixtureDef fd2 = new FixtureDef();
+		PolygonShape bottom = new PolygonShape();
+		bottom.setAsBox((sprite.getWidth() / 3 / PIXELS_TO_METERS), (1/ PIXELS_TO_METERS));
+		fd2.shape = bottom;
+		fd2.density = 100000f;
+		fd2.restitution = 0f;
+		fd2.friction = 0f;
+		
+		
+         bottomBlock.createFixture(fd2);
+         bottom.dispose();
 
 		//Free up the shape here
 		shape.dispose();
@@ -86,6 +114,11 @@ public class Block extends Shape {
 	public Body getBody()
 	{
 		return body;
+	}
+	
+	public Body getBottomBlock()
+	{
+		return bottomBlock;
 	}
 	
 	public void dispose(){
