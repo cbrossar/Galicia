@@ -43,8 +43,7 @@ public class GameRenderer
    private ShapeRenderer shapeRenderer;
    private Box2DDebugRenderer debug;
    private Matrix4 debugMatrix;
-   private BitmapFont font;
-   private BitmapFont deathFont;
+   private BitmapFont font, deathFont, nameFont;
    private GlyphLayout layout; 
    private int score = 21;
    private Vector<Block> blocks;
@@ -76,6 +75,10 @@ public class GameRenderer
       
       parameter.size = 24;
       deathFont = generator.generateFont(parameter);
+      
+      parameter.size = 20;
+      parameter.color = Color.BLACK;
+      nameFont = generator.generateFont(parameter);
       generator.dispose(); // don't forget to dispose to avoid memory leaks!
       
       Texture backgroundTexture = new Texture("Backgrounds/background.png");
@@ -174,6 +177,7 @@ public class GameRenderer
       font.setUseIntegerPositions(false);
       font.draw(hudBatch, "Score: " + score, 0, Gdx.graphics.getHeight() - 10);
       font.draw(hudBatch, "" + (int)Math.floor(4.7*(4.7-world.getPlayerBody() .getPosition().y)), 0, Gdx.graphics.getHeight() - 30);
+      nameFont.draw(hudBatch, world.getUser().getUserName(), 0, Gdx.graphics.getHeight() - 50);
       
       hudBatch.end();
       
@@ -204,7 +208,8 @@ public class GameRenderer
           score = 21;
           if(world.isJustDied()) { 
             world.setJustDied(false);
-            sendScoreToSQL(1, score); 
+            sendScoreToSQL(world.getUser().getUserID(), score); 
+
             
          }
       }
@@ -249,7 +254,6 @@ public class GameRenderer
    private void sendScoreToSQL(int userID, int score){
 
       if(!world.getUser().isGuest()){
-         System.out.println("Sending score to SQL");
          SQLScoreUpdater updater = new SQLScoreUpdater(userID, score);
          updater.start();
       }

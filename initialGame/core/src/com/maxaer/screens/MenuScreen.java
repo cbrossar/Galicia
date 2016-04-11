@@ -35,6 +35,7 @@ public class MenuScreen implements Screen
    private Stage stage;
    private TextButton playBtn, scoresBtn, registerBtn, loginBtn, myStatsBtn;
    private Sprite backgroundSprite;
+   private User user; 
    
    private static final float BTN_SPACING = 10f; 
    
@@ -111,6 +112,12 @@ public class MenuScreen implements Screen
       scoresBtn.setWidth(190);
       stage.addActor(scoresBtn);
       
+      myStatsBtn = new TextButton("My Stats", skin);
+      myStatsBtn.setPosition(playBtn.getX(), playBtn.getY() - playBtn.getHeight() - BTN_SPACING);
+      myStatsBtn.setWidth(190);
+      
+      this.user = user; 
+      
       if(user.isGuest()){
          
          stage.addActor(registerBtn);
@@ -118,8 +125,7 @@ public class MenuScreen implements Screen
          
          scoresBtn.setPosition(playBtn.getX(), loginBtn.getY() - loginBtn.getHeight() - BTN_SPACING);
       } else{
-         myStatsBtn = new TextButton("My Stats", skin);
-         myStatsBtn.setPosition(playBtn.getX(), playBtn.getY() - playBtn.getHeight() - BTN_SPACING);
+         
          stage.addActor(myStatsBtn);
          
          scoresBtn.setPosition(playBtn.getX(), myStatsBtn.getY() - myStatsBtn.getHeight() - BTN_SPACING);
@@ -166,8 +172,7 @@ public class MenuScreen implements Screen
          @Override
          public void changed(ChangeEvent event, Actor actor)
          {
-
-                window.setScreen(new GameScreen(window, new User("", "", true)));
+                window.setScreen(new GameScreen(window, user));
                 dispose();
             
          }
@@ -203,7 +208,7 @@ public class MenuScreen implements Screen
          @Override
          public void changed(ChangeEvent event, Actor actor)
          {
-            window.setScreen(new HighScoreScreen(window));
+            window.setScreen(new HighScoreScreen(window, user));
             dispose(); 
             
          }

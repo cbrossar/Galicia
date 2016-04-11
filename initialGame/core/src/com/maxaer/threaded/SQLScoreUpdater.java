@@ -18,7 +18,7 @@ public class SQLScoreUpdater extends Thread
    {
       SQLDriver driver = new SQLDriver();
       driver.connect();
-      
+      System.out.println("Adding score from " + userID + " " + scoreToAdd);
       driver.addTopScore(userID, scoreToAdd);
       
       driver.stop();

@@ -2,6 +2,7 @@ package com.maxaer.gameworld;
 
 import java.util.Vector;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
@@ -39,7 +40,7 @@ public class GameWorld
    //private Block block;
    private Vector<Block> blocks;
    private float lastDropTime = TimeUtils.nanoTime();
-   float lastHeight = -500;
+   private float lastHeight = -500;
    private boolean gameOver;
    private boolean justDied;
    private GameWindow window;
@@ -48,6 +49,13 @@ public class GameWorld
    private User user;
    
    private boolean isRunning;
+
+   //Game speeds
+   private int GAME_SPEED;
+   private static final int FAST_SPEED = 45;
+   private static final int DEFAULT_SPEED = 40;
+   private static final int SLOW_SPEED = 35;
+   
    
    public GameWorld(GameWindow window, User user)
    {
@@ -70,8 +78,11 @@ public class GameWorld
       blocks = new Vector<Block>();
       gameOver = false;
       justDied = true;
+      GAME_SPEED = DEFAULT_SPEED;
+      lastHeight = -500;
       inActiveBottomBlocks = new Vector<Body>();
       isRunning = true;
+
 
       
       //Set the input listener for this screen
@@ -97,38 +108,7 @@ public class GameWorld
    }
    public void update(float delta){
 	   
-      //Any updating for our world should go here
-	  if(TimeUtils.nanoTime() - lastDropTime > 1000000000.0){
-		  lastDropTime = TimeUtils.nanoTime();
-		  int heightToUse = (int) Math.min(lastHeight, player.getSprite().getY()-600);
-		  Block b = new Block(world, heightToUse);
-		  lastHeight=heightToUse;
-		  blocks.add(b);
-	  }
-
-	  
-	  //Lava comes after 4.5 so enough time for boxes to fall
-	  if(lastDropTime >= 4500000000.0 && lastDropTime <= 25000000000.0){
-		  
-		  //Update the position of the lava by a few pixels
-		  if(lava.getY() > player.getSprite().getY() - (Gdx.graphics.getHeight()/2))
-		     lava.setPosition(lava.getX(), lava.getY() - (30 * delta));
-	  }
-	  
-	  //Increases difficulty of world through increase of velocity
-	  if(lastDropTime > 25000000000.0){
-		  
-		  //Update the position of the lava by a few pixels
-		  if(lava.getY() > player.getSprite().getY() - (Gdx.graphics.getHeight()/2))
-		     lava.setPosition(lava.getX(), lava.getY() - (33 * delta));
-	  }
-
-	  //Update the position of the lava by a few pixels
-	  if(lava.getY() > player.getSprite().getY() - (Gdx.graphics.getHeight()/2))
-
-	     lava.setPosition(lava.getX(), lava.getY() - (45 * delta));
-
-	     lava.setPosition(lava.getX(), lava.getY() - (40 * delta));
+ 
 
 	   if(isRunning){
 		   
@@ -176,6 +156,9 @@ public class GameWorld
 //	     lava.setPosition(lava.getX(), lava.getY() - (45 * delta));
 //
 //	     lava.setPosition(lava.getX(), lava.getY() - (40 * delta));
+
+	   //  lava.setPosition(lava.getX(), lava.getY() - (GAME_SPEED * delta));
+	  
    }
    
    //Method to start the menu screen from game
@@ -183,6 +166,18 @@ public class GameWorld
 
       window.setScreen(new MenuScreen(window, user));
       this.dispose();
+   }
+   
+   public void setFast(){
+      GAME_SPEED = FAST_SPEED;
+   }
+   
+   public void setSlow(){
+      GAME_SPEED = SLOW_SPEED;
+   }
+   
+   public void setDefault(){
+      GAME_SPEED = DEFAULT_SPEED;
    }
    
    public Sprite getBackground()
