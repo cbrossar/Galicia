@@ -1,5 +1,6 @@
 package com.maxaer.gameobjects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import java.util.Random;
@@ -31,7 +32,7 @@ public class Block extends Shape {
 		if(small <= .50f) isSmall = true;
 		if(isSmall) sprite.setSize(sprite.getWidth()/2, sprite.getHeight()/2);
 		
-		int p = rand.nextInt(800);
+		int p = rand.nextInt(Gdx.graphics.getWidth());
 		sprite.setPosition(/*Gdx.graphics.getWidth()/6, 0*/ p, height);
 	  
 		//Set the body definition for the player
@@ -40,7 +41,7 @@ public class Block extends Shape {
 		bodyDef.fixedRotation = true;
 		
 		//Randomize drop location on screen
-		int pos = rand.nextInt(800);
+		int pos = rand.nextInt(Gdx.graphics.getWidth());
 		bodyDef.position.set((pos) / PIXELS_TO_METERS,
               (sprite.getY() + sprite.getHeight()/2) / PIXELS_TO_METERS);
       

@@ -2,6 +2,7 @@ package com.maxaer.gameworld;
 
 import java.util.Vector;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
@@ -39,11 +40,18 @@ public class GameWorld
    //private Block block;
    private Vector<Block> blocks;
    private float lastDropTime = TimeUtils.nanoTime();
-   float lastHeight = -500;
+   private float lastHeight = -500;
    private boolean gameOver;
    private boolean justDied;
    private GameWindow window;
    private User user;
+   
+   //Game speeds
+   private int GAME_SPEED;
+   private static final int FAST_SPEED = 45;
+   private static final int DEFAULT_SPEED = 40;
+   private static final int SLOW_SPEED = 35;
+   
    
    public GameWorld(GameWindow window, User user)
    {
@@ -66,6 +74,8 @@ public class GameWorld
       blocks = new Vector<Block>();
       gameOver = false;
       justDied = true;
+      GAME_SPEED = DEFAULT_SPEED;
+      lastHeight = -500;
       
       //Set the input listener for this screen
       Gdx.input.setInputProcessor(new UserInputListener(this));
@@ -88,7 +98,7 @@ public class GameWorld
 	  }
 	  //Update the position of the lava by a few pixels
 	  if(lava.getY() > player.getSprite().getY() - (Gdx.graphics.getHeight()/2))
-	     lava.setPosition(lava.getX(), lava.getY() - (45 * delta));
+	     lava.setPosition(lava.getX(), lava.getY() - (GAME_SPEED * delta));
 	  
 	  
    }
@@ -97,6 +107,18 @@ public class GameWorld
    public void showMenuScreen(){
       window.setScreen(new MenuScreen(window, user));
       this.dispose();
+   }
+   
+   public void setFast(){
+      GAME_SPEED = FAST_SPEED;
+   }
+   
+   public void setSlow(){
+      GAME_SPEED = SLOW_SPEED;
+   }
+   
+   public void setDefault(){
+      GAME_SPEED = DEFAULT_SPEED;
    }
    
    public Sprite getBackground()
