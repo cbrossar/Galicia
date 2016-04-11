@@ -46,6 +46,7 @@ public class GameRenderer
    private BitmapFont font, deathFont, nameFont;
    private GlyphLayout layout; 
    private int score = 21;
+   private int finalScore;
    private Vector<Block> blocks;
    
    public GameRenderer(GameWorld world){
@@ -167,19 +168,23 @@ public class GameRenderer
               b.getSprite().getScaleY(),b.getSprite().getRotation());
       }
       
-
-      score = Math.max(score,  (int)Math.floor(4.7*(4.7-world.getPlayerBody() .getPosition().y)));
+      
+      if(!world.isGameOver())
+         score = Math.max(score,  (int)Math.floor(4.7*(4.7-world.getPlayerBody() .getPosition().y)));
      
       batch.end();
       
-      hudBatch.begin();
+      if(!world.isGameOver()){
+         hudBatch.begin();
+         
+         font.setUseIntegerPositions(false);
+         font.draw(hudBatch, "Score: " + score, 0, Gdx.graphics.getHeight() - 10);
+         font.draw(hudBatch, "" + (int)Math.floor(4.7*(4.7-world.getPlayerBody() .getPosition().y)), 0, Gdx.graphics.getHeight() - 30);
+         nameFont.draw(hudBatch, world.getUser().getUserName(), 0, Gdx.graphics.getHeight() - 50);
+         
+         hudBatch.end();
+      }
       
-      font.setUseIntegerPositions(false);
-      font.draw(hudBatch, "Score: " + score, 0, Gdx.graphics.getHeight() - 10);
-      font.draw(hudBatch, "" + (int)Math.floor(4.7*(4.7-world.getPlayerBody() .getPosition().y)), 0, Gdx.graphics.getHeight() - 30);
-      nameFont.draw(hudBatch, world.getUser().getUserName(), 0, Gdx.graphics.getHeight() - 50);
-      
-      hudBatch.end();
       
       //Render the lava here
       Gdx.gl.glEnable(GL30.GL_BLEND);
@@ -192,26 +197,20 @@ public class GameRenderer
       shapeRenderer.end();
       Gdx.gl.glDisable(GL30.GL_BLEND);
       
-      //if player is crushed by block end the game 
-      if (world.isGameOver()) {
-    	  world.getPlayerBody().setLinearVelocity(0, 0);
-    	  world.setGameOver(true);
-          renderGameOverScreen();  
-          score = 21;
-      }
-      
       if(checkLavaDeath() || world.isGameOver()){
          //Update the delay time by adding the time passed since the last delay 
     	  world.setGameOver(true);
-          renderGameOverScreen();
-         
-          score = 21;
+    	  world.getPlayerBody().setLinearVelocity(0,0);
+    	  
           if(world.isJustDied()) { 
             world.setJustDied(false);
-            sendScoreToSQL(world.getUser().getUserID(), score); 
-
-            
+            finalScore = score;
+            score = 21;
+            sendScoreToSQL(world.getUser().getUserID(), finalScore);    
          }
+          
+         renderGameOverScreen();
+          
       }
       
       debug.render(world.getWorld(), debugMatrix);
@@ -245,7 +244,7 @@ public class GameRenderer
       deathFont.draw(hudBatch, "Game over", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - h1)/2);
       layout.setText(deathFont, "Score: " + score);
       float h2 = layout.height;
-      deathFont.draw(hudBatch, "Score: " + score, (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - h1)/2 - h2 - 15);
+      deathFont.draw(hudBatch, "Score: " + finalScore, (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - h1)/2 - h2 - 15);
       layout.setText(deathFont, "Hit space to restart, enter for main menu");
       deathFont.draw(hudBatch, "Hit space to restart, enter for main menu", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - h1)/2 - h2 - layout.height - 30);
       hudBatch.end();
