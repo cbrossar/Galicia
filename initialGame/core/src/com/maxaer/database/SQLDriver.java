@@ -141,7 +141,7 @@ public class SQLDriver
          ResultSet results = statement.executeQuery(GET_TOP_SCORES);
          ArrayList<UserScore> highScores = new ArrayList<UserScore>(); 
          int count = 0; 
-         while(results.next() && count < 10){
+         while(results.next() && count < 10){ 
             highScores.add(new UserScore(results.getInt("userID"), results.getInt("score")));
             count++;
          }

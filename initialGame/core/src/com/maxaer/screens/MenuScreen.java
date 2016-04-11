@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -17,8 +18,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+
 import com.maxaer.database.User;
+
 import com.maxaer.game.GameWindow;
+
+
 
 public class MenuScreen implements Screen
 {
@@ -33,23 +38,55 @@ public class MenuScreen implements Screen
    
    private static final float BTN_SPACING = 10f; 
    
+
    public MenuScreen(GameWindow window, User user){
       cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
       cam.setToOrtho(false);
       
       batch = new SpriteBatch();
       
+      //FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.local("data/MonaKo.ttf"));
+
       Texture background = new Texture(Gdx.files.internal("Backgrounds/600x600Background.png"));
       backgroundSprite = new Sprite(background);
       backgroundSprite.setPosition(0, 0);
       
       FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/BankGothic-Regular.ttf"));
+
       FreeTypeFontParameter parameter = new FreeTypeFontParameter();
       parameter.size = 26;
       parameter.color = Color.BLACK;
       generator.generateData(parameter);
       font = generator.generateFont(parameter);
+
       
+      stage = new Stage();
+      Gdx.input.setInputProcessor(stage);// Make the stage consume events
+
+      createBasicSkin();
+      
+      playBtn = new TextButton("Play", skin); // Use the initialized skin
+      playBtn.setPosition(420, Gdx.graphics.getHeight()/3 + 50);
+      playBtn.setWidth(200);
+      stage.addActor(playBtn);
+      
+      registerBtn = new TextButton("Sign up", skin);
+      registerBtn.setPosition(playBtn.getX(), playBtn.getY() - playBtn.getHeight() - BTN_SPACING);
+      registerBtn.setWidth(200);
+      stage.addActor(registerBtn);
+      
+      loginBtn = new TextButton("Login", skin);
+      loginBtn.setPosition(registerBtn.getX(), registerBtn.getY() - registerBtn.getHeight() - BTN_SPACING);
+      loginBtn.setWidth(200);
+      stage.addActor(loginBtn);
+      
+      
+      scoresBtn = new TextButton("High Scores", skin);
+      scoresBtn.setPosition(playBtn.getX(), loginBtn.getY() - loginBtn.getHeight() - BTN_SPACING);
+      scoresBtn.setWidth(200);
+      stage.addActor(scoresBtn);
+      
+      addActions(); 
       
       stage = new Stage();
       Gdx.input.setInputProcessor(stage);// Make the stage consume events
@@ -129,6 +166,7 @@ public class MenuScreen implements Screen
          @Override
          public void changed(ChangeEvent event, Actor actor)
          {
+
                 window.setScreen(new GameScreen(window, new User("", "", true)));
                 dispose();
             

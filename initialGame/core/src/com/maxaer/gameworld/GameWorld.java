@@ -43,7 +43,11 @@ public class GameWorld
    private boolean gameOver;
    private boolean justDied;
    private GameWindow window;
+   private Vector<Body> inActiveBottomBlocks;
+   
    private User user;
+   
+   private boolean isRunning;
    
    public GameWorld(GameWindow window, User user)
    {
@@ -62,10 +66,13 @@ public class GameWorld
       player = new Player(world);
       platform = new Platform(world);
       //Create the lava as a rectangle with the width of the screen and with 
-      lava = new Rectangle(0, Gdx.graphics.getHeight() + 300,Gdx.graphics.getWidth(), Gdx.graphics.getHeight() + 1200);
+      lava = new Rectangle(0, Gdx.graphics.getHeight() + 300,Gdx.graphics.getWidth(), Gdx.graphics.getHeight() + 1000);
       blocks = new Vector<Block>();
       gameOver = false;
       justDied = true;
+      inActiveBottomBlocks = new Vector<Body>();
+      isRunning = true;
+
       
       //Set the input listener for this screen
       Gdx.input.setInputProcessor(new UserInputListener(this));
@@ -77,24 +84,72 @@ public class GameWorld
       if(platform != null) platform.dispose();
    }
    
+   public void setRunningWorld(boolean running)
+   {
+	   isRunning = running;
+   }
+   
+   public boolean getRunningWorld() {
+	   return isRunning;
+   }
    public void update(float delta){
+	   
+	   if(isRunning){
+		   
       //Any updating for our world should go here
-	  if(TimeUtils.nanoTime() - lastDropTime > 1000000000.0){
-		  lastDropTime = TimeUtils.nanoTime();
-		  int heightToUse = (int) Math.min(lastHeight, player.getSprite().getY()-600);
-		  Block b = new Block(world, heightToUse);
-		  lastHeight=heightToUse;
-		  blocks.add(b);
-	  }
+		  if(TimeUtils.nanoTime() - lastDropTime > 1000000000.0){
+			  lastDropTime = TimeUtils.nanoTime();
+			  int heightToUse = (int) Math.min(lastHeight, player.getSprite().getY()-600);
+			  Block b = new Block(world, heightToUse);
+			  lastHeight=heightToUse;
+			  blocks.add(b);
+		  }
+		
+		  // a bullshit try at this
+		  int heightDifference = (int) (player.getY() - lava.getY());
+		  System.out.println("Block height: " + player.getY());
+		  System.out.println("Lava height: " + lava.getY());
+		  System.out.println("Difference: " + heightDifference);
+		  
+		  //Lava comes after 4.5 so enough time for boxes to fall
+		  if(lastDropTime >= 4500000000.0 && lastDropTime <= 25000000000.0){
+			  
+			  //Update the position of the lava by a few pixels
+			  if(heightDifference >= -600)
+			  {
+				  lava.setPosition(lava.getX(), lava.getY() - (38 * delta));
+			  }
+			  else{
+			     lava.setPosition(lava.getX(), lava.getY() - (35 * delta));
+			  }
+		  }
+		  
+		  //Increases difficulty of world through increase of velocity
+		  if(lastDropTime > 25000000000.0){
+			  
+			  if(heightDifference >= -600)
+			  {
+				  lava.setPosition(lava.getX(), lava.getY() - (35 * delta));
+			  }
+			  else{
+			     lava.setPosition(lava.getX(), lava.getY() - (33 * delta));
+			  }
+		  }
+	   }
+
 	  //Update the position of the lava by a few pixels
-	  if(lava.getY() > player.getSprite().getY() - (Gdx.graphics.getHeight()/2))
-	     lava.setPosition(lava.getX(), lava.getY() - (30 * delta));
+//	  if(lava.getY() > player.getSprite().getY() - (Gdx.graphics.getHeight()/2))
+//
+//	     lava.setPosition(lava.getX(), lava.getY() - (45 * delta));
+//
+//	     lava.setPosition(lava.getX(), lava.getY() - (40 * delta));
 	  
 	  
    }
    
    //Method to start the menu screen from game
    public void showMenuScreen(){
+
       window.setScreen(new MenuScreen(window, user));
       this.dispose();
    }
@@ -156,6 +211,16 @@ public class GameWorld
    {
       this.justDied = justDied;
    }
+
+	public void addToBottomBlocksInactive(Body bottomBlock) {
+		inActiveBottomBlocks.add(bottomBlock);	
+		
+	}
+
+	public Vector<Body> getInactiveBottomBlocks() {
+		return inActiveBottomBlocks;
+	}
+
    
    public User getUser()
    {

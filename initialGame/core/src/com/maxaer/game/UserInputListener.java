@@ -15,11 +15,13 @@ public class UserInputListener implements InputProcessor
 {  
    private GameWorld world;
    private Body player;
+   private boolean isRunning;
    //Pass the constructor an instance of our GameWorld so we can manipulate the game objects
    public UserInputListener(GameWorld world)
    {
       this.world = world;
       player = world.getPlayerBody();
+      isRunning = true;
    }
 
    @Override
@@ -58,7 +60,19 @@ public class UserInputListener implements InputProcessor
          world.createNewGame(); 
       }
 	  
-
+      if(keycode == Input.Keys.P && !world.isGameOver() && isRunning){
+    	
+    	  world.setRunningWorld(false);
+    	  isRunning = false;
+    	  System.out.println(world.getRunningWorld());
+      }
+      
+      else if(keycode == Input.Keys.P && !world.isGameOver() && !isRunning){
+    	  world.setRunningWorld(true);
+    	  isRunning = true;
+    	  System.out.println(world.getRunningWorld() + " wasPaused");
+      }
+    
        if(keycode == Input.Keys.RIGHT && !world.isGameOver()){
     	   player.setLinearVelocity(0, player.getLinearVelocity().y * 1f);
        }
