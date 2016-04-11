@@ -35,7 +35,7 @@ public class CollisionListener implements ContactListener {
     //Death by blocks attempt #2      
       Vector<Block> v = world.getBlocks();
       
-      //check all bottom blocks for death conditions
+    //check all bottom blocks for death conditions
       for(int i = 0; i < v.size(); i++) {
     	  if(obj2.getBody().equals(v.get(i).getBottomBlock())) {  
     		  if(obj1.getBody().equals(world.getPlayerBody())) {
@@ -43,12 +43,22 @@ public class CollisionListener implements ContactListener {
     			  Vector2 vplayer = world.getPlayerBody().getPosition();
     			  if(world.getPlayer().canJump() && ((vplayer.y - vbottom.y) > .1)) {
     				  world.setGameOver(true);
+    				  System.out.println("Death by block crush! Block #" + i);
 				  }
-    		  }   		   
+    		  }
+    		  else {
+    			  for(int j = 0; j < v.size(); j++) {
+    				  if(obj1.getBody().equals(v.get(i).getBody())) {
+    					  world.addToBottomBlocksInactive(v.get(i).getBottomBlock());
+    				  }
+    			  }
+    			  
+    		  }
     	  } else if (obj2.getBody().equals(v.get(i).getBody())) {
     		  if(!obj1.getBody().equals(world.getPlayerBody())) {
     			  v.get(i).getBottomBlock().setLinearVelocity(0f, 0f);
     			  world.addToBottomBlocksInactive(v.get(i).getBottomBlock());
+    			  
     		  }
     		  	
     	  }
