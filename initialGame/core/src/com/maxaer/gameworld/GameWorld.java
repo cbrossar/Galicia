@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.maxaer.database.User;
 import com.maxaer.game.CollisionListener;
 import com.maxaer.game.GameWindow;
 import com.maxaer.game.UserInputListener;
@@ -44,8 +45,11 @@ public class GameWorld
    private GameWindow window;
    private Vector<Body> inActiveBottomBlocks;
    
-   public GameWorld(GameWindow window)
+   private User user;
+   
+   public GameWorld(GameWindow window, User user)
    {
+      this.user = user;
       this.window = window;
       createNewGame(); 
   
@@ -60,11 +64,12 @@ public class GameWorld
       player = new Player(world);
       platform = new Platform(world);
       //Create the lava as a rectangle with the width of the screen and with 
-      lava = new Rectangle(0, Gdx.graphics.getHeight() + 240,Gdx.graphics.getWidth(), Gdx.graphics.getHeight() + 1000);
+      lava = new Rectangle(0, Gdx.graphics.getHeight() + 300,Gdx.graphics.getWidth(), Gdx.graphics.getHeight() + 1000);
       blocks = new Vector<Block>();
       gameOver = false;
       justDied = true;
       inActiveBottomBlocks = new Vector<Body>();
+
       
       //Set the input listener for this screen
       Gdx.input.setInputProcessor(new UserInputListener(this));
@@ -87,14 +92,15 @@ public class GameWorld
 	  }
 	  //Update the position of the lava by a few pixels
 	  if(lava.getY() > player.getSprite().getY() - (Gdx.graphics.getHeight()/2))
-	     lava.setPosition(lava.getX(), lava.getY() - (30 * delta));
+	     lava.setPosition(lava.getX(), lava.getY() - (45 * delta));
 	  
 	  
    }
    
    //Method to start the menu screen from game
    public void showMenuScreen(){
-      window.setScreen(new MenuScreen(window));
+
+      window.setScreen(new MenuScreen(window, user));
       this.dispose();
    }
    
@@ -165,6 +171,11 @@ public class GameWorld
 		return inActiveBottomBlocks;
 	}
 
+   
+   public User getUser()
+   {
+      return user;
+   }
    
    
    

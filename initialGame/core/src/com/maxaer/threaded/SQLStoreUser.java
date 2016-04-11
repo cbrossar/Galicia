@@ -1,8 +1,11 @@
 package com.maxaer.threaded;
 
+<<<<<<< HEAD
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+=======
+>>>>>>> master
 import com.maxaer.database.SQLDriver;
 
 public class SQLStoreUser extends Thread
@@ -19,6 +22,7 @@ public class SQLStoreUser extends Thread
       public SQLStoreUser(String userName, String password)
       {
          this.userName = userName;
+<<<<<<< HEAD
          this.passHash = hashPassword(password);
          
       }
@@ -39,6 +43,12 @@ public class SQLStoreUser extends Thread
       
       }
       
+=======
+         this.passHash = password;
+         
+      }
+      
+>>>>>>> master
       
       @Override
       public void run()

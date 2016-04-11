@@ -10,11 +10,23 @@ import java.util.ArrayList;
 
 import com.mysql.jdbc.Driver;
 
+<<<<<<< HEAD
+=======
+/*
+ * Class: SQLDriver
+ * Author: Peter Kaminski
+ * Purpose: To create a connection for our game to store information in an SQL database 
+ */
+>>>>>>> master
 public class SQLDriver
 {
    private Connection conn;
    private static final String GET_TOP_SCORES = "Select score, userID from HighScores order by score desc";
    private static final String GET_USER_BY_ID = "Select uname from User where userID=?";
+<<<<<<< HEAD
+=======
+   private static final String GET_USER_BY_NAME = "Select userID from User where uname=?";
+>>>>>>> master
    private static final String ADD_USER = "Insert into User (uname, passHash) values (?,?)";
    private static final String ADD_HIGH_SCORE = "Insert into HighScores (userID, score) values (?,?)";
    private static final String USER_EXISTS = "select count(uname) from User where uname=?";
@@ -29,6 +41,10 @@ public class SQLDriver
       }
    }
 
+<<<<<<< HEAD
+=======
+   //Connect to the SQL server instance 
+>>>>>>> master
    public void connect(){
       try{
          conn = DriverManager.getConnection("jdbc:mysql://104.131.153.145:3306/maxaer?user=max&password=DoD2016&useSSL=false");
@@ -37,6 +53,10 @@ public class SQLDriver
       }
    }
 
+<<<<<<< HEAD
+=======
+   //Close the connection
+>>>>>>> master
    public void stop(){
       try
       {
@@ -74,6 +94,10 @@ public class SQLDriver
       } 
    }
    
+<<<<<<< HEAD
+=======
+   //Check to see if the user name is in SQL
+>>>>>>> master
    public boolean userNameExists(String uname){
       try{
          PreparedStatement statement = conn.prepareStatement(USER_EXISTS);
@@ -95,6 +119,10 @@ public class SQLDriver
       } 
    }
 
+<<<<<<< HEAD
+=======
+   //Add a new score to the HighScores table
+>>>>>>> master
    public void addTopScore(int userID, int score){
       try{
          PreparedStatement statement = conn.prepareStatement(ADD_HIGH_SCORE);
@@ -109,6 +137,10 @@ public class SQLDriver
 
    }
    
+<<<<<<< HEAD
+=======
+   //Register a new user with SQL 
+>>>>>>> master
    public void addUser(String userID, String passHash){
       try{
          PreparedStatement statement = conn.prepareStatement(ADD_USER);
@@ -123,6 +155,10 @@ public class SQLDriver
 
    }
    
+<<<<<<< HEAD
+=======
+   //Return the top 10 scores from the DB
+>>>>>>> master
    public ArrayList<UserScore> getTopScores(){
       try{
          Statement statement = conn.createStatement();
@@ -143,6 +179,10 @@ public class SQLDriver
       }
    }
    
+<<<<<<< HEAD
+=======
+   //Return the user's name by their ID
+>>>>>>> master
    public String getUserByID(int userID){
       String user = "Error";
       try{
@@ -161,6 +201,29 @@ public class SQLDriver
          return user;
       }
    }
+<<<<<<< HEAD
+=======
+   
+   //Return the user id by name
+   public int getUserByName(String userName){
+      int user = 1;
+      try{
+         PreparedStatement statement = conn.prepareStatement(GET_USER_BY_NAME);
+         statement.setString(1, userName);
+         ResultSet results = statement.executeQuery();
+         if(results.next()){
+            return results.getInt("userID");
+         }
+         
+         statement.close();
+         results.close();
+         return user;
+      } catch(SQLException e){
+         System.out.println("Get user id err: " + e.getMessage() + " " + e.getSQLState());
+         return user;
+      }
+   }
+>>>>>>> master
 
   
 

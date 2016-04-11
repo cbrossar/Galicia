@@ -74,7 +74,7 @@ public class GameRenderer
       
       layout = new GlyphLayout(); 
       
-      parameter.size = 30;
+      parameter.size = 24;
       deathFont = generator.generateFont(parameter);
       generator.dispose(); // don't forget to dispose to avoid memory leaks!
       
@@ -193,6 +193,7 @@ public class GameRenderer
          //Update the delay time by adding the time passed since the last delay 
          world.setGameOver(true);
          renderGameOverScreen();
+<<<<<<< HEAD
          score = 21;
          if(world.isJustDied()){
             world.setJustDied(false);
@@ -202,6 +203,18 @@ public class GameRenderer
       }
 
       debug.render(world.getWorld(), debugMatrix);
+=======
+         if(world.isJustDied()){
+            world.setJustDied(false);
+            
+            sendScoreToSQL(world.getUser().getUserID(), score); 
+            
+         }
+      }
+      
+      
+      //debug.render(world.getWorld(), debugMatrix);
+>>>>>>> master
       
    }
    
@@ -226,9 +239,17 @@ public class GameRenderer
    }
    
    private void sendScoreToSQL(int userID, int score){
+<<<<<<< HEAD
       //If logged in!
       SQLScoreUpdater updater = new SQLScoreUpdater(userID, score);
       updater.start();
+=======
+      if(!world.getUser().isGuest()){
+         System.out.println("Sending score to SQL");
+         SQLScoreUpdater updater = new SQLScoreUpdater(userID, score);
+         updater.start();
+      }
+>>>>>>> master
    }
    
 

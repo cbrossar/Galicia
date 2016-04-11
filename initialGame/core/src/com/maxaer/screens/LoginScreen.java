@@ -5,8 +5,13 @@ import java.security.NoSuchAlgorithmException;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+<<<<<<< HEAD
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
+=======
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Screen;
+>>>>>>> master
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -28,6 +33,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.maxaer.database.SQLDriver;
+<<<<<<< HEAD
+=======
+import com.maxaer.database.User;
+>>>>>>> master
 import com.maxaer.game.GameWindow;
 
 public class LoginScreen implements Screen
@@ -50,13 +59,15 @@ public class LoginScreen implements Screen
       
       batch = new SpriteBatch();
       
-      Texture background = new Texture(Gdx.files.internal("Backgrounds/AltLoginBackground.png"));
+
+      Texture background = new Texture(Gdx.files.internal("Backgrounds/600x600Login.png"));
       backgroundSprite = new Sprite(background);
       backgroundSprite.setPosition(0, 0);
       
       FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/BankGothic-Regular.ttf"));
       FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-      parameter.size = 26;
+
+      parameter.size = 22;
       parameter.color = Color.BLACK;
       generator.generateData(parameter);
       font = generator.generateFont(parameter);
@@ -73,21 +84,24 @@ public class LoginScreen implements Screen
       createBasicSkin();
       
       userNameField = new TextField("", skin); // Use the initialized skin
-      userNameField.setPosition(420, Gdx.graphics.getHeight()/3 + 60);
-      userNameField.setWidth(200);
+
+      userNameField.setPosition(330, Gdx.graphics.getHeight()/3 + 60);
+      userNameField.setWidth(170);
       stage.addActor(userNameField);
       
       passwordField = new TextField("", skin);
       passwordField.setPasswordMode(true);
-      passwordField.setPasswordCharacter('.');
+
+      passwordField.setPasswordCharacter('*');
       passwordField.setPosition(userNameField.getX(), userNameField.getY() - userNameField.getHeight() - BTN_SPACING);
-      passwordField.setWidth(200);
+      passwordField.setWidth(170);
       stage.addActor(passwordField);
       
       
       loginBtn = new TextButton("Login", skin);
       loginBtn.setPosition(userNameField.getX(), passwordField.getY() - passwordField.getHeight() - BTN_SPACING);
-      loginBtn.setWidth(200);
+
+      loginBtn.setWidth(170);
       stage.addActor(loginBtn);
       
       addActions(); 
@@ -157,10 +171,10 @@ public class LoginScreen implements Screen
          @Override
          public void changed(ChangeEvent event, Actor actor)
          {
-            System.out.println(userNameField.getText() + " " + passwordField.getText());
             if(loginUser(userNameField.getText(), passwordField.getText())){
-
-               window.setScreen(new GameScreen(window));
+               
+               User user = new User(userNameField.getText(), hashPassword(passwordField.getText()), false);
+               window.setScreen(new GameScreen(window, user));
                dispose(); 
             } else{
                Dialog dialog = new Dialog("", skin);
@@ -229,7 +243,8 @@ public class LoginScreen implements Screen
 
        
        if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){
-          window.setScreen(new MenuScreen(window));
+
+          window.setScreen(new MenuScreen(window, new User("", "", true)));
           dispose();
        }
 

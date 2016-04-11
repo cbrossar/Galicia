@@ -1,11 +1,16 @@
 package com.maxaer.screens;
 
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import java.util.regex.Pattern;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
+
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -27,8 +32,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.maxaer.database.SQLDriver;
+
+import com.maxaer.database.User;
 import com.maxaer.game.GameWindow;
-import com.maxaer.threaded.SQLStoreUser;
 
 public class RegisterScreen implements Screen
 {
@@ -50,13 +56,15 @@ public class RegisterScreen implements Screen
       
       batch = new SpriteBatch();
       
-      Texture background = new Texture(Gdx.files.internal("Backgrounds/AltRegisterBackground.png"));
+
+      Texture background = new Texture(Gdx.files.internal("Backgrounds/600x600RegisterBackground.png"));
       backgroundSprite = new Sprite(background);
       backgroundSprite.setPosition(0, 0);
       
       FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/BankGothic-Regular.ttf"));
       FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-      parameter.size = 26;
+
+      parameter.size = 22;
       parameter.color = Color.BLACK;
       generator.generateData(parameter);
       font = generator.generateFont(parameter);
@@ -73,20 +81,23 @@ public class RegisterScreen implements Screen
       createBasicSkin();
       
       userNameField = new TextField("", skin); // Use the initialized skin
-      userNameField.setPosition(420, Gdx.graphics.getHeight()/3 + 50);
-      userNameField.setWidth(200);
+
+      userNameField.setPosition(330, Gdx.graphics.getHeight()/3 + 75);
+      userNameField.setWidth(170);
       stage.addActor(userNameField);
       
       passwordField = new TextField("", skin);
       passwordField.setPosition(userNameField.getX(), userNameField.getY() - userNameField.getHeight() - BTN_SPACING);
-      passwordField.setWidth(200);
+
+      passwordField.setWidth(170);
       passwordField.setPasswordMode(true);
       passwordField.setPasswordCharacter('*');
       stage.addActor(passwordField);
       
       confirmField = new TextField("", skin);
       confirmField.setPosition(passwordField.getX(), passwordField.getY() - passwordField.getHeight() - BTN_SPACING);
-      confirmField.setWidth(200);
+
+      confirmField.setWidth(170);
       confirmField.setPasswordMode(true);
       confirmField.setPasswordCharacter('*');
       stage.addActor(confirmField);
@@ -94,7 +105,8 @@ public class RegisterScreen implements Screen
       
       registerBtn = new TextButton("Register", skin);
       registerBtn.setPosition(userNameField.getX(), confirmField.getY() - confirmField.getHeight() - BTN_SPACING);
-      registerBtn.setWidth(200);
+
+      registerBtn.setWidth(170);
       stage.addActor(registerBtn);
       
       addActions(); 
@@ -168,21 +180,37 @@ public class RegisterScreen implements Screen
             
             if(verifyPassword(passwordField.getText(), confirmField.getText()) && userNameFree(userNameField.getText())){
                //Store the user into SQL 
-               SQLStoreUser storeUser = new SQLStoreUser(userNameField.getText(), passwordField.getText());
-               storeUser.start();
+
+               String hash = hashPassword(passwordField.getText());
+               SQLDriver driver = new SQLDriver();
+               driver.connect();
+               driver.addUser(userNameField.getText(), hash);
+               driver.stop();
                
+               User user = new User(userNameField.getText(), hash, false);
                //register user and change the screen
-               window.setScreen(new GameScreen(window));
-            } else{
-               Dialog dialog = new Dialog("", skin);
-               dialog.text("Username taken");
-               dialog.button("Ok", true);
-               dialog.key(Keys.ENTER, true);
-               dialog.show(stage);
-            }
+               window.setScreen(new GameScreen(window, user));
+            } 
             
          }
       });
+   }
+   
+
+   private String hashPassword(String password){
+
+      MessageDigest messageDigest;
+      try
+      {
+         messageDigest = MessageDigest.getInstance("SHA-256");
+         messageDigest.update(password.getBytes());
+         return new String(messageDigest.digest());
+      }
+      catch (NoSuchAlgorithmException e)
+      {
+         return "";
+      }
+   
    }
    
    //Check SQL to make sure the username is free
@@ -191,11 +219,20 @@ public class RegisterScreen implements Screen
       SQLDriver driver = new SQLDriver();
       driver.connect();
       
-      boolean isFree = driver.userNameExists(userName);
+
+      boolean exists = driver.userNameExists(userName);
       
       driver.stop();
       
-      return !isFree;
+      if(exists){
+         Dialog dialog = new Dialog("", skin);
+         dialog.text("Username taken");
+         dialog.button("Ok", true);
+         dialog.key(Keys.ENTER, true);
+         dialog.show(stage);
+      }
+      
+      return !exists;
       
    }
    
@@ -250,7 +287,8 @@ public class RegisterScreen implements Screen
        stage.draw();
 
        if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){
-          window.setScreen(new MenuScreen(window));
+
+          window.setScreen(new MenuScreen(window, new User("", "", true)));
           dispose();
        }
 
