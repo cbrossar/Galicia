@@ -1,5 +1,6 @@
 package com.maxaer.game;
 
+import com.maxaer.database.User;
 import com.maxaer.screens.MenuScreen;
 
 /*
@@ -14,7 +15,7 @@ public class GameWindow extends Game{
     @Override
     public void create() {
        
-       setScreen(new MenuScreen(this));
+       setScreen(new MenuScreen(this, new User("", "", true)));
         
     }
 

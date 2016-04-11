@@ -21,6 +21,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.maxaer.constants.GameConstants;
 import com.maxaer.gameobjects.Block;
+import com.maxaer.threaded.SQLScoreUpdater;
 
 /*
  * Class: GameRender
@@ -44,7 +45,7 @@ public class GameRenderer
    private BitmapFont font;
    private BitmapFont deathFont;
    private GlyphLayout layout; 
-   private int score = 0;
+   private int score = 21;
    private Vector<Block> blocks;
    
    public GameRenderer(GameWorld world){
@@ -64,7 +65,7 @@ public class GameRenderer
       batch.setProjectionMatrix(camera.combined);
       shapeRenderer.setProjectionMatrix(camera.combined);
       
-      FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/MonaKo.ttf"));
+      FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/BankGothic-Regular.ttf"));
       FreeTypeFontParameter parameter = new FreeTypeFontParameter();
       parameter.size = 22;
       parameter.color = Color.WHITE;
@@ -72,11 +73,11 @@ public class GameRenderer
       
       layout = new GlyphLayout(); 
       
-      parameter.size = 30;
+      parameter.size = 24;
       deathFont = generator.generateFont(parameter);
       generator.dispose(); // don't forget to dispose to avoid memory leaks!
       
-      Texture backgroundTexture = new Texture("background.png");
+      Texture backgroundTexture = new Texture("Backgrounds/background.png");
       backgroundSprite = new Sprite(backgroundTexture);
       
       debug = new Box2DDebugRenderer();
@@ -179,10 +180,16 @@ public class GameRenderer
          //Update the delay time by adding the time passed since the last delay 
          world.setGameOver(true);
          renderGameOverScreen();
+         if(world.isJustDied()){
+            world.setJustDied(false);
+            
+            sendScoreToSQL(world.getUser().getUserID(), score); 
+            
+         }
       }
       
       
-      debug.render(world.getWorld(), debugMatrix);
+      //debug.render(world.getWorld(), debugMatrix);
       
    
    }
@@ -194,21 +201,25 @@ public class GameRenderer
    
    public void renderGameOverScreen(){
 //      //Clear the screen here
-//      Gdx.gl.glClearColor(1, 1, 1, 1);
-//      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
       hudBatch.begin();
-//      backgroundSprite.setPosition(0, 0);
-//      backgroundSprite.draw(hudBatch);
       deathFont.setColor(Color.BLACK);
       layout.setText(deathFont, "Game over");
       float h1 = layout.height;
       deathFont.draw(hudBatch, "Game over", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - h1)/2);
       layout.setText(deathFont, "Score: " + score);
       float h2 = layout.height;
-      deathFont.draw(hudBatch, "Score: " + score, (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - h1)/2 - h2 - 5);
-      layout.setText(deathFont, "Press space to restart");
-      deathFont.draw(hudBatch, "Press space to restart", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - h1)/2 - h2 - layout.height - 5);
+      deathFont.draw(hudBatch, "Score: " + score, (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - h1)/2 - h2 - 15);
+      layout.setText(deathFont, "Hit space to restart, enter for main menu");
+      deathFont.draw(hudBatch, "Hit space to restart, enter for main menu", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - h1)/2 - h2 - layout.height - 30);
       hudBatch.end();
+   }
+   
+   private void sendScoreToSQL(int userID, int score){
+      if(!world.getUser().isGuest()){
+         System.out.println("Sending score to SQL");
+         SQLScoreUpdater updater = new SQLScoreUpdater(userID, score);
+         updater.start();
+      }
    }
    
 

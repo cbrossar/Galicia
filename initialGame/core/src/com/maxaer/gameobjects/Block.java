@@ -22,7 +22,7 @@ public class Block extends Shape {
 	public Block(World world, int height)
 	{
 		//Create the player to have the block image
-		texture = new Texture("thinmint2.png");
+		texture = new Texture(randomBlockImage());
 		sprite = new Sprite(texture);
 		//Initialize with position in the middle of the screen
 	  
@@ -47,7 +47,7 @@ public class Block extends Shape {
 		//Create the body for the player
 		body = world.createBody(bodyDef);
 		body.setGravityScale(0);		
-		body.setLinearVelocity(0, 2f);
+		body.setLinearVelocity(0, 3f);
 		
       
 		//Create the shape for our player
@@ -100,6 +100,34 @@ public class Block extends Shape {
 	public Type getType() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	
+	private String randomBlockImage(){
+	   Random rand = new Random();
+	   int randomNum = rand.nextInt((8 - 1) + 1) + 1;
+	   switch(randomNum){
+	   case 1:
+	      return GameConstants.ThinMintImg;
+	   case 2:
+	      return GameConstants.BerryImg;
+	   case 3:
+	      return GameConstants.ThanksALotImg;
+	   case 4:
+	      return GameConstants.TrefoilImg;
+	   case 5:
+	      return GameConstants.DoSiDoImg;
+	   case 6:
+	      return GameConstants.TagalongImg;
+	   case 7:
+	      return GameConstants.LemonImg;
+	   case 8:
+	      return GameConstants.SamoaImg;
+	      
+	   default:
+	      return GameConstants.SamoaImg;
+
+	   }
 	}
 
 }
