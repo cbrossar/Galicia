@@ -26,7 +26,7 @@ public class MenuScreen implements Screen
       
       batch = new SpriteBatch();
       
-      FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/MonaKo.ttf"));
+      FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.local("data/MonaKo.ttf"));
       FreeTypeFontParameter parameter = new FreeTypeFontParameter();
       parameter.size = 26;
       parameter.color = Color.WHITE;

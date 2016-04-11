@@ -70,6 +70,7 @@ public class GameWorld
    }
    
    public void update(float delta){
+	   
       //Any updating for our world should go here
 	  if(TimeUtils.nanoTime() - lastDropTime > 1000000000.0){
 		  lastDropTime = TimeUtils.nanoTime();
@@ -78,9 +79,22 @@ public class GameWorld
 		  lastHeight=heightToUse;
 		  blocks.add(b);
 	  }
-	  //Update the position of the lava by a few pixels
-	  if(lava.getY() > player.getSprite().getY() - (Gdx.graphics.getHeight()/2))
-	     lava.setPosition(lava.getX(), lava.getY() - (30 * delta));
+	  
+	  //Lava comes after 4.5 so enough time for boxes to fall
+	  if(lastDropTime >= 4500000000.0 && lastDropTime <= 25000000000.0){
+		  
+		  //Update the position of the lava by a few pixels
+		  if(lava.getY() > player.getSprite().getY() - (Gdx.graphics.getHeight()/2))
+		     lava.setPosition(lava.getX(), lava.getY() - (30 * delta));
+	  }
+	  
+	  //Increases difficulty of world through increase of velocity
+	  if(lastDropTime > 25000000000.0){
+		  
+		  //Update the position of the lava by a few pixels
+		  if(lava.getY() > player.getSprite().getY() - (Gdx.graphics.getHeight()/2))
+		     lava.setPosition(lava.getX(), lava.getY() - (33 * delta));
+	  }
 	  
 	  
    }
