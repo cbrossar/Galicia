@@ -74,7 +74,7 @@ public class Block extends Shape {
 		bd2.type = BodyDef.BodyType.DynamicBody;
 		bd2.fixedRotation = true;
 		bd2.position.set((pos) / PIXELS_TO_METERS,
-	              (sprite.getY() + sprite.getHeight() + 10) /PIXELS_TO_METERS);
+	              (sprite.getY() + sprite.getHeight() + 15) /PIXELS_TO_METERS);
 	
 		bottomBlock = world.createBody(bd2);
 	

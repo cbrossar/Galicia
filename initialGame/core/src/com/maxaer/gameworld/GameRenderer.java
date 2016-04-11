@@ -198,13 +198,11 @@ public class GameRenderer
       
       if(checkLavaDeath() || world.isGameOver()){
          //Update the delay time by adding the time passed since the last delay 
-         
-    	  
     	  world.setGameOver(true);
           renderGameOverScreen();
          
           score = 21;
-         if(world.isJustDied()) { 
+          if(world.isJustDied()) { 
             world.setJustDied(false);
             sendScoreToSQL(1, score); 
             
