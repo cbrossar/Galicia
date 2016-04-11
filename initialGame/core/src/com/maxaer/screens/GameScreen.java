@@ -24,7 +24,7 @@ public class GameScreen implements Screen
    
    public GameScreen(GameWindow window, User user){
       world = new GameWorld(window, user);
-      renderer = new GameRenderer(world); 
+      renderer = new GameRenderer(world);
    }
 
    @Override

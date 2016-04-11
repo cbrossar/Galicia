@@ -64,13 +64,11 @@ public class UserInputListener implements InputProcessor
     	
     	  world.setRunningWorld(false);
     	  isRunning = false;
-    	  System.out.println(world.getRunningWorld());
       }
       
       else if(keycode == Input.Keys.P && !world.isGameOver() && !isRunning){
     	  world.setRunningWorld(true);
     	  isRunning = true;
-    	  System.out.println(world.getRunningWorld() + " wasPaused");
       }
     
        if(keycode == Input.Keys.RIGHT && !world.isGameOver()){

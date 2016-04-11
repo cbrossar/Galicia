@@ -79,7 +79,10 @@ public class GameWorld
    }
       
    public void dispose(){
-      if(world != null) world.dispose();
+      if(world != null){
+    	  world.dispose();
+    	  window.getMusicPlayer().dispose();
+      }
       if(player != null) player.dispose();
       if(platform != null) platform.dispose();
    }
@@ -107,9 +110,6 @@ public class GameWorld
 		
 		  // a bullshit try at this
 		  int heightDifference = (int) (player.getY() - lava.getY());
-		  System.out.println("Block height: " + player.getY());
-		  System.out.println("Lava height: " + lava.getY());
-		  System.out.println("Difference: " + heightDifference);
 		  
 		  //Lava comes after 4.5 so enough time for boxes to fall
 		  if(lastDropTime >= 4500000000.0 && lastDropTime <= 25000000000.0){
