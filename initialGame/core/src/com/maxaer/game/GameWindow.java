@@ -1,5 +1,7 @@
 package com.maxaer.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.maxaer.database.User;
 import com.maxaer.screens.MenuScreen;
 
@@ -12,11 +14,19 @@ import com.maxaer.screens.MenuScreen;
  */
 public class GameWindow extends Game{
 
+	private Music music;
     @Override
     public void create() {
-       
-       setScreen(new MenuScreen(this, new User("", "", true)));
+    	music = Gdx.audio.newMusic(Gdx.files.internal("data/Desiigner-Panda.mp3"));
+    	music.play();
+    	music.setLooping(true);
+        setScreen(new MenuScreen(this, new User("", "", true)));
         
+    }
+    
+    public Music getMusicPlayer()
+    {
+    	return music;
     }
 
 }

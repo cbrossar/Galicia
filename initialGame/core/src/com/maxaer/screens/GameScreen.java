@@ -1,5 +1,6 @@
 package com.maxaer.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.maxaer.database.User;
 
@@ -23,7 +24,7 @@ public class GameScreen implements Screen
    
    public GameScreen(GameWindow window, User user){
       world = new GameWorld(window, user);
-      renderer = new GameRenderer(world); 
+      renderer = new GameRenderer(world);
    }
 
    @Override
@@ -63,7 +64,22 @@ public class GameScreen implements Screen
    public void render(float delta)
    {
       world.update(delta); 
-      renderer.render();   
+      boolean wasPaused = false;
+      if(!world.getRunningWorld()){
+    	  Gdx.graphics.setContinuousRendering(false);
+    	  wasPaused = true;
+    	  renderer.renderPauseScreen();
+      }
+      else if(wasPaused)
+      {
+    	  wasPaused = false;
+    	  Gdx.graphics.requestRendering();
+    	  renderer.falseRenderPauseScreen();
+      }
+      else {
+    	  Gdx.graphics.requestRendering();
+    	  renderer.render();  
+      }
    }
 
 

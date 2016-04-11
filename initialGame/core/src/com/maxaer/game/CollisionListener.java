@@ -20,11 +20,11 @@ import com.maxaer.gameworld.GameWorld;
 public class CollisionListener implements ContactListener {
 	GameWorld world;
 
-
 	public CollisionListener(GameWorld world) {
 		this.world = world;
 	}
 
+	
    @Override
    public void beginContact(Contact contact)
    {

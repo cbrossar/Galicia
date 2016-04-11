@@ -218,6 +218,19 @@ public class GameRenderer
       backgroundSprite.draw(batch);
    }
    
+   public void renderPauseScreen() {
+	   hudBatch.begin();
+	   deathFont.setColor(Color.BLACK);
+	   layout.setText(deathFont, "Game Paused");
+	   float h1 = layout.height;
+	   deathFont.draw(hudBatch, "Game Paused", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - h1)/2);
+	   hudBatch.end();
+	   
+   }
+   
+   public void falseRenderPauseScreen() {
+	   layout.reset();
+   }
    public void renderGameOverScreen(){
 //      //Clear the screen here
       hudBatch.begin();
