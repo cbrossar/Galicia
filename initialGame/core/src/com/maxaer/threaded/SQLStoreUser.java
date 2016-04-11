@@ -1,5 +1,6 @@
 package com.maxaer.threaded;
 
+
 import com.maxaer.database.SQLDriver;
 
 public class SQLStoreUser extends Thread

@@ -5,6 +5,7 @@ import java.security.NoSuchAlgorithmException;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -28,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.maxaer.database.SQLDriver;
+
 import com.maxaer.database.User;
 import com.maxaer.game.GameWindow;
 
@@ -51,12 +53,14 @@ public class LoginScreen implements Screen
       
       batch = new SpriteBatch();
       
+
       Texture background = new Texture(Gdx.files.internal("Backgrounds/600x600Login.png"));
       backgroundSprite = new Sprite(background);
       backgroundSprite.setPosition(0, 0);
       
       FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/BankGothic-Regular.ttf"));
       FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+
       parameter.size = 22;
       parameter.color = Color.BLACK;
       generator.generateData(parameter);
@@ -74,12 +78,14 @@ public class LoginScreen implements Screen
       createBasicSkin();
       
       userNameField = new TextField("", skin); // Use the initialized skin
+
       userNameField.setPosition(330, Gdx.graphics.getHeight()/3 + 60);
       userNameField.setWidth(170);
       stage.addActor(userNameField);
       
       passwordField = new TextField("", skin);
       passwordField.setPasswordMode(true);
+
       passwordField.setPasswordCharacter('*');
       passwordField.setPosition(userNameField.getX(), userNameField.getY() - userNameField.getHeight() - BTN_SPACING);
       passwordField.setWidth(170);
@@ -88,6 +94,7 @@ public class LoginScreen implements Screen
       
       loginBtn = new TextButton("Login", skin);
       loginBtn.setPosition(userNameField.getX(), passwordField.getY() - passwordField.getHeight() - BTN_SPACING);
+
       loginBtn.setWidth(170);
       stage.addActor(loginBtn);
       
@@ -230,6 +237,7 @@ public class LoginScreen implements Screen
 
        
        if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){
+
           window.setScreen(new MenuScreen(window, new User("", "", true)));
           dispose();
        }

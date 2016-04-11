@@ -43,6 +43,8 @@ public class GameWorld
    private boolean gameOver;
    private boolean justDied;
    private GameWindow window;
+   private Vector<Body> inActiveBottomBlocks;
+   
    private User user;
    
    public GameWorld(GameWindow window, User user)
@@ -66,6 +68,8 @@ public class GameWorld
       blocks = new Vector<Block>();
       gameOver = false;
       justDied = true;
+      inActiveBottomBlocks = new Vector<Body>();
+
       
       //Set the input listener for this screen
       Gdx.input.setInputProcessor(new UserInputListener(this));
@@ -87,7 +91,7 @@ public class GameWorld
 		  lastHeight=heightToUse;
 		  blocks.add(b);
 	  }
-<<<<<<< HEAD
+
 	  
 	  //Lava comes after 4.5 so enough time for boxes to fall
 	  if(lastDropTime >= 4500000000.0 && lastDropTime <= 25000000000.0){
@@ -104,17 +108,20 @@ public class GameWorld
 		  if(lava.getY() > player.getSprite().getY() - (Gdx.graphics.getHeight()/2))
 		     lava.setPosition(lava.getX(), lava.getY() - (33 * delta));
 	  }
-=======
+
 	  //Update the position of the lava by a few pixels
 	  if(lava.getY() > player.getSprite().getY() - (Gdx.graphics.getHeight()/2))
+
 	     lava.setPosition(lava.getX(), lava.getY() - (45 * delta));
->>>>>>> fb1e73ce4c3cce0e6b8ed4b7aba89869cab00718
+
+	     lava.setPosition(lava.getX(), lava.getY() - (40 * delta));
 	  
 	  
    }
    
    //Method to start the menu screen from game
    public void showMenuScreen(){
+
       window.setScreen(new MenuScreen(window, user));
       this.dispose();
    }
@@ -176,6 +183,16 @@ public class GameWorld
    {
       this.justDied = justDied;
    }
+
+	public void addToBottomBlocksInactive(Body bottomBlock) {
+		inActiveBottomBlocks.add(bottomBlock);	
+		
+	}
+
+	public Vector<Body> getInactiveBottomBlocks() {
+		return inActiveBottomBlocks;
+	}
+
    
    public User getUser()
    {
