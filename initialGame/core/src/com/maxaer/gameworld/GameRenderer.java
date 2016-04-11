@@ -191,30 +191,20 @@ public class GameRenderer
       
       if(checkLavaDeath() || world.isGameOver()){
          //Update the delay time by adding the time passed since the last delay 
-         world.setGameOver(true);
+         
+    	  world.getPlayerBody().setLinearVelocity(0, 0);
+    	  world.setGameOver(true);
          renderGameOverScreen();
-<<<<<<< HEAD
+         
          score = 21;
-         if(world.isJustDied()){
+         if(world.isJustDied()) { 
             world.setJustDied(false);
             sendScoreToSQL(1, score); 
             
          }
       }
-
+      
       debug.render(world.getWorld(), debugMatrix);
-=======
-         if(world.isJustDied()){
-            world.setJustDied(false);
-            
-            sendScoreToSQL(world.getUser().getUserID(), score); 
-            
-         }
-      }
-      
-      
-      //debug.render(world.getWorld(), debugMatrix);
->>>>>>> master
       
    }
    
@@ -239,17 +229,12 @@ public class GameRenderer
    }
    
    private void sendScoreToSQL(int userID, int score){
-<<<<<<< HEAD
-      //If logged in!
-      SQLScoreUpdater updater = new SQLScoreUpdater(userID, score);
-      updater.start();
-=======
+
       if(!world.getUser().isGuest()){
          System.out.println("Sending score to SQL");
          SQLScoreUpdater updater = new SQLScoreUpdater(userID, score);
          updater.start();
       }
->>>>>>> master
    }
    
 

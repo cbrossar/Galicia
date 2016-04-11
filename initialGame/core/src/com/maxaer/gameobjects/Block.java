@@ -31,7 +31,6 @@ public class Block extends Shape {
 		//Randomly determine whether block is small or large
 		float small = rand.nextFloat();
 		if(small <= .50f) isSmall = true;
-		//isSmall = false;
 		if(isSmall) sprite.setSize(sprite.getWidth()/2, sprite.getHeight()/2);
 		
 		int p = rand.nextInt(800);
@@ -43,8 +42,7 @@ public class Block extends Shape {
 		bodyDef.fixedRotation = true;
 		
 		//Randomize drop location on screen
-		int pos = rand.nextInt(800);
-	//	pos = 200;
+		int pos = rand.nextInt(650);
 		bodyDef.position.set((pos) / PIXELS_TO_METERS,
               (sprite.getY() + sprite.getHeight()/2) / PIXELS_TO_METERS);
       
@@ -75,12 +73,12 @@ public class Block extends Shape {
 		bd2.type = BodyDef.BodyType.DynamicBody;
 		bd2.fixedRotation = true;
 		bd2.position.set((pos) / PIXELS_TO_METERS,
-	              (sprite.getY() + sprite.getHeight() + 20) /PIXELS_TO_METERS);
+	              (sprite.getY() + sprite.getHeight() + 10) /PIXELS_TO_METERS);
 	
 		bottomBlock = world.createBody(bd2);
 	
 		bottomBlock.setGravityScale(0);
-		bottomBlock.setLinearVelocity(0, 2f);
+		bottomBlock.setLinearVelocity(0, 3f);
 		
 
 		FixtureDef fd2 = new FixtureDef();
@@ -94,8 +92,6 @@ public class Block extends Shape {
 		
          bottomBlock.createFixture(fd2);
          bottom.dispose();
-
-		
 
 		//Free up the shape here
 		shape.dispose();

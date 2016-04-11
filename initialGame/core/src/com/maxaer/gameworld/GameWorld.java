@@ -92,7 +92,7 @@ public class GameWorld
 	  }
 	  //Update the position of the lava by a few pixels
 	  if(lava.getY() > player.getSprite().getY() - (Gdx.graphics.getHeight()/2))
-	     lava.setPosition(lava.getX(), lava.getY() - (45 * delta));
+	     lava.setPosition(lava.getX(), lava.getY() - (40 * delta));
 	  
 	  
    }

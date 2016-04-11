@@ -5,13 +5,9 @@ import java.security.NoSuchAlgorithmException;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-<<<<<<< HEAD
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Keys;
-=======
+
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
->>>>>>> master
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -33,10 +29,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.maxaer.database.SQLDriver;
-<<<<<<< HEAD
-=======
+
 import com.maxaer.database.User;
->>>>>>> master
 import com.maxaer.game.GameWindow;
 
 public class LoginScreen implements Screen
