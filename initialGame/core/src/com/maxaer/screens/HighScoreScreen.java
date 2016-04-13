@@ -46,7 +46,7 @@ public class HighScoreScreen implements Screen
       SQLHighScoreRetriever retrieveScores = new SQLHighScoreRetriever(this);
       retrieveScores.start();
       
-      Texture background = new Texture(Gdx.files.internal("Backgrounds/MaxaerHighScoresBackground.png"));
+      Texture background = new Texture(Gdx.files.internal("Backgrounds/600x600HighScoresBackground.png"));
       backgroundSprite = new Sprite(background);
       backgroundSprite.setPosition(0, 0);
       

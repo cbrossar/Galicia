@@ -195,7 +195,7 @@ public class RegisterScreen implements Screen
                
                User user = new User(userName, hash, false);
                //register user and change the screen
-               window.setScreen(new GameScreen(window, user));
+               window.setScreen(new MenuScreen(window, user));
             } 
             
          }

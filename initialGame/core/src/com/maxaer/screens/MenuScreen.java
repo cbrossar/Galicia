@@ -87,8 +87,6 @@ public class MenuScreen implements Screen
       scoresBtn.setWidth(200);
       stage.addActor(scoresBtn);
       
-      addActions(); 
-      
       stage = new Stage();
       Gdx.input.setInputProcessor(stage);// Make the stage consume events
 
@@ -211,6 +209,17 @@ public class MenuScreen implements Screen
             window.setScreen(new HighScoreScreen(window, user));
             dispose(); 
             
+         }
+      });
+      
+      myStatsBtn.addListener(new ChangeListener()
+      {
+         
+         @Override
+         public void changed(ChangeEvent event, Actor actor)
+         {
+            window.setScreen(new UserStatsScreen(window, user));
+            dispose(); 
          }
       });
    }

@@ -4,6 +4,7 @@ import java.util.Vector;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -46,6 +47,7 @@ public class GameWorld
    private GameWindow window;
    private Vector<Body> inActiveBottomBlocks;
    private boolean lavaDeath, blockDeath;
+   private Music musicPlayer;
    
    private User user;
    
@@ -63,6 +65,7 @@ public class GameWorld
       this.user = user;
       this.window = window;
       createNewGame(); 
+      this.musicPlayer = window.getMusicPlayer();
       window.getMusicPlayer().play();
   
   }
@@ -101,6 +104,11 @@ public class GameWorld
       }
       if(player != null) player.dispose();
       if(platform != null) platform.dispose();
+   }
+   
+   public Music getMusicPlayer()
+   {
+      return musicPlayer;
    }
    
    public void setRunningWorld(boolean running)

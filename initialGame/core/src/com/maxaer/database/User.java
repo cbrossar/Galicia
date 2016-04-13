@@ -119,6 +119,8 @@ public class User extends Thread
       driver.connect();
       userID = driver.getUserByName(userName);
       driver.stop();
+      
+      
    }
 
 }

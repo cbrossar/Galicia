@@ -168,7 +168,7 @@ public class LoginScreen implements Screen
             if(loginUser(userNameField.getText(), passwordField.getText())){
                
                User user = new User(userNameField.getText(), hashPassword(passwordField.getText()), false);
-               window.setScreen(new GameScreen(window, user));
+               window.setScreen(new MenuScreen(window, user));
                dispose(); 
             } else{
                Dialog dialog = new Dialog("", skin);

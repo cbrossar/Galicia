@@ -23,6 +23,8 @@ public class SQLDriver
    private static final String USER_AND_PASSWORD_EXIST = "select count(uname) from User where uname=? and passHash=?";
    private static final String UPDATE_STAT = "update UserStats set totalDeaths=?, blockDeath=?, lavaDeath=?, distanceTraveled=? where userID=?";
    private static final String CREATE_STAT = "insert into UserStats (userID) values (?)";
+   private static final String RETRIEVE_STAT = "select totalDeaths, blockDeath, lavaDeath, distanceTraveled from UserStats where userID=?";
+   private static final String GET_HIGHSCORE = "select score from HighScores where userID=? order by score desc";
    
    public SQLDriver()
    {
@@ -118,6 +120,32 @@ public class SQLDriver
       } catch(SQLException e){
          System.out.println("Add stat err: " + e.getMessage() + " " + e.getSQLState());
 
+      } 
+   }
+   
+   public UserStat getUserStats(int userID){
+      try{
+         PreparedStatement statement = conn.prepareStatement(RETRIEVE_STAT);
+
+         statement.setInt(1, userID);
+         
+         ResultSet set = statement.executeQuery();
+         
+         if(set.next()){
+            PreparedStatement statement2 = conn.prepareStatement(GET_HIGHSCORE);
+            statement2.setInt(1, userID);
+            ResultSet inner = statement2.executeQuery();
+            if(inner.next())
+               return new UserStat(set.getInt("totalDeaths"), set.getInt("blockDeath"), set.getInt("lavaDeath"), set.getInt("distanceTraveled"), inner.getInt("score"));
+            
+         }
+         
+         set.close();
+         statement.close();
+         return new UserStat(0, 0, 0, 0, 0);
+      } catch(SQLException e){
+         System.out.println("Add stat err: " + e.getMessage() + " " + e.getSQLState());
+         return new UserStat(0, 0, 0, 0, 0);
       } 
    }
    

@@ -1,7 +1,5 @@
 package com.maxaer.screens;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -15,19 +13,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.maxaer.database.User;
-import com.maxaer.database.UserScore;
 import com.maxaer.game.GameWindow;
-import com.maxaer.threaded.SQLHighScoreRetriever;
 import com.maxaer.threaded.SQLUserStatRetriever;
 
 public class UserStatsScreen implements Screen
 { 
-   private static final float BTN_SPACING = 10f; 
+   private static final float BTN_SPACING = 15f; 
    private final GameWindow window; 
    private SpriteBatch batch;
    private OrthographicCamera cam;
@@ -35,8 +28,8 @@ public class UserStatsScreen implements Screen
    private Skin skin;
    private GlyphLayout layout;
    private Sprite backgroundSprite;
-   private ArrayList<UserScore> topScores;
    private User user; 
+   private final float LARGE_HEIGHT, FINE_HEIGHT;
    
    public UserStatsScreen(GameWindow window, User user)
    {
@@ -47,24 +40,32 @@ public class UserStatsScreen implements Screen
       cam.setToOrtho(false);
       
       batch = new SpriteBatch();
-      
-      SQLUserStatRetriever retrieveScores = new SQLUserStatRetriever(this);
-      retrieveScores.start();
-      
+
       Texture background = new Texture(Gdx.files.internal("Backgrounds/600x600ScoreBackground.png"));
       backgroundSprite = new Sprite(background);
       backgroundSprite.setPosition(0, 0);
       
       FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/BankGothic-Regular.ttf"));
       FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-      parameter.size = 18;
+      parameter.size = 24;
       parameter.color = Color.BLACK;
       generator.generateData(parameter);
       fineFont = generator.generateFont(parameter);
+     
+      layout = new GlyphLayout();
       
-      parameter.size = 24;
+      layout.setText(fineFont, "MaxAER");
+      FINE_HEIGHT = layout.height;
+     
+      parameter.size = 36;
       largeFont = generator.generateFont(parameter);
       
+      layout.setText(largeFont, "MaxAER");
+      LARGE_HEIGHT = layout.height;
+      
+      //Retrieve the user stats here
+      SQLUserStatRetriever retrieveStats = new SQLUserStatRetriever(this);
+      retrieveStats.start();
    }
    
    public User getUser()
@@ -72,12 +73,6 @@ public class UserStatsScreen implements Screen
       return user;
    }
    
-   public void setUserStats(ArrayList<UserScore> topScores)
-   {
-      this.topScores = topScores;
-   }
-   
-
    @Override
    public void show()
    {
@@ -98,23 +93,14 @@ public class UserStatsScreen implements Screen
       batch.begin();
      
       backgroundSprite.draw(batch);
-      
-      layout.setText(largeFont, user.getUserName());
-      float largeH = layout.height;
+      //Draw everything to the screen
       largeFont.draw(batch, user.getUserName(), 350, 500 - 25);
-      layout.setText(fineFont, "Total distance jumped: "  + user.getTotalDistanceTraveled());
-      float fineH = layout.height;
-      fineFont.draw(batch, "Total distance jumped: "  + user.getTotalDistanceTraveled(), 350, 500 - 25 + layout.height + BTN_SPACING);
-//      fineFont.draw(batch, topScores.get(i).toString(), 350, 500 - 25 + largeH);
-//      fineFont.draw(batch, topScores.get(i).toString(), 350, 500 - 25*i);
-//      fineFont.draw(batch, topScores.get(i).toString(), 350, 500 - 25*i);
-//      fineFont.draw(batch, topScores.get(i).toString(), 350, 500 - 25*i);
-      
-      if(topScores != null)
-         //Draw the high scores out
-         for(int i = 0; i < topScores.size(); i++){
-            fineFont.draw(batch, topScores.get(i).toString(), 350, 500 - 25*i);
-         }
+      fineFont.draw(batch, "All time high score:  " + user.getHighScore(), 250, 500 - 25 - LARGE_HEIGHT - BTN_SPACING);
+      fineFont.draw(batch, "Total deaths:  " + user.getDeathCount(), 250, 500 - 25 - LARGE_HEIGHT - FINE_HEIGHT - 2*BTN_SPACING);
+      fineFont.draw(batch, "Deaths by milk:  " + user.getLavaDeaths(), 250, 500 - 25 - LARGE_HEIGHT - 2*FINE_HEIGHT - 3*BTN_SPACING);
+      fineFont.draw(batch, "Smushed deaths:  " + user.getSmushDeaths(), 250, 500 - 25 - LARGE_HEIGHT - 3*FINE_HEIGHT - 4*BTN_SPACING);
+      fineFont.draw(batch, "Distance traveled:  " + user.getTotalDistanceTraveled(), 250, 500 - 25 - LARGE_HEIGHT - 4*FINE_HEIGHT - 5*BTN_SPACING);
+
       batch.end();
       
       if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){

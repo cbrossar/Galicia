@@ -212,9 +212,11 @@ public class GameRenderer
             
             //See which type of death it is
             if(!world.isLavaDeath()) world.setBlockDeath(true);
+            else{
+               System.out.println(world.isLavaDeath());
+            }
             
             //And update SQL
-            world.getUser().updateStats(finalScore, world.isLavaDeath(), world.isBlockDeath());
             sendScoreToSQL(world.getUser().getUserID(), finalScore);    
          
           }
@@ -263,7 +265,7 @@ public class GameRenderer
    private void sendScoreToSQL(int userID, int score){
 
       if(!world.getUser().isGuest()){
-         SQLStatUpdater updater = new SQLStatUpdater(world.getUser(), score);
+         SQLStatUpdater updater = new SQLStatUpdater(world.getUser(), score, world.isLavaDeath());
          updater.start();
       }
    }
