@@ -45,6 +45,7 @@ public class GameWorld
    private boolean justDied;
    private GameWindow window;
    private Vector<Body> inActiveBottomBlocks;
+   private boolean lavaDeath, blockDeath;
    
    private User user;
    
@@ -62,6 +63,7 @@ public class GameWorld
       this.user = user;
       this.window = window;
       createNewGame(); 
+      window.getMusicPlayer().play();
   
   }
    
@@ -78,10 +80,13 @@ public class GameWorld
       blocks = new Vector<Block>();
       gameOver = false;
       justDied = true;
+      lavaDeath = false;
+      blockDeath = false;
       GAME_SPEED = DEFAULT_SPEED;
       lastHeight = -500;
       inActiveBottomBlocks = new Vector<Body>();
       isRunning = true;
+      
 
 
       
@@ -251,6 +256,26 @@ public class GameWorld
    public User getUser()
    {
       return user;
+   }
+   
+   public boolean isLavaDeath()
+   {
+      return lavaDeath;
+   }
+   
+   public boolean isBlockDeath()
+   {
+      return blockDeath;
+   }
+   
+   public void setBlockDeath(boolean blockDeath)
+   {
+      this.blockDeath = blockDeath;
+   }
+   
+   public void setLavaDeath(boolean lavaDeath)
+   {
+      this.lavaDeath = lavaDeath;
    }
    
    

@@ -22,7 +22,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.maxaer.constants.GameConstants;
 import com.maxaer.gameobjects.Block;
-import com.maxaer.threaded.SQLScoreUpdater;
+import com.maxaer.threaded.SQLStatUpdater;
 
 /*
  * Class: GameRender
@@ -202,13 +202,23 @@ public class GameRenderer
     	  world.setGameOver(true);
     	  world.getPlayerBody().setLinearVelocity(0,0);
     	  
+    	  //If the player has just died, we'll go ahead and send their score to SQL right now on a separate thread
           if(world.isJustDied()) { 
             world.setJustDied(false);
+            
+            //Take care of resetting the score
             finalScore = score;
             score = 21;
+            
+            //See which type of death it is
+            if(!world.isLavaDeath()) world.setBlockDeath(true);
+            
+            //And update SQL
+            world.getUser().updateStats(finalScore, world.isLavaDeath(), world.isBlockDeath());
             sendScoreToSQL(world.getUser().getUserID(), finalScore);    
-         }
-          
+         
+          }
+         //Render the game over screen when the user is dead
          renderGameOverScreen();
           
       }
@@ -253,7 +263,7 @@ public class GameRenderer
    private void sendScoreToSQL(int userID, int score){
 
       if(!world.getUser().isGuest()){
-         SQLScoreUpdater updater = new SQLScoreUpdater(userID, score);
+         SQLStatUpdater updater = new SQLStatUpdater(world.getUser(), score);
          updater.start();
       }
    }
@@ -261,7 +271,12 @@ public class GameRenderer
 
    //Check if the lava has surpassed the player
    public boolean checkLavaDeath(){
-      return (world.getLava().getY() <= (world.getPlayer().getSprite().getY() + world.getPlayer().getSprite().getHeight() - 5)); 
+      if(world.getLava().getY() <= (world.getPlayer().getSprite().getY() + world.getPlayer().getSprite().getHeight() - 5)){
+         world.setLavaDeath(true);
+         return true;
+      } else{
+         return false;
+      }
    }
    
 

@@ -13,10 +13,10 @@ CREATE TABLE User (
 CREATE TABLE UserStats (
 	statID int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT, 
     userID int(11) NOT NULL, 
-    deaths int(11) NOT NULL DEFAULT 0, 
-    tplayed int(11) NOT NULL DEFAULT 0,
-    wins int(11) NOT NULL DEFAULT 0,
-    losses int(11) NOT NULL DEFAULT 0,
+    totalDeaths int(11) NOT NULL DEFAULT 0, 
+    blockDeath int(11) NOT NULL DEFAULT 0,
+    lavaDeath int(11) NOT NULL DEFAULT 0,
+    distanceTraveled int(11) NOT NULL DEFAULT 0, 
     FOREIGN KEY fk1(userID) REFERENCES User(userID)
 );
 

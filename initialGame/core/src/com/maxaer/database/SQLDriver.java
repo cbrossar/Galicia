@@ -21,6 +21,8 @@ public class SQLDriver
    private static final String ADD_HIGH_SCORE = "Insert into HighScores (userID, score) values (?,?)";
    private static final String USER_EXISTS = "select count(uname) from User where uname=?";
    private static final String USER_AND_PASSWORD_EXIST = "select count(uname) from User where uname=? and passHash=?";
+   private static final String UPDATE_STAT = "update UserStats set totalDeaths=?, blockDeath=?, lavaDeath=?, distanceTraveled=? where userID=?";
+   private static final String CREATE_STAT = "insert into UserStats (userID) values (?)";
    
    public SQLDriver()
    {
@@ -100,6 +102,39 @@ public class SQLDriver
       } catch(SQLException e){
          System.out.println("User exists err: " + e.getMessage() + " " + e.getSQLState());
          return false;
+      } 
+   }
+   
+   public void createUserStats(int userID){
+      try{
+         PreparedStatement statement = conn.prepareStatement(CREATE_STAT);
+
+         statement.setInt(1, userID);
+         
+         statement.executeUpdate();
+         
+         statement.close();
+         
+      } catch(SQLException e){
+         System.out.println("Add stat err: " + e.getMessage() + " " + e.getSQLState());
+
+      } 
+   }
+   
+   public void updateUserStats(User user){
+      try{
+         PreparedStatement statement = conn.prepareStatement(UPDATE_STAT);
+         statement.setInt(1, user.getDeathCount());
+         statement.setInt(2, user.getSmushDeaths());
+         statement.setInt(3, user.getLavaDeaths());
+         statement.setInt(4, user.getTotalDistanceTraveled());
+         statement.setInt(5, user.getUserID());
+         
+         statement.executeUpdate();
+         statement.close();
+      } catch(SQLException e){
+         System.out.println("Update stat err: " + e.getMessage() + " " + e.getSQLState());
+
       } 
    }
 
