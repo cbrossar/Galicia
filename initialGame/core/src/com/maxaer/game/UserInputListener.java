@@ -75,7 +75,7 @@ public class UserInputListener implements InputProcessor
       }
       
       //Allow the user to pause the music here
-      if(keycode == Input.Keys.O && isRunning){
+      if(keycode == Input.Keys.SHIFT_RIGHT && isRunning){
          if(world.getMusicPlayer().isPlaying()) world.getMusicPlayer().pause();
          else world.getMusicPlayer().play();
       }

@@ -43,7 +43,7 @@ public class GameRenderer
    private ShapeRenderer shapeRenderer;
    private Box2DDebugRenderer debug;
    private Matrix4 debugMatrix;
-   private BitmapFont font, deathFont, nameFont;
+   private BitmapFont font, deathFont, nameFont, settingFont;
    private GlyphLayout layout; 
    private int score = 21;
    private int finalScore;
@@ -80,6 +80,9 @@ public class GameRenderer
       parameter.size = 20;
       parameter.color = Color.BLACK;
       nameFont = generator.generateFont(parameter);
+      
+      parameter.size = 12;
+      settingFont = generator.generateFont(parameter);
       generator.dispose(); // don't forget to dispose to avoid memory leaks!
       
       Texture backgroundTexture = new Texture("Backgrounds/background.png");
@@ -180,7 +183,11 @@ public class GameRenderer
          font.setUseIntegerPositions(false);
          font.draw(hudBatch, "Score: " + score, 0, Gdx.graphics.getHeight() - 10);
          font.draw(hudBatch, "" + (int)Math.floor(4.7*(4.7-world.getPlayerBody() .getPosition().y)), 0, Gdx.graphics.getHeight() - 30);
-         nameFont.draw(hudBatch, world.getUser().getUserName(), 0, Gdx.graphics.getHeight() - 50);
+         settingFont.draw(hudBatch, world.getUser().getUserName(), 0, Gdx.graphics.getHeight() - 50);
+         layout.setText(settingFont, "Music: on");
+         if(world.getMusicPlayer().isPlaying()) settingFont.draw(hudBatch, "Music: on", Gdx.graphics.getWidth() - layout.width - 5,  Gdx.graphics.getHeight() - 10);
+         else settingFont.draw(hudBatch, "Music: off", Gdx.graphics.getWidth() - layout.width - 5,  Gdx.graphics.getHeight() - 10);
+         
          
          hudBatch.end();
       }
@@ -212,9 +219,6 @@ public class GameRenderer
             
             //See which type of death it is
             if(!world.isLavaDeath()) world.setBlockDeath(true);
-            else{
-               System.out.println(world.isLavaDeath());
-            }
             
             //And update SQL
             sendScoreToSQL(world.getUser().getUserID(), finalScore);    
