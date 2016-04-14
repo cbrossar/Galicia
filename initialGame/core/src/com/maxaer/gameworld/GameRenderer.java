@@ -105,18 +105,7 @@ public class GameRenderer
 	  // Step the physics simulation forward at a rate of 45hz, recommended by LibGDX
       world.getWorld().step(1/45f, 6, 2);
       
-      
-      
-      Vector<Body> ibb = world.getInactiveBottomBlocks();
-      if(!ibb.isEmpty()) {
-    	  for(int i = 0; i < ibb.size(); i++) {
-        	  ibb.get(i).setActive(false);
-        	  ibb.remove(ibb.get(i));
-          }
-      }
-      
-      
-      
+
       //Clear the screen here
       Gdx.gl.glClearColor(1, 1, 1, 1);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

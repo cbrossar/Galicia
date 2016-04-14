@@ -50,7 +50,6 @@ public class GameWorld
    private boolean gameOver;
    private boolean justDied;
    private GameWindow window;
-   private Vector<Body> inActiveBottomBlocks;
    private boolean lavaDeath, blockDeath;
    private Music musicPlayer;
    
@@ -160,7 +159,6 @@ public class GameWorld
       blockDeath = false;
       GAME_SPEED = DEFAULT_SPEED;
       lastHeight = -500;
-      inActiveBottomBlocks = new Vector<Body>();
       isRunning = true;
         
       //Set the input listener for this screen
@@ -291,6 +289,10 @@ public class GameWorld
 	   return blocks;
    }
    
+   public Platform getPlatform() {
+	   return platform;
+   }
+   
    public void setGameOver(boolean gameOver)
    {
       this.gameOver = gameOver;
@@ -310,16 +312,6 @@ public class GameWorld
    {
       this.justDied = justDied;
    }
-
-	public void addToBottomBlocksInactive(Body bottomBlock) {
-		inActiveBottomBlocks.add(bottomBlock);	
-		
-	}
-
-	public Vector<Body> getInactiveBottomBlocks() {
-		return inActiveBottomBlocks;
-	}
-
    
    public User getUser()
    {
