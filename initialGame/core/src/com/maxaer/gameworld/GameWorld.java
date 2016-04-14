@@ -231,6 +231,10 @@ public class GameWorld
 	   return blocks;
    }
    
+   public Platform getPlatform() {
+	   return platform;
+   }
+   
    public void setGameOver(boolean gameOver)
    {
       this.gameOver = gameOver;

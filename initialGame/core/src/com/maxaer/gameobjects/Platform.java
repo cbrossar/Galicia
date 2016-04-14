@@ -54,4 +54,8 @@ public class Platform {
 	public Sprite getPlatformSprite() {
 		return sprite;
 	}
+	
+	public Body getBody() {
+		return body;
+	}
 }
