@@ -23,6 +23,8 @@ import com.maxaer.database.User;
 
 import com.maxaer.game.GameWindow;
 
+
+
 public class MenuScreen implements Screen
 {
    private final GameWindow window; 
@@ -31,8 +33,9 @@ public class MenuScreen implements Screen
    private BitmapFont font;
    private Skin skin;
    private Stage stage;
-   private TextButton playBtn, scoresBtn, registerBtn, loginBtn, myStatsBtn;
+   private TextButton playBtn, scoresBtn, registerBtn, loginBtn, myStatsBtn, logoutBtn;
    private Sprite backgroundSprite;
+   private User user; 
    
    private static final float BTN_SPACING = 10f; 
    
@@ -43,46 +46,20 @@ public class MenuScreen implements Screen
       
       batch = new SpriteBatch();
       
+      //FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.local("data/MonaKo.ttf"));
 
       Texture background = new Texture(Gdx.files.internal("Backgrounds/600x600Background.png"));
       backgroundSprite = new Sprite(background);
       backgroundSprite.setPosition(0, 0);
       
       FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/BankGothic-Regular.ttf"));
+
       FreeTypeFontParameter parameter = new FreeTypeFontParameter();
       parameter.size = 26;
       parameter.color = Color.BLACK;
       generator.generateData(parameter);
       font = generator.generateFont(parameter);
 
-      
-      stage = new Stage();
-      Gdx.input.setInputProcessor(stage);// Make the stage consume events
-
-      createBasicSkin();
-      
-      playBtn = new TextButton("Play", skin); // Use the initialized skin
-      playBtn.setPosition(420, Gdx.graphics.getHeight()/3 + 50);
-      playBtn.setWidth(200);
-      stage.addActor(playBtn);
-      
-      registerBtn = new TextButton("Sign up", skin);
-      registerBtn.setPosition(playBtn.getX(), playBtn.getY() - playBtn.getHeight() - BTN_SPACING);
-      registerBtn.setWidth(200);
-      stage.addActor(registerBtn);
-      
-      loginBtn = new TextButton("Login", skin);
-      loginBtn.setPosition(registerBtn.getX(), registerBtn.getY() - registerBtn.getHeight() - BTN_SPACING);
-      loginBtn.setWidth(200);
-      stage.addActor(loginBtn);
-      
-      
-      scoresBtn = new TextButton("High Scores", skin);
-      scoresBtn.setPosition(playBtn.getX(), loginBtn.getY() - loginBtn.getHeight() - BTN_SPACING);
-      scoresBtn.setWidth(200);
-      stage.addActor(scoresBtn);
-      
-      addActions(); 
       
       stage = new Stage();
       Gdx.input.setInputProcessor(stage);// Make the stage consume events
@@ -102,26 +79,30 @@ public class MenuScreen implements Screen
       loginBtn.setPosition(registerBtn.getX(), registerBtn.getY() - registerBtn.getHeight() - BTN_SPACING);
       loginBtn.setWidth(190);
       
-
-      scoresBtn = new TextButton("High Scores", skin);
-      scoresBtn.setWidth(190);
-      stage.addActor(scoresBtn);
+      logoutBtn = new TextButton("Logout", skin);
+      logoutBtn.setWidth(190);
+      logoutBtn.setPosition(registerBtn.getX(), registerBtn.getY() - registerBtn.getHeight() - BTN_SPACING);
       
-      if(user.isGuest()){
-         
+      scoresBtn = new TextButton("High Scores", skin);
+      scoresBtn.setPosition(playBtn.getX(), loginBtn.getY() - loginBtn.getHeight() - BTN_SPACING);
+      scoresBtn.setWidth(190);
+      scoresBtn.setPosition(playBtn.getX(), loginBtn.getY() - loginBtn.getHeight() - BTN_SPACING);
+      stage.addActor(scoresBtn);
+
+      myStatsBtn = new TextButton("My Stats", skin);
+      myStatsBtn.setPosition(playBtn.getX(), playBtn.getY() - playBtn.getHeight() - BTN_SPACING);
+      myStatsBtn.setWidth(190);
+      
+      this.user = user; 
+      
+      if(user.isGuest()){   
          stage.addActor(registerBtn);
-         stage.addActor(loginBtn);
-         
-         scoresBtn.setPosition(playBtn.getX(), loginBtn.getY() - loginBtn.getHeight() - BTN_SPACING);
-      } else{
-         myStatsBtn = new TextButton("My Stats", skin);
-         myStatsBtn.setPosition(playBtn.getX(), playBtn.getY() - playBtn.getHeight() - BTN_SPACING);
+         stage.addActor(loginBtn);       
+      } else{        
          stage.addActor(myStatsBtn);
-         
-         scoresBtn.setPosition(playBtn.getX(), myStatsBtn.getY() - myStatsBtn.getHeight() - BTN_SPACING);
+         stage.addActor(logoutBtn);
       }
       
-      stage.addActor(scoresBtn);
      
 
       
@@ -146,7 +127,7 @@ public class MenuScreen implements Screen
       //Create a button style
       TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
       textButtonStyle.up = skin.newDrawable("background", Color.WHITE);
-      textButtonStyle.down = skin.newDrawable("background", Color.WHITE);
+      textButtonStyle.down = skin.newDrawable("background", Color.LIGHT_GRAY);
       textButtonStyle.checked = skin.newDrawable("background", Color.WHITE);
       textButtonStyle.over = skin.newDrawable("background", Color.LIGHT_GRAY);
       textButtonStyle.font = skin.getFont("default");
@@ -162,8 +143,7 @@ public class MenuScreen implements Screen
          @Override
          public void changed(ChangeEvent event, Actor actor)
          {
-
-                window.setScreen(new GameScreen(window, new User("", "", true)));
+                window.setScreen(new GameScreen(window, user));
                 dispose();
             
          }
@@ -193,15 +173,38 @@ public class MenuScreen implements Screen
          }
       });
       
+      logoutBtn.addListener(new ChangeListener()
+      {
+         
+         @Override
+         public void changed(ChangeEvent event, Actor actor)
+         {
+            // TODO Auto-generated method stub
+            window.setScreen(new MenuScreen(window, new User("", "", true)));
+            dispose();
+         }
+      });
+      
       scoresBtn.addListener(new ChangeListener()
       {
          
          @Override
          public void changed(ChangeEvent event, Actor actor)
          {
-            window.setScreen(new HighScoreScreen(window));
+            window.setScreen(new HighScoreScreen(window, user));
             dispose(); 
             
+         }
+      });
+      
+      myStatsBtn.addListener(new ChangeListener()
+      {
+         
+         @Override
+         public void changed(ChangeEvent event, Actor actor)
+         {
+            window.setScreen(new UserStatsScreen(window, user));
+            dispose(); 
          }
       });
    }

@@ -17,13 +17,12 @@ import com.maxaer.gameworld.GameWorld;
  * Author: Peter Kaminski
  * Purpose: CollisionListener is what will do most of the heavy lifting for our collision detection
  */
-public class CollisionListener implements ContactListener
-{
-   GameWorld world;
-   public CollisionListener(GameWorld world)
-   {
-      this.world = world;
-   }
+public class CollisionListener implements ContactListener {
+	GameWorld world;
+
+	public CollisionListener(GameWorld world) {
+		this.world = world;
+	}
 
    @Override
    public void beginContact(Contact contact)
@@ -32,35 +31,44 @@ public class CollisionListener implements ContactListener
       Fixture obj1 = contact.getFixtureA();
       Fixture obj2 = contact.getFixtureB();
       
-    //Death by blocks attempt #2      
+      if(obj2.getBody().equals(world.getPlatform().getBody())) {
+    	  if(obj1.getBody().equals(world.getPlayerBody())) {
+    		  world.getPlayer().setOnTopOfSurface(true);
+    	  }
+      }
+      
+      //Death by blocks attempt #2      
       Vector<Block> v = world.getBlocks();
       
       //check all bottom blocks for death conditions
       for(int i = 0; i < v.size(); i++) {
-    	  if(obj2.getBody().equals(v.get(i).getBottomBlock())) {  
+    	  if(obj2.getBody().equals(v.get(i).getBody())) {  
     		  if(obj1.getBody().equals(world.getPlayerBody())) {
-    			  Vector2 vbottom = v.get(i).getBottomBlock().getPosition();
+    			  Vector2 vfalling = v.get(i).getBody().getPosition();
     			  Vector2 vplayer = world.getPlayerBody().getPosition();
-    			  if(world.getPlayer().canJump() && ((vplayer.y - vbottom.y) > .1)) {
-    				  world.setGameOver(true);
-    				  System.out.println("Death by block crush! Block #" + i);
-				  }
-    		  }
-    		  else {
-    			  for(int j = 0; j < v.size(); j++) {
-    				  if(obj1.getBody().equals(v.get(i).getBody())) {
-    					  world.addToBottomBlocksInactive(v.get(i).getBottomBlock());
+
+    			  double yDiff = vplayer.y - vfalling.y;
+    			  double xDiff = vplayer.x - vfalling.x;
+    			  System.out.println("\nvbottom = " + vfalling.x + ", " + vfalling.y);
+    			  System.out.println("vplayer = " + vplayer.x + ", " + vplayer.y);
+    			  System.out.println("vplayer.y - vbottom.y = " + yDiff);
+    			  System.out.println("vplayer.x - vbottom.x = " + xDiff);
+    			  
+    			  //check if on top of a block and for deaths
+    			  if((!v.get(i).isSmall() && yDiff < -.7) || 
+    					  (v.get(i).isSmall() && yDiff < -.4)) {
+    				  world.getPlayer().setOnTopOfSurface(true);
+    			  } else if(world.getPlayer().isOnTopOfSurface()) {
+    				  if((!v.get(i).isSmall() && xDiff >= -.75 && xDiff <= .75) ||
+    						  (v.get(i).isSmall() && xDiff >= -.45 && xDiff <= .45)) {
+    					  world.setGameOver(true);
     				  }
+    				  
+    				  
     			  }
-    			  
+
     		  }
-    	  } else if (obj2.getBody().equals(v.get(i).getBody())) {
-    		  if(!obj1.getBody().equals(world.getPlayerBody())) {
-    			  v.get(i).getBottomBlock().setLinearVelocity(0f, 0f);
-    			  world.addToBottomBlocksInactive(v.get(i).getBottomBlock());
-    			  
-    		  }
-    		  	
+    		  break;
     	  }
       }
       
@@ -68,9 +76,7 @@ public class CollisionListener implements ContactListener
       //The player is here--do something with it
       if(obj1.getBody().equals(world.getPlayerBody())){
     	  for(int i = 0; i < v.size(); i++) {
-        	  if(!obj2.getBody().equals(v.get(i).getBottomBlock())) {  
-        		  world.getPlayer().setJumpability(true);
-        	  }
+    		  world.getPlayer().setJumpability(true); 
     	  }
           //Gdx.app.error("Collision", "Collision with player in 2");        
       }
@@ -92,32 +98,35 @@ public class CollisionListener implements ContactListener
       
    }
 
-   @Override
-   public void endContact(Contact contact)
-   {
-//    //Get the two objects that are colliding
-//      Fixture obj1 = contact.getFixtureA();
-//      Fixture obj2 = contact.getFixtureB();
-      
-   }
-
+	
    @Override
    public void preSolve(Contact contact, Manifold oldManifold)
    {
-      // TODO Auto-generated method stub
-	 //Get the two objects that are colliding
-	      Fixture obj1 = contact.getFixtureA();
-	      Fixture obj2 = contact.getFixtureB();
-      
-	      
+
    }
 
-   @Override
-   public void postSolve(Contact contact, ContactImpulse impulse)
-   {
-      // TODO Auto-generated method stub
-      
-   }
-   
+	@Override
+	public void endContact(Contact contact) {
+		//Get the two objects that are colliding
+		 Fixture obj1 = contact.getFixtureA();
+		 Fixture obj2 = contact.getFixtureB();
+		 		 
+		 //Resetting gravity
+		 if (obj1.getBody().equals(world.getPlayerBody())) {
+			 obj1.getBody().setGravityScale(7);
+			 world.getPlayer().setOnTopOfSurface(false);
+		 }
+			 
+		 else if(obj2.getBody().equals(world.getPlayerBody())){
+			 obj2.getBody().setGravityScale(7);
+			 world.getPlayer().setOnTopOfSurface(false);
+		 }
+			 
+	}
+
+	@Override
+	public void postSolve(Contact contact, ContactImpulse impulse) {
+		
+	}
 
 }

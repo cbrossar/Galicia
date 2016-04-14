@@ -35,6 +35,7 @@ import com.maxaer.database.SQLDriver;
 
 import com.maxaer.database.User;
 import com.maxaer.game.GameWindow;
+import com.maxaer.threaded.SQLAddUserStat;
 
 public class RegisterScreen implements Screen
 {
@@ -138,7 +139,7 @@ public class RegisterScreen implements Screen
       //Create a button style
       TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
       textButtonStyle.up = skin.newDrawable("background", Color.WHITE);
-      textButtonStyle.down = skin.newDrawable("background", Color.WHITE);
+      textButtonStyle.down = skin.newDrawable("background", Color.LIGHT_GRAY);
       textButtonStyle.checked = skin.newDrawable("background", Color.WHITE);
       textButtonStyle.over = skin.newDrawable("background", Color.LIGHT_GRAY);
       textButtonStyle.font = skin.getFont("default");
@@ -181,15 +182,20 @@ public class RegisterScreen implements Screen
             if(verifyPassword(passwordField.getText(), confirmField.getText()) && userNameFree(userNameField.getText())){
                //Store the user into SQL 
 
+               String userName = userNameField.getText();
+               
                String hash = hashPassword(passwordField.getText());
                SQLDriver driver = new SQLDriver();
                driver.connect();
-               driver.addUser(userNameField.getText(), hash);
+               driver.addUser(userName, hash);
                driver.stop();
                
-               User user = new User(userNameField.getText(), hash, false);
+               SQLAddUserStat addUser = new SQLAddUserStat(userName);
+               addUser.start();
+               
+               User user = new User(userName, hash, false);
                //register user and change the screen
-               window.setScreen(new GameScreen(window, user));
+               window.setScreen(new MenuScreen(window, user));
             } 
             
          }
@@ -253,7 +259,7 @@ public class RegisterScreen implements Screen
          }
       } else{
          Dialog dialog = new Dialog("", skin);
-         dialog.text("Password needs a numerical and upper case character");
+         dialog.text("numerical AND upper case character needed");
          dialog.button("Ok", true);
          dialog.key(Keys.ENTER, true);
          dialog.show(stage);

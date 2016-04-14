@@ -11,15 +11,18 @@ import com.maxaer.gameworld.GameWorld;
  * Purpose: This class is where any user input will be processed
  *          1. This listener needs to be passed an instance of the GameWorld so it can interact with the player
  */
+
 public class UserInputListener implements InputProcessor
 {  
    private GameWorld world;
    private Body player;
+   private boolean isRunning;
    //Pass the constructor an instance of our GameWorld so we can manipulate the game objects
    public UserInputListener(GameWorld world)
    {
       this.world = world;
       player = world.getPlayerBody();
+      isRunning = true;
    }
 
    @Override
@@ -58,7 +61,29 @@ public class UserInputListener implements InputProcessor
          world.createNewGame(); 
       }
 	  
-
+      if(keycode == Input.Keys.P && !world.isGameOver() && isRunning){
+    	
+    	  world.setRunningWorld(false);
+    	  world.getMusicPlayer().pause();
+    	  isRunning = false;
+      }
+      
+      else if(keycode == Input.Keys.P && !world.isGameOver() && !isRunning){
+    	  world.setRunningWorld(true);
+    	  world.getMusicPlayer().play();
+    	  isRunning = true;
+      }
+      
+      //Allow the user to pause the music here
+      if(keycode == Input.Keys.SHIFT_RIGHT && isRunning){
+         if(world.getMusicPlayer().isPlaying()) world.getMusicPlayer().pause();
+         else world.getMusicPlayer().play();
+      }
+      
+      if(keycode == Input.Keys.I && isRunning){
+         world.setGameOver(true);
+      }
+    
        if(keycode == Input.Keys.RIGHT && !world.isGameOver()){
     	   player.setLinearVelocity(0, player.getLinearVelocity().y * 1f);
        }

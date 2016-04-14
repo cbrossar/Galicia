@@ -21,6 +21,10 @@ public class SQLDriver
    private static final String ADD_HIGH_SCORE = "Insert into HighScores (userID, score) values (?,?)";
    private static final String USER_EXISTS = "select count(uname) from User where uname=?";
    private static final String USER_AND_PASSWORD_EXIST = "select count(uname) from User where uname=? and passHash=?";
+   private static final String UPDATE_STAT = "update UserStats set totalDeaths=?, blockDeath=?, lavaDeath=?, distanceTraveled=? where userID=?";
+   private static final String CREATE_STAT = "insert into UserStats (userID) values (?)";
+   private static final String RETRIEVE_STAT = "select totalDeaths, blockDeath, lavaDeath, distanceTraveled from UserStats where userID=?";
+   private static final String GET_HIGHSCORE = "select score from HighScores where userID=? order by score desc";
    
    public SQLDriver()
    {
@@ -102,6 +106,65 @@ public class SQLDriver
          return false;
       } 
    }
+   
+   public void createUserStats(int userID){
+      try{
+         PreparedStatement statement = conn.prepareStatement(CREATE_STAT);
+
+         statement.setInt(1, userID);
+         
+         statement.executeUpdate();
+         
+         statement.close();
+         
+      } catch(SQLException e){
+         System.out.println("Add stat err: " + e.getMessage() + " " + e.getSQLState());
+
+      } 
+   }
+   
+   public UserStat getUserStats(int userID){
+      try{
+         PreparedStatement statement = conn.prepareStatement(RETRIEVE_STAT);
+
+         statement.setInt(1, userID);
+         
+         ResultSet set = statement.executeQuery();
+         
+         if(set.next()){
+            PreparedStatement statement2 = conn.prepareStatement(GET_HIGHSCORE);
+            statement2.setInt(1, userID);
+            ResultSet inner = statement2.executeQuery();
+            if(inner.next())
+               return new UserStat(set.getInt("totalDeaths"), set.getInt("blockDeath"), set.getInt("lavaDeath"), set.getInt("distanceTraveled"), inner.getInt("score"));
+            
+         }
+         
+         set.close();
+         statement.close();
+         return new UserStat(0, 0, 0, 0, 0);
+      } catch(SQLException e){
+         System.out.println("Add stat err: " + e.getMessage() + " " + e.getSQLState());
+         return new UserStat(0, 0, 0, 0, 0);
+      } 
+   }
+   
+   public void updateUserStats(User user){
+      try{
+         PreparedStatement statement = conn.prepareStatement(UPDATE_STAT);
+         statement.setInt(1, user.getDeathCount());
+         statement.setInt(2, user.getSmushDeaths());
+         statement.setInt(3, user.getLavaDeaths());
+         statement.setInt(4, user.getTotalDistanceTraveled());
+         statement.setInt(5, user.getUserID());
+         
+         statement.executeUpdate();
+         statement.close();
+      } catch(SQLException e){
+         System.out.println("Update stat err: " + e.getMessage() + " " + e.getSQLState());
+
+      } 
+   }
 
 
    //Add a new score to the HighScores table
@@ -141,7 +204,7 @@ public class SQLDriver
          ResultSet results = statement.executeQuery(GET_TOP_SCORES);
          ArrayList<UserScore> highScores = new ArrayList<UserScore>(); 
          int count = 0; 
-         while(results.next() && count < 10){
+         while(results.next() && count < 10){ 
             highScores.add(new UserScore(results.getInt("userID"), results.getInt("score")));
             count++;
          }

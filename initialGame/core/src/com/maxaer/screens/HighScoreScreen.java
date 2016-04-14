@@ -31,11 +31,13 @@ public class HighScoreScreen implements Screen
    private Skin skin;
    private Sprite backgroundSprite;
    private ArrayList<UserScore> topScores;
+   private User user; 
    
-   public HighScoreScreen(GameWindow window)
+   public HighScoreScreen(GameWindow window, User user)
    {
       // TODO Auto-generated constructor stub
       this.window = window;
+      this.user = user; 
       cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
       cam.setToOrtho(false);
       
@@ -44,7 +46,7 @@ public class HighScoreScreen implements Screen
       SQLHighScoreRetriever retrieveScores = new SQLHighScoreRetriever(this);
       retrieveScores.start();
       
-      Texture background = new Texture(Gdx.files.internal("Backgrounds/MaxaerHighScoresBackground.png"));
+      Texture background = new Texture(Gdx.files.internal("Backgrounds/600x600HighScoresBackground.png"));
       backgroundSprite = new Sprite(background);
       backgroundSprite.setPosition(0, 0);
       
@@ -92,8 +94,7 @@ public class HighScoreScreen implements Screen
       batch.end();
       
       if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){
-
-         window.setScreen(new MenuScreen(window, new User("", "", true)));
+         window.setScreen(new MenuScreen(window, user));
       }
    }
 
