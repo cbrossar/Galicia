@@ -65,7 +65,6 @@ public class Block extends Shape {
 //		boxDef.filter.categoryBits = GameConstants.CATEGORY_BLOCK;
 //		boxDef.filter.maskBits = GameConstants.MASK_BLOCK;
 		
-		
 		body.createFixture(boxDef);
 
 		//Free up the shape here
