@@ -90,7 +90,7 @@ public class UserInputListener implements InputProcessor
        if(keycode == Input.Keys.LEFT && !world.isGameOver())
     	  player.setLinearVelocity(0, player.getLinearVelocity().y * 1f);
 
-       if(keycode == Input.Keys.UP && !world.isGameOver()){
+       if(keycode == Input.Keys.UP && !world.isGameOver() && isRunning){
     	   if(player.getLinearVelocity().y == 0)
     		   player.applyForceToCenter(0f, -2.5f,true);
        }

@@ -1,5 +1,11 @@
 package com.maxaer.game;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.maxaer.database.User;
@@ -20,7 +26,7 @@ public class GameWindow extends Game{
     	music = Gdx.audio.newMusic(Gdx.files.internal("data/Desiigner-Panda.mp3"));
     	music.setLooping(true);
         setScreen(new MenuScreen(this, new User("", "", true)));
-        
+    
     }
     
     public Music getMusicPlayer()

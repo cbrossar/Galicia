@@ -22,8 +22,8 @@ public class GameScreen implements Screen
    private GameWorld world;
    private GameRenderer renderer;
    
-   public GameScreen(GameWindow window, User user){
-      world = new GameWorld(window, user);
+   public GameScreen(GameWindow window, User user, boolean isMultiplayer){
+      world = new GameWorld(window, user, isMultiplayer);
       renderer = new GameRenderer(world);
    }
 
@@ -62,8 +62,11 @@ public class GameScreen implements Screen
    
    @Override
    public void render(float delta)
-   {
-      world.update(delta); 
+   {  
+      //Only update the world when it's single player, or the multiplayer is ready
+      if(!world.isMultiplayer() || (world.isMultiplayer() && world.isMultiplayerReady()))
+         world.update(delta); 
+      
       boolean wasPaused = false;
       if(!world.getRunningWorld()){
     	  Gdx.graphics.setContinuousRendering(false);

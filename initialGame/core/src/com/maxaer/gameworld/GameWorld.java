@@ -1,5 +1,10 @@
 package com.maxaer.gameworld;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Vector;
 
 
@@ -36,7 +41,7 @@ public class GameWorld
    private Player player;
    private World world;
    private Platform platform;
-   private Rectangle lava;
+   private Rectangle lava, opponent;
    private Sprite background;
    //private Block block;
    private Vector<Block> blocks;
@@ -51,7 +56,8 @@ public class GameWorld
    
    private User user;
    
-   private boolean isRunning;
+   private boolean isRunning, isMultiplayer;
+   private volatile boolean multiplayerReady;
 
    //Game speeds
    private int GAME_SPEED;
@@ -60,15 +66,82 @@ public class GameWorld
    private static final int SLOW_SPEED = 35;
    
    
-   public GameWorld(GameWindow window, User user)
+   public GameWorld(GameWindow window, User user, boolean isMultiplayer)
    {
       this.user = user;
       this.window = window;
+      this.isMultiplayer = isMultiplayer;
+      multiplayerReady = false;
       createNewGame(); 
       this.musicPlayer = window.getMusicPlayer();
       window.getMusicPlayer().play();
-  
-  }
+      
+      
+      //Set up the connection once the player starts playing
+      if(isMultiplayer){
+         
+         //Create the opponent rectangle here
+         opponent = new Rectangle(player.getX() + player.getSprite().getWidth() + 30, player.getY(), player.getSprite().getWidth(), player.getSprite().getHeight());
+         
+      // Now we create a thread that will listen for incoming socket connections
+         new Thread(new Runnable(){
+
+             @Override
+             public void run() {
+                 Socket client = null;
+                 DataInputStream is;
+                 DataOutputStream os; 
+                 try
+                {
+                   client = new Socket("localhost", 6789);
+                   is = new DataInputStream(client.getInputStream());
+                   os = new DataOutputStream(client.getOutputStream());
+                   
+                   //Wait for the signal to start the game here
+                   multiplayerReady = is.readBoolean();
+                   
+                   while(true){
+                      
+                      //Send the player's current position to the server
+                      os.writeFloat(player.getSprite().getX());
+                      os.writeFloat(player.getSprite().getY());
+                      os.flush();
+                      
+                      float x = is.readFloat();
+                      float y = is.readFloat();
+                      //Update the opponents position to be re-rendered 
+                      opponent.setPosition(x, y);
+ 
+                   }
+                }
+                catch (UnknownHostException e)
+                {
+                   // TODO Auto-generated catch block
+                   e.printStackTrace();
+                }
+                catch (IOException e)
+                {
+                   
+                } finally{
+                   if(client != null){
+                      try
+                      {
+                         client.close();
+                      }
+                      catch (IOException e)
+                      {
+                         
+                      }
+                   }
+                  
+                }
+                 
+             }
+         }).start(); // And, start the thread running
+         
+        
+      }
+   }
    
    public void createNewGame(){
       //Get rid of any preexisting components
@@ -89,10 +162,7 @@ public class GameWorld
       lastHeight = -500;
       inActiveBottomBlocks = new Vector<Body>();
       isRunning = true;
-      
-
-
-      
+        
       //Set the input listener for this screen
       Gdx.input.setInputProcessor(new UserInputListener(this));
    }
@@ -120,9 +190,7 @@ public class GameWorld
 	   return isRunning;
    }
    public void update(float delta){
-	   
- 
-
+      
 	   if(isRunning){
 		   
       //Any updating for our world should go here
@@ -163,14 +231,6 @@ public class GameWorld
 		  }
 	   }
 
-	  //Update the position of the lava by a few pixels
-//	  if(lava.getY() > player.getSprite().getY() - (Gdx.graphics.getHeight()/2))
-//
-//	     lava.setPosition(lava.getX(), lava.getY() - (45 * delta));
-//
-//	     lava.setPosition(lava.getX(), lava.getY() - (40 * delta));
-
-	   //  lava.setPosition(lava.getX(), lava.getY() - (GAME_SPEED * delta));
 	  
    }
    
@@ -286,6 +346,21 @@ public class GameWorld
       this.lavaDeath = lavaDeath;
    }
    
+   
+   public Rectangle getOpponent()
+   {
+      return opponent;
+   }
+   
+   public boolean isMultiplayer()
+   {
+      return isMultiplayer;
+   }
+   
+   public boolean isMultiplayerReady()
+   {
+      return multiplayerReady;
+   }
    
    
    

@@ -96,7 +96,12 @@ public class GameRenderer
     * All rendering goes on here. Super important method
     */
    public void render() {
-                       
+      
+      if(world.isMultiplayer() && !world.isMultiplayerReady()){
+         renderWaitingScreen();
+         return;
+      }
+               
 	  // Step the physics simulation forward at a rate of 45hz, recommended by LibGDX
       world.getWorld().step(1/45f, 6, 2);
       
@@ -171,6 +176,7 @@ public class GameRenderer
               b.getSprite().getScaleY(),b.getSprite().getRotation());
       }
       
+     
       
       if(!world.isGameOver())
          score = Math.max(score,  (int)Math.floor(4.7*(4.7-world.getPlayerBody() .getPosition().y)));
@@ -187,8 +193,7 @@ public class GameRenderer
          layout.setText(settingFont, "Music: on");
          if(world.getMusicPlayer().isPlaying()) settingFont.draw(hudBatch, "Music: on", Gdx.graphics.getWidth() - layout.width - 5,  Gdx.graphics.getHeight() - 10);
          else settingFont.draw(hudBatch, "Music: off", Gdx.graphics.getWidth() - layout.width - 5,  Gdx.graphics.getHeight() - 10);
-         
-         
+           
          hudBatch.end();
       }
       
@@ -201,7 +206,18 @@ public class GameRenderer
       shapeRenderer.begin(ShapeType.Filled);
       shapeRenderer.setColor(.95f, .95f, .95f, .95f);
       shapeRenderer.rect(world.getLava().x, world.getLava().y, world.getLava().width, world.getLava().height);
+      
+      //If the game is multiplayer, go ahead and render the opponent. 
+      if(world.isMultiplayer()){
+         shapeRenderer.setColor(Color.RED);
+         shapeRenderer.rect(world.getOpponent().x, world.getOpponent().y, world.getOpponent().width, world.getOpponent().height);
+      }
+      
+      
       shapeRenderer.end();
+      
+      
+      
       Gdx.gl.glDisable(GL30.GL_BLEND);
       
       if(checkLavaDeath() || world.isGameOver()){
@@ -236,6 +252,24 @@ public class GameRenderer
    public void renderBackground(){
       backgroundSprite.setPosition(0, camera.position.y - 600);
       backgroundSprite.draw(batch);
+   }
+   
+   public void renderWaitingBackground(){
+      backgroundSprite.setPosition(0, camera.position.y - 600);
+      backgroundSprite.draw(hudBatch);
+   }
+   
+   public void renderWaitingScreen(){
+      //Clear the screen here
+      Gdx.gl.glClearColor(1, 1, 1, 1);
+      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+      hudBatch.begin();
+      renderWaitingBackground();
+      deathFont.setColor(Color.BLACK);
+      layout.setText(deathFont, "Waiting for opponent...");
+      float h1 = layout.height;
+      deathFont.draw(hudBatch, "Waiting for opponent", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - h1)/2);
+      hudBatch.end();
    }
    
    public void renderPauseScreen() {
