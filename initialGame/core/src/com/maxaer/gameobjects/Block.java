@@ -30,7 +30,6 @@ public class Block extends Shape {
 		//Randomly determine whether block is small or large
 		float small = rand.nextFloat();
 		if(small <= .50f) isSmall = true;
-		isSmall = false;
 		if(isSmall) sprite.setSize(sprite.getWidth()/2, sprite.getHeight()/2);
 		
 		int p = rand.nextInt(Gdx.graphics.getWidth());
