@@ -97,15 +97,6 @@ public class GameRenderer
     */
    public void render() {
                
-	   //set all static bottom blocks to inactive
-	   Vector<Body> ibb = world.getInactiveBottomBlocks();
-	      if(!ibb.isEmpty()) {
-	    	  for(int i = 0; i < ibb.size(); i++) {
-	        	  ibb.get(i).setActive(false);
-	        	  ibb.remove(ibb.get(i));
-	          }
-	      } 
-	   
 	  // Step the physics simulation forward at a rate of 45hz, recommended by LibGDX
       world.getWorld().step(1/45f, 6, 2);
       
