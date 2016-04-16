@@ -48,7 +48,7 @@ public class GameWorld
    private Vector<Block> blocks;
    private float lastDropTime = TimeUtils.nanoTime();
    private float lastHeight = -500;
-   private boolean gameOver;
+   private volatile boolean gameOver;
    private boolean justDied;
    private GameWindow window;
    private boolean lavaDeath, blockDeath;
@@ -58,7 +58,7 @@ public class GameWorld
    
    private boolean isRunning, isMultiplayer;
    private volatile boolean multiplayerReady, multiplayerFinished;
-   private int currentScore;
+   private volatile int currentScore;
    private volatile int opponentsScore; 
 
    //Game speeds
@@ -86,56 +86,74 @@ public class GameWorld
          //Create the opponent rectangle here
          opponent = new Rectangle(player.getX() + player.getSprite().getWidth() + 30, player.getY(), player.getSprite().getWidth(), player.getSprite().getHeight());
          
-      // Now we create a thread that will listen for incoming socket connections
+         //We need to create a thread for this client so we can communicate with the game server. 
          new Thread(new Runnable(){
 
              @Override
              public void run() {
                  Socket client = null;
-                 DataInputStream is;
-                 DataOutputStream os; 
+                 DataInputStream is = null;
+                 DataOutputStream os = null; 
                  int checkScore = 0; 
                  try
                 {
-                   //Connect to the server and get our streams
+                   //Connect to the server and set up our streams
                    client = new Socket("localhost", 6789);
                    is = new DataInputStream(client.getInputStream());
                    os = new DataOutputStream(client.getOutputStream());
                    
                    //Wait for the signal to start the game here
                    multiplayerReady = is.readBoolean();
+                   
+                   //Set the initial game status
                    multiplayerFinished = false;
                    float oppX = 0; 
                    float oppY = 0; 
                    
-                   //Run the thread until the game is over. 
-                   while(!gameOver || checkScore > 0){
-                      
+                   /*
+                    * There are three conditions where we should continue talking with the server
+                    *   1. !gameOver -- meaning we are still alive
+                    *   2. checkScore > 0 -- meaning the opponent has not yet died
+                    *   3. currentScore > 0 -- this allows us to know exactly when we have died
+                    */
+                   while(!gameOver || checkScore > 0 || currentScore > 0){
                       /*
                        * Write the information necessary to the server
+                       *    1. currentScore
+                       *    2. X and Y coordinates of our player
                        */
                       os.writeInt(currentScore);
-                     
-                      //Send the player's current position to the server
                       os.writeFloat(player.getSprite().getX());
                       os.writeFloat(player.getSprite().getY());
                       os.flush();
-
+                      
                       /*
                        * Read the necessary information here
+                       *    1. Opponents score
+                       *    2. Opponent's X Y coordinate
                        */
                       checkScore = is.readInt();
                       oppX = is.readFloat();
                       oppY = is.readFloat();
+                      
                       //Update the opponents position to be re-rendered and the score
                       opponent.setPosition(oppX, oppY);
                       
                       
-                      //if the score is negative--game over. Else, update our opponents score
-                      if(checkScore < 0) multiplayerFinished = true;
-                      else opponentsScore = checkScore; 
-
+                      //if the score is negative, don't update it.
+                      if(checkScore > 0) opponentsScore = checkScore;
+                      
                    }
+                   //Finally send our final information to the opponent
+                   os.writeInt(currentScore);
+                   os.writeFloat(player.getSprite().getX());
+                   os.writeFloat(player.getSprite().getY());
+                   os.flush();
+                   
+                   
+                   System.out.println("Multiplayer finished against" + opponentsScore);
+                   //The multiplayer game is now finished. And so is our communication with the server. 
+                   multiplayerFinished = true;
                    
                 }
                 catch (UnknownHostException e)
@@ -150,7 +168,10 @@ public class GameWorld
                    if(client != null){
                       try
                       {
+                         //clean up
                          client.close();
+                         os.close();
+                         is.close();
                       }
                       catch (IOException e)
                       {
@@ -226,33 +247,33 @@ public class GameWorld
 			  blocks.add(b);
 		  }
 		
-//		  // a bullshit try at this
-//		  int heightDifference = (int) (player.getY() - lava.getY());
-//		  
-//		  //Lava comes after 4.5 so enough time for boxes to fall
-//		  if(lastDropTime >= 4500000000.0 && lastDropTime <= 25000000000.0){
-//			  
-//			  //Update the position of the lava by a few pixels
-//			  if(heightDifference >= -600)
-//			  {
-//				  lava.setPosition(lava.getX(), lava.getY() - (38 * delta));
-//			  }
-//			  else{
-//			     lava.setPosition(lava.getX(), lava.getY() - (35 * delta));
-//			  }
-//		  }
-//		  
-//		  //Increases difficulty of world through increase of velocity
-//		  if(lastDropTime > 25000000000.0){
-//			  
-//			  if(heightDifference >= -600)
-//			  {
-//				  lava.setPosition(lava.getX(), lava.getY() - (35 * delta));
-//			  }
-//			  else{
-//			     lava.setPosition(lava.getX(), lava.getY() - (33 * delta));
-//			  }
-//		  }
+		  // a bullshit try at this
+		  int heightDifference = (int) (player.getY() - lava.getY());
+		  
+		  //Lava comes after 4.5 so enough time for boxes to fall
+		  if(lastDropTime >= 4500000000.0 && lastDropTime <= 25000000000.0){
+			  
+			  //Update the position of the lava by a few pixels
+			  if(heightDifference >= -600)
+			  {
+				  lava.setPosition(lava.getX(), lava.getY() - (38 * delta));
+			  }
+			  else{
+			     lava.setPosition(lava.getX(), lava.getY() - (35 * delta));
+			  }
+		  }
+		  
+		  //Increases difficulty of world through increase of velocity
+		  if(lastDropTime > 25000000000.0){
+			  
+			  if(heightDifference >= -600)
+			  {
+				  lava.setPosition(lava.getX(), lava.getY() - (35 * delta));
+			  }
+			  else{
+			     lava.setPosition(lava.getX(), lava.getY() - (33 * delta));
+			  }
+		  }
 	   }
 
 	  
