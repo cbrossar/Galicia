@@ -23,7 +23,7 @@ public class GameScreen implements Screen
    private GameRenderer renderer;
    
    public GameScreen(GameWindow window, User user){
-      world = new GameWorld(window, user);
+      world = new GameWorld(window, user, 0);
       renderer = new GameRenderer(world);
    }
 

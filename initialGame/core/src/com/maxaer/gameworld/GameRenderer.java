@@ -178,9 +178,7 @@ public class GameRenderer
          settingFont.draw(hudBatch, world.getUser().getUserName(), 0, Gdx.graphics.getHeight() - 50);
          layout.setText(settingFont, "Music: on");
          if(world.getMusicPlayer().isPlaying()) settingFont.draw(hudBatch, "Music: on", Gdx.graphics.getWidth() - layout.width - 5,  Gdx.graphics.getHeight() - 10);
-         else settingFont.draw(hudBatch, "Music: off", Gdx.graphics.getWidth() - layout.width - 5,  Gdx.graphics.getHeight() - 10);
-         
-         
+         else settingFont.draw(hudBatch, "Music: off", Gdx.graphics.getWidth() - layout.width - 5,  Gdx.graphics.getHeight() - 10);         
          hudBatch.end();
       }
       

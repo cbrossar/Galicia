@@ -13,6 +13,7 @@ public class User extends Thread
    private int lavaDeaths;
    private int smushDeaths;
    private int totalDistanceTraveled;
+   private boolean playMusic = true;
    
    public User(String userName, String passHash, boolean isGuest)
    {
@@ -60,6 +61,14 @@ public class User extends Thread
    public int getTotalDistanceTraveled()
    {
       return totalDistanceTraveled;
+   }
+   
+   public void setMusic(boolean b) {
+	   playMusic = b;
+   }
+   
+   public boolean getMusic() {
+	   return playMusic;
    }
    
    public void setLavaDeaths(int lavaDeaths)

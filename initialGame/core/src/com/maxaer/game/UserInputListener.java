@@ -38,6 +38,7 @@ public class UserInputListener implements InputProcessor
 	   	
 	   	if(keycode == Input.Keys.ENTER && world.isGameOver()){
 	   	   world.showMenuScreen(); 
+	   	   world.getMusicPlayer().pause();
 	   	}
 	   	
 	   	if(keycode == Input.Keys.RIGHT && !world.isGameOver()){   		

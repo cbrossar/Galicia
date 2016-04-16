@@ -17,11 +17,13 @@ public class Block extends Shape {
 	private Body body;
 	private Texture texture;   
 	final float PIXELS_TO_METERS = GameConstants.PIXEL_TO_METERS;
-	private Random rand = new Random();
 	private Boolean isSmall = false;
+	private Random rand;
 	
-	public Block(World world, int height)
+	public Block(World world, int height, Random rand)
 	{
+		this.rand = rand;
+		
 		//Create the player to have the block image
 		texture = new Texture(randomBlockImage());
 		sprite = new Sprite(texture);
@@ -107,7 +109,6 @@ public class Block extends Shape {
 	
 	
 	private String randomBlockImage(){
-	   Random rand = new Random();
 	   int randomNum = rand.nextInt((8 - 1) + 1) + 1;
 	   switch(randomNum){
 	   case 1:

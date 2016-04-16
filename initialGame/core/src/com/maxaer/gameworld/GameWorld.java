@@ -1,5 +1,6 @@
 package com.maxaer.gameworld;
 
+import java.util.Random;
 import java.util.Vector;
 
 
@@ -42,12 +43,12 @@ public class GameWorld
    //private Block block;
    private Vector<Block> blocks;
    private float lastDropTime = TimeUtils.nanoTime();
-   private float lastHeight = -500;
    private boolean gameOver;
    private boolean justDied;
    private GameWindow window;
    private boolean lavaDeath, blockDeath;
    private Music musicPlayer;
+   private Random rand;
    
    private User user;
    
@@ -55,19 +56,25 @@ public class GameWorld
 
    //Game speeds
    private int GAME_SPEED;
+   private int seed;
    private static final int FAST_SPEED = 45;
    private static final int DEFAULT_SPEED = 40;
    private static final int SLOW_SPEED = 35;
    final float PIXELS_TO_METERS = GameConstants.PIXEL_TO_METERS;
+      
    
-   
-   public GameWorld(GameWindow window, User user)
+   public GameWorld(GameWindow window, User user, int seed)
    {
       this.user = user;
       this.window = window;
-      createNewGame(); 
+      this.rand = new Random(seed);
       this.musicPlayer = window.getMusicPlayer();
-      window.getMusicPlayer().play();
+      if(user.getMusic()) {
+    	  window.getMusicPlayer().play();
+      }
+      createNewGame(); 
+      this.seed = seed;
+      
   
   }
    
@@ -87,11 +94,9 @@ public class GameWorld
       lavaDeath = false;
       blockDeath = false;
       GAME_SPEED = DEFAULT_SPEED;
-      lastHeight = -500;
       isRunning = true;
       
-
-
+      
       
       //Set the input listener for this screen
       Gdx.input.setInputProcessor(new UserInputListener(this));
@@ -100,7 +105,6 @@ public class GameWorld
    public void dispose(){
       if(world != null){
     	  world.dispose();
-    	  window.getMusicPlayer().dispose();
       }
       if(player != null) player.dispose();
       if(platform != null) platform.dispose();
@@ -129,12 +133,8 @@ public class GameWorld
 		  if(TimeUtils.nanoTime() - lastDropTime > 1000000000.0){
 			  lastDropTime = TimeUtils.nanoTime();
 			  
-			  int heightToUse = (int) Math.min(player.getY() - 800, lava.getY()-1400);
-			  
-			  System.out.println("player.getY() - 700 === " + (player.getY() -800));
-			  System.out.println("lava.getY() - 1400 === " + (lava.getY() -1400));
-			  Block b = new Block(world, heightToUse);
-			  lastHeight=heightToUse;
+			  int heightToUse = (int) Math.min(player.getSprite().getY()-800, lava.getY()-1300);
+			  Block b = new Block(world, heightToUse, rand);
 			  blocks.add(b);
 		  }		
 		  // a bullshit try at this
@@ -144,7 +144,7 @@ public class GameWorld
 		  
 		  if(lastDropTime > 25000000000.0){
 			  
-			  if(heightDifference <= -8)
+			  if(heightDifference <= -10)
 			  {
 				  lava.setPosition(lava.getX(), lava.getY() - (60 * delta));
 			  }
