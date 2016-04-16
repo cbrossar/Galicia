@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.maxaer.constants.GameConstants;
 import com.maxaer.database.User;
 import com.maxaer.game.CollisionListener;
 import com.maxaer.game.GameWindow;
@@ -57,6 +58,7 @@ public class GameWorld
    private static final int FAST_SPEED = 45;
    private static final int DEFAULT_SPEED = 40;
    private static final int SLOW_SPEED = 35;
+   final float PIXELS_TO_METERS = GameConstants.PIXEL_TO_METERS;
    
    
    public GameWorld(GameWindow window, User user)
@@ -126,50 +128,29 @@ public class GameWorld
       //Any updating for our world should go here
 		  if(TimeUtils.nanoTime() - lastDropTime > 1000000000.0){
 			  lastDropTime = TimeUtils.nanoTime();
-			  int heightToUse = (int) Math.min(lastHeight, player.getSprite().getY()-600);
+			  
+			  int heightToUse = (int) Math.min(lastHeight, lava.getY()-1300);
 			  Block b = new Block(world, heightToUse);
 			  lastHeight=heightToUse;
 			  blocks.add(b);
-		  }
-		
+		  }		
 		  // a bullshit try at this
-		  int heightDifference = (int) (player.getY() - lava.getY());
+		  float heightDifference = (player.getY() - lava.getY()/PIXELS_TO_METERS);
+		  System.out.println(heightDifference);
 		  
-		  //Lava comes after 4.5 so enough time for boxes to fall
-		  if(lastDropTime >= 4500000000.0 && lastDropTime <= 25000000000.0){
-			  
-			  //Update the position of the lava by a few pixels
-			  if(heightDifference >= -600)
-			  {
-				  lava.setPosition(lava.getX(), lava.getY() - (38 * delta));
-			  }
-			  else{
-			     lava.setPosition(lava.getX(), lava.getY() - (35 * delta));
-			  }
-		  }
 		  
-		  //Increases difficulty of world through increase of velocity
 		  if(lastDropTime > 25000000000.0){
 			  
-			  if(heightDifference >= -600)
+			  if(heightDifference <= -8)
 			  {
-				  lava.setPosition(lava.getX(), lava.getY() - (35 * delta));
+				  lava.setPosition(lava.getX(), lava.getY() - (60 * delta));
 			  }
 			  else{
-			     lava.setPosition(lava.getX(), lava.getY() - (33 * delta));
+			     lava.setPosition(lava.getX(), lava.getY()- (40 * delta));
 			  }
 		  }
 	   }
 
-	  //Update the position of the lava by a few pixels
-//	  if(lava.getY() > player.getSprite().getY() - (Gdx.graphics.getHeight()/2))
-//
-//	     lava.setPosition(lava.getX(), lava.getY() - (45 * delta));
-//
-//	     lava.setPosition(lava.getX(), lava.getY() - (40 * delta));
-
-	   //  lava.setPosition(lava.getX(), lava.getY() - (GAME_SPEED * delta));
-	  
    }
    
    //Method to start the menu screen from game
