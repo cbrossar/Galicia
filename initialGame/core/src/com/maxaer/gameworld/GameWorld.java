@@ -129,14 +129,17 @@ public class GameWorld
 		  if(TimeUtils.nanoTime() - lastDropTime > 1000000000.0){
 			  lastDropTime = TimeUtils.nanoTime();
 			  
-			  int heightToUse = (int) Math.min(lastHeight, lava.getY()-1300);
+			  int heightToUse = (int) Math.min(player.getY() - 800, lava.getY()-1400);
+			  
+			  System.out.println("player.getY() - 700 === " + (player.getY() -800));
+			  System.out.println("lava.getY() - 1400 === " + (lava.getY() -1400));
 			  Block b = new Block(world, heightToUse);
 			  lastHeight=heightToUse;
 			  blocks.add(b);
 		  }		
 		  // a bullshit try at this
 		  float heightDifference = (player.getY() - lava.getY()/PIXELS_TO_METERS);
-		  System.out.println(heightDifference);
+		//  System.out.println(heightDifference);
 		  
 		  
 		  if(lastDropTime > 25000000000.0){
