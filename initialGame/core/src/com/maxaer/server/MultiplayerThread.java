@@ -66,29 +66,51 @@ public class MultiplayerThread extends Thread
          System.out.println("Error starting the game ");
       }
       
+      boolean gameRunning = true;
+      //Store user positions
+      float p1X = 0; float p1Y = 0;
+      float p2X = 0; float p2Y = 0; 
+      int p1Score = 0; int p2Score = 0;
+      
       //The server thread will just receieve information, send information, and then 
-      while(true){
-         
+      while(gameRunning){
          try
          {
-            //Read both player's positions
-            float p1X = p1InStream.readFloat();
-            float p1Y = p1InStream.readFloat();
             
-            float p2X = p2InStream.readFloat();
-            float p2Y = p2InStream.readFloat();
-            
-            //Write the player's positions out
-            p1OutStream.writeFloat(p2X);
-            p1OutStream.writeFloat(p2Y);
-            p1OutStream.flush();
-            
-            p2OutStream.writeFloat(p1X);
-            p2OutStream.writeFloat(p1Y);
-            p2OutStream.flush();
-            
-            System.out.println(p1X + " " + p1Y);
-            System.out.println(p2X + " " + p2Y);
+            //Only read from the streams if they are available to use
+            if(p1InStream.available() > 0 && p2InStream.available() > 0){
+               
+               /*
+                * Read the necessary information
+                */
+               p1Score = p1InStream.readInt();
+               p1X = p1InStream.readFloat();
+               p1Y = p1InStream.readFloat();
+               
+               p2Score = p2InStream.readInt();
+               p2X = p2InStream.readFloat();
+               p2Y = p2InStream.readFloat();
+
+               /*
+                * Write the information 
+                */
+               p2OutStream.writeInt(p1Score);
+               p2OutStream.writeFloat(p1X);
+               p2OutStream.writeFloat(p1Y);
+               p2OutStream.flush();
+
+
+               p1OutStream.writeInt(p2Score);
+               p1OutStream.writeFloat(p2X);
+               p1OutStream.writeFloat(p2Y);
+               p1OutStream.flush();
+
+               
+            }
+
+           
+          
+
          }
          catch (IOException e)
          {

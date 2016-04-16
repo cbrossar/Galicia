@@ -57,8 +57,11 @@ public class UserInputListener implements InputProcessor
    public boolean keyUp(int keycode) {
       
       //If the game is over, the user can press space to create a new game session
-      if(keycode == Input.Keys.SPACE && world.isGameOver()){
+      if(keycode == Input.Keys.SPACE && world.isGameOver() && !world.isMultiplayer()){
          world.createNewGame(); 
+      } else if(keycode == Input.Keys.SPACE && world.isGameOver() && world.isMultiplayer()){
+         //If it's multiplayer we'll send them out to the menu again
+         world.showMenuScreen();
       }
 	  
       if(keycode == Input.Keys.P && !world.isGameOver() && isRunning){

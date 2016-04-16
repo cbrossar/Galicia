@@ -29,7 +29,8 @@ public class GameServer
             System.out.println("Waiting for player 2...");
             Socket client2 = socket.accept();
             System.out.println("Player 2 connected.");
-            //We won't start the multiplayer thread until the second user accepts our connection. 
+            //We won't start the multiplayer thread until the second user accepts our connection, and both users mantain connection
+           
             MultiplayerThread st = new MultiplayerThread(client1, client2, this);
             clients.add(st);
          }

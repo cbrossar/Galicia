@@ -49,6 +49,7 @@ public class GameRenderer
    private int finalScore;
    private Vector<Block> blocks;
    
+   
    public GameRenderer(GameWorld world){
       //Create the reference to the game world
       this.world = world;
@@ -167,9 +168,14 @@ public class GameRenderer
       
      
       
-      if(!world.isGameOver())
+      if(!world.isGameOver()){
          score = Math.max(score,  (int)Math.floor(4.7*(4.7-world.getPlayerBody() .getPosition().y)));
-     
+         world.setCurrentScore(score);
+      } else{
+         //Setting the death score here
+         world.setCurrentScore(GameConstants.DEATH_SCORE);
+      }
+         
       batch.end();
       
       if(!world.isGameOver()){
@@ -198,8 +204,29 @@ public class GameRenderer
       
       //If the game is multiplayer, go ahead and render the opponent. 
       if(world.isMultiplayer()){
-         shapeRenderer.setColor(Color.RED);
+         shapeRenderer.setColor(Color.LIGHT_GRAY);
          shapeRenderer.rect(world.getOpponent().x, world.getOpponent().y, world.getOpponent().width, world.getOpponent().height);
+         
+         hudBatch.begin();
+         
+         font.setUseIntegerPositions(false);
+         layout.setText(nameFont, "Opponent score: " + world.getOpponentsScore());
+         nameFont.draw(hudBatch, "Opponent Score: " + world.getOpponentsScore(), Gdx.graphics.getWidth() - layout.width - 5, Gdx.graphics.getHeight() - 25);
+         
+         //If the game is over, go ahead and print the results
+         if(world.isMultiplayerFinished()){
+            layout.setText(nameFont, "Opponent is dead! " + world.getOpponentsScore());
+            nameFont.draw(hudBatch, "Opponent is dead! " + world.getOpponentsScore(), Gdx.graphics.getWidth() - layout.width - 5, Gdx.graphics.getHeight() - 50);
+            if(world.getOpponentsScore() < score){
+               layout.setText(nameFont, "You win!");
+               nameFont.draw(hudBatch, "You win! ", Gdx.graphics.getWidth() - layout.width - 5, Gdx.graphics.getHeight() - 65);
+            } else{
+               layout.setText(nameFont, "You lost :(");
+               nameFont.draw(hudBatch, "You lost :(", Gdx.graphics.getWidth() - layout.width - 5, Gdx.graphics.getHeight() - 65);
+            }
+         }
+         
+         hudBatch.end();
       }
       
       
@@ -217,7 +244,8 @@ public class GameRenderer
     	  //If the player has just died, we'll go ahead and send their score to SQL right now on a separate thread
           if(world.isJustDied()) { 
             world.setJustDied(false);
-            
+            world.setCurrentScore(GameConstants.DEATH_SCORE);
+            //Update the world's score 
             //Take care of resetting the score
             finalScore = score;
             score = 21;

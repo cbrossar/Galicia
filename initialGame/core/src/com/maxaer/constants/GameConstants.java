@@ -21,5 +21,7 @@ public class GameConstants
    public static final String ThanksALotImg = "Cookies/ThanksALot.png";
    public static final String TrefoilImg = "Cookies/Trefoil.png";
    
+   public static final int DEATH_SCORE = -1; 
+   
    
 }
