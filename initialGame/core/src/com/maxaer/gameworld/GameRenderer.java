@@ -8,10 +8,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -21,6 +24,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.maxaer.constants.GameConstants;
+import com.maxaer.gameobjects.AnimatedSprite;
 import com.maxaer.gameobjects.Block;
 import com.maxaer.threaded.SQLScoreUpdater;
 
@@ -48,6 +52,15 @@ public class GameRenderer
    private GlyphLayout layout; 
    private int score = 21;
    private Vector<Block> blocks;
+   private float elapsedTime;
+   private AnimatedSprite animatedSprite;
+   
+   private Texture img;
+   private TextureRegion[] animationFrames;
+   private Animation animation;
+   
+   private int count;
+   
    
    public GameRenderer(GameWorld world){
       //Create the reference to the game world
@@ -82,9 +95,37 @@ public class GameRenderer
       backgroundSprite = new Sprite(backgroundTexture);
       
       debug = new Box2DDebugRenderer();
+      
+  
             
+      initiateAnimations();
    }
    
+   private void initiateAnimations() {
+	   batch = new SpriteBatch();
+	   img = new Texture("data/deathAnimation.png");
+	   
+	   TextureRegion[][] tempFrames = TextureRegion.split(img, 90, 120);
+	   
+	   animationFrames = new TextureRegion[4];
+	   int index = 0;
+	   	   
+	   for(int i = 0; i < 2; i++) {
+		   for (int j = 0; j < 2; j++) {
+			   animationFrames[index++] = tempFrames[i][j];
+		   }
+	   }
+	   int i = 0;
+	   while(animationFrames.length > i) { animationFrames[i].flip(false, true); i++; } 
+	   animation = new Animation(1/10f, animationFrames);
+	   animation.setPlayMode(PlayMode.NORMAL);
+	   elapsedTime = 0;
+	   count = 0;
+   }
+   
+   public void setElapsedTime(float elapsedTime2) {
+	   elapsedTime = elapsedTime2;
+   }
    /*
     * All rendering goes on here. Super important method
     */
@@ -92,9 +133,7 @@ public class GameRenderer
                        
 	  // Step the physics simulation forward at a rate of 45hz, recommended by LibGDX
       world.getWorld().step(1/45f, 6, 2);
-      
-      
-      
+    
       Vector<Body> ibb = world.getInactiveBottomBlocks();
       if(!ibb.isEmpty()) {
     	  for(int i = 0; i < ibb.size(); i++) {
@@ -121,6 +160,7 @@ public class GameRenderer
          
       }
       
+      
       //Access the world's reference to Player, and update the position of it's sprite with respect to the body
       blocks = world.getBlocks();
       world.getPlayer().updatePosition();
@@ -144,27 +184,28 @@ public class GameRenderer
       debugMatrix = batch.getProjectionMatrix().cpy().scale(100f,
             100f, 0);
       
-      //Render the Player sprite here
-      batch.draw(world.getPlayerSprite(), world.getPlayerSprite().getX(), world.getPlayerSprite().getY(),world.getPlayerSprite().getOriginX(),
-            world.getPlayerSprite().getOriginY(),
-            world.getPlayerSprite().getWidth(),world.getPlayerSprite().getHeight(),world.getPlayerSprite().getScaleX(),world.getPlayerSprite().
-                    getScaleY(),world.getPlayerSprite().getRotation());
+	      //Render the Player sprite here
+	      batch.draw(world.getPlayerSprite(), world.getPlayerSprite().getX(), world.getPlayerSprite().getY(),world.getPlayerSprite().getOriginX(),
+	            world.getPlayerSprite().getOriginY(),
+	            world.getPlayerSprite().getWidth(),world.getPlayerSprite().getHeight(),world.getPlayerSprite().getScaleX(),world.getPlayerSprite().
+	                    getScaleY(),world.getPlayerSprite().getRotation());
+	      
+	      batch.draw(world.getPlatformSprite(), world.getPlatformSprite().getX(),
+	    		  world.getPlatformSprite().getY(),world.getPlatformSprite().getOriginX(),
+	              world.getPlatformSprite().getOriginY(),world.getPlatformSprite().getWidth(),
+	              world.getPlatformSprite().getHeight(),world.getPlatformSprite().getScaleX(),
+	              world.getPlatformSprite().getScaleY(),world.getPlatformSprite().getRotation());
+	      
+	      for(Block b : blocks){
+	    		  batch.draw(b.getSprite(), b.getSprite().getX(),
+	    		  b.getSprite().getY(),b.getSprite().getOriginX(),
+	              b.getSprite().getOriginY(),b.getSprite().getWidth(),
+	              b.getSprite().getHeight(),b.getSprite().getScaleX(),
+	              b.getSprite().getScaleY(),b.getSprite().getRotation());
+	      }
       
-      batch.draw(world.getPlatformSprite(), world.getPlatformSprite().getX(),
-    		  world.getPlatformSprite().getY(),world.getPlatformSprite().getOriginX(),
-              world.getPlatformSprite().getOriginY(),world.getPlatformSprite().getWidth(),
-              world.getPlatformSprite().getHeight(),world.getPlatformSprite().getScaleX(),
-              world.getPlatformSprite().getScaleY(),world.getPlatformSprite().getRotation());
       
-      for(Block b : blocks){
-    		  batch.draw(b.getSprite(), b.getSprite().getX(),
-    		  b.getSprite().getY(),b.getSprite().getOriginX(),
-              b.getSprite().getOriginY(),b.getSprite().getWidth(),
-              b.getSprite().getHeight(),b.getSprite().getScaleX(),
-              b.getSprite().getScaleY(),b.getSprite().getRotation());
-      }
       
-
       score = Math.max(score,  (int)Math.floor(4.7*(4.7-world.getPlayerBody() .getPosition().y)));
      
       batch.end();
@@ -199,6 +240,29 @@ public class GameRenderer
       if(checkLavaDeath() || world.isGameOver()){
          //Update the delay time by adding the time passed since the last delay 
     	  world.setGameOver(true);
+    	  if(world.getCreatedGame()) {
+    		  elapsedTime = 0;
+    		  world.setCreatedGame(false);
+    	  }
+    	  world.getPlayer().setJumpability(false);
+    	
+    	  elapsedTime += Gdx.graphics.getDeltaTime();
+    	  
+    	  if(!animation.isAnimationFinished(elapsedTime)) {
+      	
+    	
+      	Gdx.gl.glClearColor(1,0,0,1);
+      	Gdx.gl.glClear(GL20.GL_DEPTH_BUFFER_BIT); 
+      	
+      	world.getPlayerSprite().setTexture(new Texture("45x60player_gone.png"));
+      	
+		batch.begin();
+		
+		batch.draw(animation.getKeyFrame(elapsedTime, true), world.getPlayer().getX()*GameConstants.PIXEL_TO_METERS - 40, world.getPlayer().getY()*GameConstants.PIXEL_TO_METERS- 85);
+		batch.end();
+    	  }
+    	  
+    		System.out.println(elapsedTime);
           renderGameOverScreen();
          
           score = 21;
@@ -210,6 +274,7 @@ public class GameRenderer
       }
       
       debug.render(world.getWorld(), debugMatrix);
+      
       
    }
    
@@ -255,6 +320,9 @@ public class GameRenderer
       }
    }
    
+   public OrthographicCamera getCamera() {
+	   return camera;
+   }
 
    //Check if the lava has surpassed the player
    public boolean checkLavaDeath(){

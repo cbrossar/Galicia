@@ -48,12 +48,14 @@ public class GameWorld
    private User user;
    
    private boolean isRunning;
+   private boolean createdNewGame;
    
    public GameWorld(GameWindow window, User user)
    {
       this.user = user;
       this.window = window;
       createNewGame(); 
+      createdNewGame = false;
   
   }
    
@@ -72,7 +74,7 @@ public class GameWorld
       justDied = true;
       inActiveBottomBlocks = new Vector<Body>();
       isRunning = true;
-
+      
       
       //Set the input listener for this screen
       Gdx.input.setInputProcessor(new UserInputListener(this));
@@ -81,12 +83,19 @@ public class GameWorld
    public void dispose(){
       if(world != null){
     	  world.dispose();
-    	  window.getMusicPlayer().dispose();
+    	  //window.getMusicPlayer().dispose();
       }
       if(player != null) player.dispose();
       if(platform != null) platform.dispose();
    }
    
+   public void setCreatedGame(boolean created) {
+	   createdNewGame = created;
+   }
+   
+   public boolean getCreatedGame() {
+	   return createdNewGame;
+   }
    public void setRunningWorld(boolean running)
    {
 	   isRunning = running;
@@ -98,7 +107,7 @@ public class GameWorld
    public void update(float delta){
 	   
 	   if(isRunning){
-		   
+		
       //Any updating for our world should go here
 		  if(TimeUtils.nanoTime() - lastDropTime > 1000000000.0){
 			  lastDropTime = TimeUtils.nanoTime();

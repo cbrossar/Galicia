@@ -57,7 +57,8 @@ public class UserInputListener implements InputProcessor
       
       //If the game is over, the user can press space to create a new game session
       if(keycode == Input.Keys.SPACE && world.isGameOver()){
-         world.createNewGame(); 
+         world.createNewGame();
+         world.setCreatedGame(true);
       }
 	  
       if(keycode == Input.Keys.P && !world.isGameOver() && isRunning){
@@ -82,8 +83,6 @@ public class UserInputListener implements InputProcessor
     		   player.applyForceToCenter(0f, -2.5f,true);
        }
        
-          
-
        return true;
    }
 

@@ -1,10 +1,23 @@
 package com.maxaer.screens;
 
+import java.io.File;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.loaders.AssetLoader;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.maxaer.database.User;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 
 import com.maxaer.game.GameWindow;
+import com.maxaer.gameobjects.AnimatedSprite;
+import com.maxaer.gameobjects.Player;
 import com.maxaer.gameworld.GameRenderer;
 import com.maxaer.gameworld.GameWorld;
 
@@ -22,11 +35,16 @@ public class GameScreen implements Screen
    private GameWorld world;
    private GameRenderer renderer;
    
+   private SpriteBatch batch;
+   private AnimatedSprite animatedSprite;
+   private Texture img;
+   private TextureRegion[] animationFrames;
+   private float elapsedTime;
+   
    public GameScreen(GameWindow window, User user){
       world = new GameWorld(window, user);
       renderer = new GameRenderer(world);
    }
-
    @Override
    public void resize(int width, int height) {
    }
@@ -62,9 +80,10 @@ public class GameScreen implements Screen
    
    @Override
    public void render(float delta)
-   {
+   { 
       world.update(delta); 
       boolean wasPaused = false;
+      
       if(!world.getRunningWorld()){
     	  Gdx.graphics.setContinuousRendering(false);
     	  wasPaused = true;
@@ -78,6 +97,8 @@ public class GameScreen implements Screen
       }
       else {
     	  Gdx.graphics.requestRendering();
+    	  elapsedTime += delta;
+    	  //renderer.setElapsedTime(elapsedTime);
     	  renderer.render();  
       }
    }
