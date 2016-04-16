@@ -62,16 +62,13 @@ public class CollisionListener implements ContactListener {
     				  if((!v.get(i).isSmall() && xDiff >= -.75 && xDiff <= .75) ||
     						  (v.get(i).isSmall() && xDiff >= -.45 && xDiff <= .45)) {
     					  world.setGameOver(true);
-    				  }
-    				  
-    				  
+    				  }	  
     			  }
 
     		  }
     		  break;
     	  }
       }
-      
       
       //The player is here--do something with it
       if(obj1.getBody().equals(world.getPlayerBody())){
@@ -100,8 +97,7 @@ public class CollisionListener implements ContactListener {
 
 	
    @Override
-   public void preSolve(Contact contact, Manifold oldManifold)
-   {
+   public void preSolve(Contact contact, Manifold oldManifold) {
 
    }
 
