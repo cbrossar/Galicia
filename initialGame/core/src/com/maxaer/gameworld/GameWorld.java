@@ -56,7 +56,7 @@ public class GameWorld
    private GameWindow window;
    private boolean lavaDeath, blockDeath;
    private Music musicPlayer;
-   private Random rand;
+   private volatile Random rand;
    
    private User user;
    
@@ -67,7 +67,6 @@ public class GameWorld
    private volatile int currentScore;
    private volatile int opponentsScore; 
 
-   private int seed;
    final float PIXELS_TO_METERS = GameConstants.PIXEL_TO_METERS;
       
    public GameWorld(GameWindow window, User user, int seed, boolean isMultiplayer)
@@ -83,7 +82,6 @@ public class GameWorld
       createNewGame(); 
       createdNewGame = false;
 
-      this.seed = seed;
       //Set up the connection once the player starts playing
       if(isMultiplayer){
          
@@ -102,12 +100,13 @@ public class GameWorld
                  try
                 {
                    //Connect to the server and set up our streams
-                   client = new Socket("104.131.153.145", 6789);
+                   client = new Socket("localhost", 6789);
                    is = new DataInputStream(client.getInputStream());
                    os = new DataOutputStream(client.getOutputStream());
                    
                    //Wait for the signal to start the game here
                    multiplayerReady = is.readBoolean();
+                   rand = new Random(is.readInt());
                    //Play the music once we are ready to go
                    getMusicPlayer().play();
                    //Set the initial game status
@@ -192,6 +191,10 @@ public class GameWorld
          //start the music for singleplayer at the time of playing
          window.getMusicPlayer().play();
       }
+      
+      
+      
+      
   }
    
    public void createNewGame(){
@@ -424,6 +427,7 @@ public class GameWorld
    {
       return opponentsScore;
    }
+
    
    
 
