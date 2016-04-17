@@ -15,6 +15,8 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -68,26 +70,33 @@ public class UserSettingsScreen implements Screen{
 	    } else {
 	    	musicOnOffBtn = new TextButton("ON", skin);
 	    }
+	    
+	    ButtonGroup<TextButton> buttonGroup = new ButtonGroup<TextButton>();
 	   
 	    musicOnOffBtn.setPosition(Gdx.graphics.getWidth()/2 + Gdx.graphics.getWidth()/9, Gdx.graphics.getHeight()/2 +  Gdx.graphics.getHeight()/8);
 	    musicOnOffBtn.setWidth(170);
 	    stage.addActor(musicOnOffBtn);
-	    
+	    	    
 	    easyBtn = new TextButton("EASY", skin);
 	    easyBtn.setPosition(musicOnOffBtn.getX(), musicOnOffBtn.getY() - musicOnOffBtn.getHeight() - 7*BTN_SPACING);
 	    easyBtn.setWidth(170);
+	    buttonGroup.add(easyBtn);
+	    easyBtn.setChecked(true);
 	    stage.addActor(easyBtn);
 	    
 	    
+	   
 	    
 	    mediumBtn = new TextButton("MEDIUM", skin);
 	    mediumBtn.setPosition(easyBtn.getX(), easyBtn.getY() - easyBtn.getHeight() - BTN_SPACING);
 	    mediumBtn.setWidth(170);
+	    buttonGroup.add(mediumBtn);
 	    stage.addActor(mediumBtn);
 	    
 	    hardBtn = new TextButton("HARD", skin);
 	    hardBtn.setPosition(mediumBtn.getX(), mediumBtn.getY() - mediumBtn.getHeight() - BTN_SPACING);
 	    hardBtn.setWidth(170);
+	    buttonGroup.add(hardBtn);
 	    stage.addActor(hardBtn);
 		
 	    addActions();
@@ -162,6 +171,34 @@ public class UserSettingsScreen implements Screen{
         	   }
            }
        });
+   		
+   		
+   		easyBtn.addListener(new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				user.setDifficulty(1);
+			}
+   			
+   		});
+   		
+   		mediumBtn.addListener(new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				user.setDifficulty(2);
+			}
+   			
+   		});
+   		
+   		hardBtn.addListener(new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				user.setDifficulty(3);
+			}
+   			
+   		});
 	}
 	   
 	   

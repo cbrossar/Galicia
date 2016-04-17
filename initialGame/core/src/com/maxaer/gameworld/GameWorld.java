@@ -135,21 +135,39 @@ public class GameWorld
 			  
 			  int heightToUse = (int) Math.min(player.getSprite().getY()-800, lava.getY()-1300);
 			  Block b = new Block(world, heightToUse, rand);
+			  b.getBody().setLinearVelocity(0, user.getDifficulty()*3f);
 			  blocks.add(b);
 		  }		
-		  // a bullshit try at this
+
 		  float heightDifference = (player.getY() - lava.getY()/PIXELS_TO_METERS);
-		//  System.out.println(heightDifference);
-		  
+ 		  
 		  
 		  if(lastDropTime > 25000000000.0){
 			  
 			  if(heightDifference <= -10)
 			  {
-				  lava.setPosition(lava.getX(), lava.getY() - (60 * delta));
+				  if(user.getDifficulty() == 1) {
+					  lava.setPosition(lava.getX(), lava.getY() - (60 * delta));
+				  }
+				  else  if(user.getDifficulty() == 2) {
+					  lava.setPosition(lava.getX(), lava.getY() - (65 * delta));
+				  }
+				  else {
+					  lava.setPosition(lava.getX(), lava.getY() - (70 * delta));
+				  }
+				  
 			  }
 			  else{
-			     lava.setPosition(lava.getX(), lava.getY()- (40 * delta));
+				  if(user.getDifficulty() == 1) {
+					  lava.setPosition(lava.getX(), lava.getY()- (40 * delta));
+				  }
+				  else if(user.getDifficulty() == 2) {
+					  lava.setPosition(lava.getX(), lava.getY() - (45 * delta));
+				  }
+				  else {
+					  lava.setPosition(lava.getX(), lava.getY() - (50 * delta));
+				  }
+			     
 			  }
 		  }
 	   }
