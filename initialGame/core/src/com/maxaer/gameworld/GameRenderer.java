@@ -299,6 +299,7 @@ public class GameRenderer
 	   layout.reset();
    }
    public void renderGameOverScreen(){
+
       hudBatch.begin();
       
       deathFont.setColor(Color.BLACK);
