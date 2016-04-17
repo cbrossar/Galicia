@@ -1,6 +1,7 @@
 package com.maxaer.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -8,7 +9,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -18,14 +18,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-
 import com.maxaer.database.User;
-
 import com.maxaer.game.GameWindow;
 
-
-
-public class MenuScreen implements Screen
+//Screen to display the different game mode types
+public class GameModeScreen implements Screen
 {
    private final GameWindow window; 
    private SpriteBatch batch;
@@ -33,14 +30,14 @@ public class MenuScreen implements Screen
    private BitmapFont font;
    private Skin skin;
    private Stage stage;
-   private TextButton playBtn, scoresBtn, registerBtn, loginBtn, myStatsBtn, logoutBtn, userSettingsBtn;
+   private TextButton singleBtn, multiBtn;
    private Sprite backgroundSprite;
    private User user; 
    
    private static final float BTN_SPACING = 10f; 
    
 
-   public MenuScreen(GameWindow window, User user){
+   public GameModeScreen(GameWindow window, User user){
       cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
       cam.setToOrtho(false);
       
@@ -48,7 +45,7 @@ public class MenuScreen implements Screen
       
       //FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.local("data/MonaKo.ttf"));
 
-      Texture background = new Texture(Gdx.files.internal("Backgrounds/600x600Background.png"));
+      Texture background = new Texture(Gdx.files.internal("Backgrounds/600x600ScoreBackground.png"));
       backgroundSprite = new Sprite(background);
       backgroundSprite.setPosition(0, 0);
       
@@ -66,54 +63,20 @@ public class MenuScreen implements Screen
 
       createBasicSkin();
       
-      playBtn = new TextButton("Play", skin); // Use the initialized skin
-      playBtn.setPosition(325, Gdx.graphics.getHeight()/3 + 50);
-      playBtn.setWidth(190);
-      stage.addActor(playBtn);
+      singleBtn = new TextButton("1 person", skin); // Use the initialized skin
+      singleBtn.setPosition(325, Gdx.graphics.getHeight()/3 + 50);
+      singleBtn.setWidth(190);
+      stage.addActor(singleBtn);
       
-      registerBtn = new TextButton("Sign up", skin);
-      registerBtn.setPosition(playBtn.getX(), playBtn.getY() - playBtn.getHeight() - BTN_SPACING);
-      registerBtn.setWidth(190);
-      
-      loginBtn = new TextButton("Login", skin);
-      loginBtn.setPosition(registerBtn.getX(), registerBtn.getY() - registerBtn.getHeight() - BTN_SPACING);
-      loginBtn.setWidth(190);
-      
-      logoutBtn = new TextButton("Logout", skin);
-      logoutBtn.setWidth(190);
-      logoutBtn.setPosition(registerBtn.getX(), registerBtn.getY() - registerBtn.getHeight() - BTN_SPACING);
-      
-      scoresBtn = new TextButton("High Scores", skin);
-      scoresBtn.setPosition(playBtn.getX(), loginBtn.getY() - loginBtn.getHeight() - BTN_SPACING);
-      scoresBtn.setWidth(190);
-      scoresBtn.setPosition(playBtn.getX(), loginBtn.getY() - loginBtn.getHeight() - BTN_SPACING);
-      stage.addActor(scoresBtn);
-
-      myStatsBtn = new TextButton("My Stats", skin);
-      myStatsBtn.setPosition(playBtn.getX(), playBtn.getY() - playBtn.getHeight() - BTN_SPACING);
-      myStatsBtn.setWidth(190);
-      
-      userSettingsBtn = new TextButton("Settings", skin);
-      userSettingsBtn.setHeight(myStatsBtn.getHeight()/3);
-      userSettingsBtn.setWidth(190);
-      userSettingsBtn.setPosition(Gdx.graphics.getWidth() - userSettingsBtn.getWidth(), Gdx.graphics.getHeight() - userSettingsBtn.getHeight());
-      
-      stage.addActor(userSettingsBtn);
-      
-      this.user = user; 
-      
-      if(user.isGuest()) {
-         stage.addActor(registerBtn);
-         stage.addActor(loginBtn);       
-      
-      } else {        
-         stage.addActor(myStatsBtn);
-         stage.addActor(logoutBtn);
-      }
+      multiBtn = new TextButton("Multiplayer", skin);
+      multiBtn.setPosition(singleBtn.getX(), singleBtn.getY() - singleBtn.getHeight() - BTN_SPACING);
+      multiBtn.setWidth(190);
+      stage.addActor(multiBtn);
       
       addActions(); 
       
       this.window = window; 
+      this.user = user;
    
    }
    
@@ -142,87 +105,30 @@ public class MenuScreen implements Screen
    }
    
    public void addActions(){
-      playBtn.addListener(new ChangeListener()
+      singleBtn.addListener(new ChangeListener()
       {
          
          @Override
          public void changed(ChangeEvent event, Actor actor)
          {
-                window.setScreen(new GameModeScreen(window, user));
+                window.setScreen(new GameScreen(window, user, false));
                 dispose();
             
          }
       });
       
-      registerBtn.addListener(new ChangeListener()
+      multiBtn.addListener(new ChangeListener()
       {
          
          @Override
          public void changed(ChangeEvent event, Actor actor)
          {
-            window.setScreen(new RegisterScreen(window));
-            dispose(); 
+                window.setScreen(new GameScreen(window, user, true));
+                dispose();
             
          }
       });
       
-      loginBtn.addListener(new ChangeListener()
-      {
-         
-         @Override
-         public void changed(ChangeEvent event, Actor actor)
-         {
-            // TODO Auto-generated method stub
-            window.setScreen(new LoginScreen(window));
-            dispose();
-         }
-      });
-      
-      logoutBtn.addListener(new ChangeListener()
-      {
-         
-         @Override
-         public void changed(ChangeEvent event, Actor actor)
-         {
-            // TODO Auto-generated method stub
-            window.setScreen(new MenuScreen(window, new User("", "", true)));
-            dispose();
-         }
-      });
-      
-      scoresBtn.addListener(new ChangeListener()
-      {
-         
-         @Override
-         public void changed(ChangeEvent event, Actor actor)
-         {
-            window.setScreen(new HighScoreScreen(window, user));
-            dispose(); 
-            
-         }
-      });
-      
-      myStatsBtn.addListener(new ChangeListener()
-      {
-         
-         @Override
-         public void changed(ChangeEvent event, Actor actor)
-         {
-            window.setScreen(new UserStatsScreen(window, user));
-            dispose(); 
-         }
-      });
-      
-      userSettingsBtn.addListener(new ChangeListener()
-      {
-         
-         @Override
-         public void changed(ChangeEvent event, Actor actor)
-         {
-            window.setScreen(new UserSettingsScreen(window, user));
-            dispose(); 
-         }
-      });
    }
 
    @Override
@@ -249,6 +155,10 @@ public class MenuScreen implements Screen
        
        stage.act();
        stage.draw();
+       
+       if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){
+          window.setScreen(new MenuScreen(window, user));
+       }
 
 
       

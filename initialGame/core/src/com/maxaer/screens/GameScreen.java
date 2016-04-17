@@ -1,6 +1,7 @@
 package com.maxaer.screens;
 
 import java.io.File;
+import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -34,7 +35,7 @@ public class GameScreen implements Screen
    
    private GameWorld world;
    private GameRenderer renderer;
-   
+
    private SpriteBatch batch;
    private AnimatedSprite animatedSprite;
    private Texture img;
@@ -43,6 +44,16 @@ public class GameScreen implements Screen
    
    public GameScreen(GameWindow window, User user){
       world = new GameWorld(window, user);
+
+   public GameScreen(GameWindow window, User user, boolean isMultiplayer){
+	  if(isMultiplayer) {
+		  world = new GameWorld(window, user, 0, isMultiplayer);
+	  } else {
+		  Random rand = new Random();
+		  int i = rand.nextInt();
+		  world = new GameWorld(window, user, i, isMultiplayer);
+	  }
+
       renderer = new GameRenderer(world);
    }
    @Override
@@ -82,6 +93,11 @@ public class GameScreen implements Screen
    public void render(float delta)
    { 
       world.update(delta); 
+   {  
+      //Only update the world when it's single player, or the multiplayer is ready
+      if(!world.isMultiplayer() || (world.isMultiplayer() && world.isMultiplayerReady()))
+         world.update(delta); 
+
       boolean wasPaused = false;
       
       if(!world.getRunningWorld()){

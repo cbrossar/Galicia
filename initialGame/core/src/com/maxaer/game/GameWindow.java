@@ -18,10 +18,9 @@ public class GameWindow extends Game{
     @Override
     public void create() {
     	music = Gdx.audio.newMusic(Gdx.files.internal("data/Desiigner-Panda.mp3"));
-    	music.play();
     	music.setLooping(true);
         setScreen(new MenuScreen(this, new User("", "", true)));
-        
+    
     }
     
     public Music getMusicPlayer()

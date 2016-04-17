@@ -11,6 +11,7 @@ import com.maxaer.gameworld.GameWorld;
  * Purpose: This class is where any user input will be processed
  *          1. This listener needs to be passed an instance of the GameWorld so it can interact with the player
  */
+
 public class UserInputListener implements InputProcessor
 {  
    private GameWorld world;
@@ -37,7 +38,8 @@ public class UserInputListener implements InputProcessor
 	   	
 	   	if(keycode == Input.Keys.ENTER && world.isGameOver()){
 	   	   world.showMenuScreen(); 
-	   	   world.getGameWindow().getMusicPlayer().dispose();
+	   	   world.getMusicPlayer().pause();
+	   	   
 	   	}
 	   	
 	   	if(keycode == Input.Keys.RIGHT && !world.isGameOver()){   		
@@ -70,16 +72,35 @@ public class UserInputListener implements InputProcessor
          world.createNewGame();
          world.setCreatedGame(true);
       }
+      
+      if(keycode == Input.Keys.SPACE && world.isGameOver() && !world.isMultiplayer()){
+         world.createNewGame(); 
+      } else if(keycode == Input.Keys.SPACE && world.isGameOver() && world.isMultiplayer()){
+         //If it's multiplayer we'll send them out to the menu again
+         world.showMenuScreen();
+      }
 	  
       if(keycode == Input.Keys.P && !world.isGameOver() && isRunning){
     	
     	  world.setRunningWorld(false);
+    	  world.getMusicPlayer().pause();
     	  isRunning = false;
       }
       
       else if(keycode == Input.Keys.P && !world.isGameOver() && !isRunning){
     	  world.setRunningWorld(true);
+    	  world.getMusicPlayer().play();
     	  isRunning = true;
+      }
+      
+      //Allow the user to pause the music here
+      if(keycode == Input.Keys.SHIFT_RIGHT && isRunning){
+         if(world.getMusicPlayer().isPlaying()) world.getMusicPlayer().pause();
+         else world.getMusicPlayer().play();
+      }
+      
+      if(keycode == Input.Keys.I && isRunning){
+         world.setGameOver(true);
       }
     
        if(keycode == Input.Keys.RIGHT && !world.isGameOver()){
@@ -97,7 +118,7 @@ public class UserInputListener implements InputProcessor
     	  }
        }
       
-       if(keycode == Input.Keys.UP && !world.isGameOver()){
+       if(keycode == Input.Keys.UP && !world.isGameOver() && isRunning){
     	   if(player.getLinearVelocity().y == 0)
     		   player.applyForceToCenter(0f, -2.5f,true);
        }

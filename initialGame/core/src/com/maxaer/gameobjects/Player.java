@@ -16,8 +16,9 @@ public class Player
    private Body body;
    private Texture texture, deathTexture;
    private BodyDef bodyDef;
-   private Boolean jumpability;
-   private int touchCount; 
+   private boolean jumpability;
+   private int touchCount;
+   private boolean onTopOfSurface = true;
    
    final float PIXELS_TO_METERS = GameConstants.PIXEL_TO_METERS;
    
@@ -97,7 +98,7 @@ public class Player
       texture.dispose();
    }
    
-   public Boolean canJump(){
+   public boolean canJump(){
 	   return jumpability;
    }
    
@@ -122,5 +123,13 @@ public class Player
    {
       return touchCount;
    }
+
+	public boolean isOnTopOfSurface() {
+		return onTopOfSurface;
+	}
+	
+	public void setOnTopOfSurface(boolean b) {
+		onTopOfSurface = b;
+	}
 
 }
