@@ -127,7 +127,7 @@ public class LoginScreen implements Screen
       //Create a button style
       TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
       textButtonStyle.up = skin.newDrawable("background", Color.WHITE);
-      textButtonStyle.down = skin.newDrawable("background", Color.WHITE);
+      textButtonStyle.down = skin.newDrawable("background", Color.LIGHT_GRAY);
       textButtonStyle.checked = skin.newDrawable("background", Color.WHITE);
       textButtonStyle.over = skin.newDrawable("background", Color.LIGHT_GRAY);
       textButtonStyle.font = skin.getFont("default");
@@ -168,7 +168,7 @@ public class LoginScreen implements Screen
             if(loginUser(userNameField.getText(), passwordField.getText())){
                
                User user = new User(userNameField.getText(), hashPassword(passwordField.getText()), false);
-               window.setScreen(new GameScreen(window, user));
+               window.setScreen(new MenuScreen(window, user));
                dispose(); 
             } else{
                Dialog dialog = new Dialog("", skin);

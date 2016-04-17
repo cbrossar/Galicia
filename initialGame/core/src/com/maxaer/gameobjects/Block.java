@@ -1,5 +1,6 @@
 package com.maxaer.gameobjects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import java.util.Random;
@@ -14,14 +15,15 @@ import com.maxaer.constants.GameConstants;
 public class Block extends Shape {
 	private Sprite sprite;
 	private Body body;
-	private Body bottomBlock;
 	private Texture texture;   
 	final float PIXELS_TO_METERS = GameConstants.PIXEL_TO_METERS;
-	private Random rand = new Random();
 	private Boolean isSmall = false;
+	private Random rand;
 	
-	public Block(World world, int height)
+	public Block(World world, int height, Random rand)
 	{
+		this.rand = rand;
+		
 		//Create the player to have the block image
 		texture = new Texture(randomBlockImage());
 		sprite = new Sprite(texture);
@@ -32,7 +34,7 @@ public class Block extends Shape {
 		if(small <= .50f) isSmall = true;
 		if(isSmall) sprite.setSize(sprite.getWidth()/2, sprite.getHeight()/2);
 		
-		int p = rand.nextInt(800);
+		int p = rand.nextInt(Gdx.graphics.getWidth());
 		sprite.setPosition(/*Gdx.graphics.getWidth()/6, 0*/ p, height);
 	  
 		//Set the body definition for the player
@@ -41,7 +43,8 @@ public class Block extends Shape {
 		bodyDef.fixedRotation = true;
 		
 		//Randomize drop location on screen
-		int pos = rand.nextInt(650);
+
+		int pos = rand.nextInt(Gdx.graphics.getWidth() + 50);
 		bodyDef.position.set((pos) / PIXELS_TO_METERS,
               (sprite.getY() + sprite.getHeight()/2) / PIXELS_TO_METERS);
       
@@ -64,34 +67,7 @@ public class Block extends Shape {
 //		boxDef.filter.categoryBits = GameConstants.CATEGORY_BLOCK;
 //		boxDef.filter.maskBits = GameConstants.MASK_BLOCK;
 		
-		
 		body.createFixture(boxDef);
-		
-		
-		//create  small body under blocks to detect for collisions
-		BodyDef bd2 = new BodyDef();
-		bd2.type = BodyDef.BodyType.DynamicBody;
-		bd2.fixedRotation = true;
-		bd2.position.set((pos) / PIXELS_TO_METERS,
-	              (sprite.getY() + sprite.getHeight() + 15) /PIXELS_TO_METERS);
-	
-		bottomBlock = world.createBody(bd2);
-	
-		bottomBlock.setGravityScale(0);
-		bottomBlock.setLinearVelocity(0, 3f);
-		
-
-		FixtureDef fd2 = new FixtureDef();
-		PolygonShape bottom = new PolygonShape();
-		bottom.setAsBox((sprite.getWidth() / 3 / PIXELS_TO_METERS), (1/ PIXELS_TO_METERS));
-		fd2.shape = bottom;
-		fd2.density = 100000f;
-		fd2.restitution = 0f;
-		fd2.friction = 0f;
-		
-		
-         bottomBlock.createFixture(fd2);
-         bottom.dispose();
 
 		//Free up the shape here
 		shape.dispose();
@@ -108,15 +84,15 @@ public class Block extends Shape {
 	      return sprite;
     }
 	
+	public boolean isSmall() {
+		return isSmall;
+	}
+	
 	public Body getBody()
 	{
 		return body;
 	}
-	
-	public Body getBottomBlock()
-	{
-		return bottomBlock;
-	}
+
 	
 	public void dispose(){
 	   texture.dispose();
@@ -135,7 +111,6 @@ public class Block extends Shape {
 	
 	
 	private String randomBlockImage(){
-	   Random rand = new Random();
 	   int randomNum = rand.nextInt((8 - 1) + 1) + 1;
 	   switch(randomNum){
 	   case 1:

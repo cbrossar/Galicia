@@ -1,11 +1,14 @@
 package com.maxaer.screens;
 
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
 import java.util.regex.Pattern;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -29,8 +32,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.maxaer.database.SQLDriver;
+
 import com.maxaer.database.User;
 import com.maxaer.game.GameWindow;
+import com.maxaer.threaded.SQLAddUserStat;
 
 public class RegisterScreen implements Screen
 {
@@ -52,12 +57,14 @@ public class RegisterScreen implements Screen
       
       batch = new SpriteBatch();
       
+
       Texture background = new Texture(Gdx.files.internal("Backgrounds/600x600RegisterBackground.png"));
       backgroundSprite = new Sprite(background);
       backgroundSprite.setPosition(0, 0);
       
       FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/BankGothic-Regular.ttf"));
       FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+
       parameter.size = 22;
       parameter.color = Color.BLACK;
       generator.generateData(parameter);
@@ -75,12 +82,14 @@ public class RegisterScreen implements Screen
       createBasicSkin();
       
       userNameField = new TextField("", skin); // Use the initialized skin
+
       userNameField.setPosition(330, Gdx.graphics.getHeight()/3 + 75);
       userNameField.setWidth(170);
       stage.addActor(userNameField);
       
       passwordField = new TextField("", skin);
       passwordField.setPosition(userNameField.getX(), userNameField.getY() - userNameField.getHeight() - BTN_SPACING);
+
       passwordField.setWidth(170);
       passwordField.setPasswordMode(true);
       passwordField.setPasswordCharacter('*');
@@ -88,6 +97,7 @@ public class RegisterScreen implements Screen
       
       confirmField = new TextField("", skin);
       confirmField.setPosition(passwordField.getX(), passwordField.getY() - passwordField.getHeight() - BTN_SPACING);
+
       confirmField.setWidth(170);
       confirmField.setPasswordMode(true);
       confirmField.setPasswordCharacter('*');
@@ -96,6 +106,7 @@ public class RegisterScreen implements Screen
       
       registerBtn = new TextButton("Register", skin);
       registerBtn.setPosition(userNameField.getX(), confirmField.getY() - confirmField.getHeight() - BTN_SPACING);
+
       registerBtn.setWidth(170);
       stage.addActor(registerBtn);
       
@@ -128,7 +139,7 @@ public class RegisterScreen implements Screen
       //Create a button style
       TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
       textButtonStyle.up = skin.newDrawable("background", Color.WHITE);
-      textButtonStyle.down = skin.newDrawable("background", Color.WHITE);
+      textButtonStyle.down = skin.newDrawable("background", Color.LIGHT_GRAY);
       textButtonStyle.checked = skin.newDrawable("background", Color.WHITE);
       textButtonStyle.over = skin.newDrawable("background", Color.LIGHT_GRAY);
       textButtonStyle.font = skin.getFont("default");
@@ -170,21 +181,28 @@ public class RegisterScreen implements Screen
             
             if(verifyPassword(passwordField.getText(), confirmField.getText()) && userNameFree(userNameField.getText())){
                //Store the user into SQL 
+
+               String userName = userNameField.getText();
+               
                String hash = hashPassword(passwordField.getText());
                SQLDriver driver = new SQLDriver();
                driver.connect();
-               driver.addUser(userNameField.getText(), hash);
+               driver.addUser(userName, hash);
                driver.stop();
                
-               User user = new User(userNameField.getText(), hash, false);
+               SQLAddUserStat addUser = new SQLAddUserStat(userName);
+               addUser.start();
+               
+               User user = new User(userName, hash, false);
                //register user and change the screen
-               window.setScreen(new GameScreen(window, user));
+               window.setScreen(new MenuScreen(window, user));
             } 
             
          }
       });
    }
    
+
    private String hashPassword(String password){
 
       MessageDigest messageDigest;
@@ -207,6 +225,7 @@ public class RegisterScreen implements Screen
       SQLDriver driver = new SQLDriver();
       driver.connect();
       
+
       boolean exists = driver.userNameExists(userName);
       
       driver.stop();
@@ -240,7 +259,7 @@ public class RegisterScreen implements Screen
          }
       } else{
          Dialog dialog = new Dialog("", skin);
-         dialog.text("Password needs a numerical and upper case character");
+         dialog.text("numerical AND upper case character needed");
          dialog.button("Ok", true);
          dialog.key(Keys.ENTER, true);
          dialog.show(stage);
@@ -274,6 +293,7 @@ public class RegisterScreen implements Screen
        stage.draw();
 
        if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){
+
           window.setScreen(new MenuScreen(window, new User("", "", true)));
           dispose();
        }

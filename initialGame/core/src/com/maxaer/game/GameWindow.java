@@ -21,7 +21,7 @@ public class GameWindow extends Game{
     	//music.play();
     	music.setLooping(true);
         setScreen(new MenuScreen(this, new User("", "", true)));
-        
+    
     }
     
     public Music getMusicPlayer()

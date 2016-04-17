@@ -9,7 +9,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = 600;
 		config.height = 600;
-		config.title = "MaxÆR";
+		config.title = "maxÆR";
 		new LwjglApplication(new GameWindow(), config);
 	}
 }
