@@ -380,11 +380,10 @@ public class GameRenderer
             layout.setText(deathFont, "You lost :( " + finalScore + " - " + world.getOpponentsScore());
             deathFont.draw(hudBatch, "You lost :( " + finalScore + " - " + world.getOpponentsScore(), (Gdx.graphics.getWidth() - layout.width)/2, Gdx.graphics.getHeight()/2);
          }
-
-         layout.setText(deathFont, "Hit enter or space to return the the menu");
-         deathFont.draw(hudBatch, "Hit enter or space to return the the menu", (Gdx.graphics.getWidth() - layout.width)/2, Gdx.graphics.getHeight()/2 - layout.height - 5);
-
-
+         
+         layout.setText(deathFont, "Hit Enter to return the the menu");
+         deathFont.draw(hudBatch, "Hit Enter to return the the menu", (Gdx.graphics.getWidth() - layout.width)/2, Gdx.graphics.getHeight()/2 - layout.height - 5);
+         
       } else{
          layout.setText(deathFont, "Game over");
          spacing = layout.height;
