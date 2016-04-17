@@ -1,5 +1,7 @@
 package com.maxaer.screens;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.maxaer.database.User;
@@ -23,7 +25,14 @@ public class GameScreen implements Screen
    private GameRenderer renderer;
 
    public GameScreen(GameWindow window, User user, boolean isMultiplayer){
-      world = new GameWorld(window, user, 0, isMultiplayer);
+	  if(isMultiplayer) {
+		  world = new GameWorld(window, user, 0, isMultiplayer);
+	  } else {
+		  Random rand = new Random();
+		  int i = rand.nextInt();
+		  world = new GameWorld(window, user, i, isMultiplayer);
+	  }
+      
       renderer = new GameRenderer(world);
    }
 
