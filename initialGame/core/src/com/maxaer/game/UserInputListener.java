@@ -34,13 +34,7 @@ public class UserInputListener implements InputProcessor
 	   			player.applyForceToCenter(0f, -2.5f,true);
 	   			world.getPlayer().setJumpability(false);
 	   		}
-	   	}
-	   	
-	   	if(keycode == Input.Keys.ENTER && world.isGameOver()){
-	   	   world.showMenuScreen(); 
-	   	   world.getMusicPlayer().dispose();
-	   	   
-	   	}
+	   	}   	
 	   	
 	   	if(keycode == Input.Keys.RIGHT && !world.isGameOver()){   		
 	        player.setLinearVelocity(3f, player.getLinearVelocity().y);
@@ -62,12 +56,13 @@ public class UserInputListener implements InputProcessor
    
       if(keycode == Input.Keys.SPACE && world.isGameOver() && !world.isMultiplayer()){
          world.createNewGame(); 
-         world.setCreatedGame(true);
-      } else if(keycode == Input.Keys.SPACE && world.isGameOver() && world.isMultiplayer()){
-         //If it's multiplayer we'll send them out to the menu again
-         world.showMenuScreen();
-         world.getMusicPlayer().pause();
-      }
+      } 
+      
+      if(keycode == Input.Keys.ENTER && world.isGameOver()){
+	   	   world.showMenuScreen(); 
+	   	   world.getMusicPlayer().dispose();
+	   	   
+	  }
 	  
       if(keycode == Input.Keys.P && !world.isGameOver() && isRunning){
     	
