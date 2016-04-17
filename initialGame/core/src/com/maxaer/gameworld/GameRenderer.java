@@ -299,11 +299,6 @@ public class GameRenderer
     	     batch.end();
     	  }
 
-    	  //If the player has just died, we'll go ahead and send their score to SQL right now on a separate thread
-
-
-    	  batch.draw(animation.getKeyFrame(elapsedTime, true), world.getPlayer().getX()*GameConstants.PIXEL_TO_METERS - 40, world.getPlayer().getY()*GameConstants.PIXEL_TO_METERS- 85);
-    	  batch.end();
 
          //If the player has just died, we'll go ahead and send their score to SQL right now on a separate thread
 
