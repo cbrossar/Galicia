@@ -182,14 +182,14 @@ public class GameRenderer
          hudBatch.begin();
          
          font.setUseIntegerPositions(false);
-         font.draw(hudBatch, "Score: " + score + " x " + world.getUser().getDifficulty(), 0, Gdx.graphics.getHeight() - 10);
+         font.draw(hudBatch, "Score: " + score, 0, Gdx.graphics.getHeight() - 10);
          font.draw(hudBatch, "" + (int)Math.floor(4.7*(4.7-world.getPlayerBody() .getPosition().y)), 0, Gdx.graphics.getHeight() - 30);
          settingFont.draw(hudBatch, world.getUser().getUserName(), 0, Gdx.graphics.getHeight() - 50);
          layout.setText(settingFont, "Music: on");
          if(world.getMusicPlayer().isPlaying()) settingFont.draw(hudBatch, "Music: on", Gdx.graphics.getWidth() - layout.width - 5,  Gdx.graphics.getHeight() - 10);
          else settingFont.draw(hudBatch, "Music: off", Gdx.graphics.getWidth() - layout.width - 5,  Gdx.graphics.getHeight() - 10);
-         layout.setText(settingFont, "Difficulty :" + world.getUser().getDifficulty());
-         settingFont.draw(hudBatch, "Difficulty :" + world.getUser().getDifficulty(), Gdx.graphics.getWidth() - layout.width - 5,  Gdx.graphics.getHeight() - 10 - 2*layout.height);
+         layout.setText(settingFont, "Multiplier: " + world.getUser().getDifficulty());
+         settingFont.draw(hudBatch, "Multiplier: " + world.getUser().getDifficulty(), Gdx.graphics.getWidth() - layout.width - 5,  Gdx.graphics.getHeight() - 10 - 2*layout.height);
          
          hudBatch.end();
       }

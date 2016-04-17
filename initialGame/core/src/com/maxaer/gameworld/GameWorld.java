@@ -65,12 +65,7 @@ public class GameWorld
    private volatile int currentScore;
    private volatile int opponentsScore; 
 
-   //Game speeds
-   private int GAME_SPEED;
    private int seed;
-   private static final int FAST_SPEED = 45;
-   private static final int DEFAULT_SPEED = 40;
-   private static final int SLOW_SPEED = 35;
    final float PIXELS_TO_METERS = GameConstants.PIXEL_TO_METERS;
       
    public GameWorld(GameWindow window, User user, int seed, boolean isMultiplayer)
@@ -211,7 +206,6 @@ public class GameWorld
       justDied = true;
       lavaDeath = false;
       blockDeath = false;
-      GAME_SPEED = DEFAULT_SPEED;
       isRunning = true;
       currentScore = 21; 
       //Set the input listener for this screen
@@ -294,18 +288,6 @@ public class GameWorld
 
       window.setScreen(new MenuScreen(window, user));
       this.dispose();
-   }
-   
-   public void setFast(){
-      GAME_SPEED = FAST_SPEED;
-   }
-   
-   public void setSlow(){
-      GAME_SPEED = SLOW_SPEED;
-   }
-   
-   public void setDefault(){
-      GAME_SPEED = DEFAULT_SPEED;
    }
    
    public Sprite getBackground()
