@@ -1,5 +1,3 @@
-DROP DATABASE if exists maxaer;
-
 CREATE DATABASE maxaer;
 
 USE maxaer;
