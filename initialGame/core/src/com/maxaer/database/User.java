@@ -14,6 +14,7 @@ public class User extends Thread
    private int smushDeaths;
    private int totalDistanceTraveled;
    private boolean playMusic = true;
+   private int difficulty;
    
    public User(String userName, String passHash, boolean isGuest)
    {
@@ -26,7 +27,7 @@ public class User extends Thread
       lavaDeaths = 0; 
       smushDeaths = 0; 
       totalDistanceTraveled = 0; 
-      
+      difficulty = 1;
       start();
    }
    
@@ -130,6 +131,14 @@ public class User extends Thread
       driver.stop();
       
       
+   }
+   
+   public void setDifficulty(int i) {
+	   difficulty = i;
+   }
+   
+   public int getDifficulty() {
+	   return difficulty;
    }
 
 }
