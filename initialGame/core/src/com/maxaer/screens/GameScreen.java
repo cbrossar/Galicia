@@ -21,9 +21,9 @@ public class GameScreen implements Screen
    
    private GameWorld world;
    private GameRenderer renderer;
-   
+
    public GameScreen(GameWindow window, User user, boolean isMultiplayer){
-      world = new GameWorld(window, user, isMultiplayer);
+      world = new GameWorld(window, user, 0, isMultiplayer);
       renderer = new GameRenderer(world);
    }
 

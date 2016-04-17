@@ -17,11 +17,13 @@ public class Block extends Shape {
 	private Body body;
 	private Texture texture;   
 	final float PIXELS_TO_METERS = GameConstants.PIXEL_TO_METERS;
-	private Random rand = new Random();
 	private Boolean isSmall = false;
+	private Random rand;
 	
-	public Block(World world, int height)
+	public Block(World world, int height, Random rand)
 	{
+		this.rand = rand;
+		
 		//Create the player to have the block image
 		texture = new Texture(randomBlockImage());
 		sprite = new Sprite(texture);
@@ -41,8 +43,8 @@ public class Block extends Shape {
 		bodyDef.fixedRotation = true;
 		
 		//Randomize drop location on screen
-		int pos = rand.nextInt(Gdx.graphics.getWidth() + 50);
 
+		int pos = rand.nextInt(Gdx.graphics.getWidth() + 50);
 		bodyDef.position.set((pos) / PIXELS_TO_METERS,
               (sprite.getY() + sprite.getHeight()/2) / PIXELS_TO_METERS);
       
@@ -90,6 +92,7 @@ public class Block extends Shape {
 	{
 		return body;
 	}
+
 	
 	public void dispose(){
 	   texture.dispose();
@@ -108,7 +111,6 @@ public class Block extends Shape {
 	
 	
 	private String randomBlockImage(){
-	   Random rand = new Random();
 	   int randomNum = rand.nextInt((8 - 1) + 1) + 1;
 	   switch(randomNum){
 	   case 1:

@@ -105,7 +105,7 @@ public class MultiplayerThread extends Thread
                p1OutStream.flush();
 
                
-            }
+            } 
 
            
           
@@ -113,24 +113,10 @@ public class MultiplayerThread extends Thread
          }
          catch (IOException e)
          {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-         } finally{
-            try
-            {
-               p1InStream.close();
-               p1OutStream.close();
-               p2InStream.close();
-               p2OutStream.close();
-            }
-            catch (IOException e)
-            {
-               // TODO Auto-generated catch block
-               System.out.println("Error closing streams");
-            }
-            
+            gameRunning = false;
+            System.out.println("Error in the multiplayer thread. Ending the thread");
          }
-      }
+      } 
    }
 
 }

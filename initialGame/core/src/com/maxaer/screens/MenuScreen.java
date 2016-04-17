@@ -33,7 +33,7 @@ public class MenuScreen implements Screen
    private BitmapFont font;
    private Skin skin;
    private Stage stage;
-   private TextButton playBtn, scoresBtn, registerBtn, loginBtn, myStatsBtn, logoutBtn;
+   private TextButton playBtn, scoresBtn, registerBtn, loginBtn, myStatsBtn, logoutBtn, userSettingsBtn;
    private Sprite backgroundSprite;
    private User user; 
    
@@ -93,18 +93,23 @@ public class MenuScreen implements Screen
       myStatsBtn.setPosition(playBtn.getX(), playBtn.getY() - playBtn.getHeight() - BTN_SPACING);
       myStatsBtn.setWidth(190);
       
+      userSettingsBtn = new TextButton("Settings", skin);
+      userSettingsBtn.setHeight(myStatsBtn.getHeight()/3);
+      userSettingsBtn.setWidth(190);
+      userSettingsBtn.setPosition(Gdx.graphics.getWidth() - userSettingsBtn.getWidth(), Gdx.graphics.getHeight() - userSettingsBtn.getHeight());
+      
+      stage.addActor(userSettingsBtn);
+      
       this.user = user; 
       
-      if(user.isGuest()){   
+      if(user.isGuest()) {
          stage.addActor(registerBtn);
          stage.addActor(loginBtn);       
-      } else{        
+      
+      } else {        
          stage.addActor(myStatsBtn);
          stage.addActor(logoutBtn);
       }
-      
-     
-
       
       addActions(); 
       
@@ -204,6 +209,17 @@ public class MenuScreen implements Screen
          public void changed(ChangeEvent event, Actor actor)
          {
             window.setScreen(new UserStatsScreen(window, user));
+            dispose(); 
+         }
+      });
+      
+      userSettingsBtn.addListener(new ChangeListener()
+      {
+         
+         @Override
+         public void changed(ChangeEvent event, Actor actor)
+         {
+            window.setScreen(new UserSettingsScreen(window, user));
             dispose(); 
          }
       });

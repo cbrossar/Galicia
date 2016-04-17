@@ -35,7 +35,6 @@ public class HighScoreScreen implements Screen
    
    public HighScoreScreen(GameWindow window, User user)
    {
-      // TODO Auto-generated constructor stub
       this.window = window;
       this.user = user; 
       cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

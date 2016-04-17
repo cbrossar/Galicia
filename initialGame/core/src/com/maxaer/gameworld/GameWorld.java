@@ -1,10 +1,12 @@
 package com.maxaer.gameworld;
 
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Random;
 import java.util.Vector;
 
 
@@ -16,6 +18,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.maxaer.constants.GameConstants;
 import com.maxaer.database.User;
 import com.maxaer.game.CollisionListener;
 import com.maxaer.game.GameWindow;
@@ -48,10 +51,12 @@ public class GameWorld
    private float lastDropTime = TimeUtils.nanoTime();
    private float lastHeight = -500;
    private volatile boolean gameOver;
+
    private boolean justDied;
    private GameWindow window;
    private boolean lavaDeath, blockDeath;
    private Music musicPlayer;
+   private Random rand;
    
    private User user;
    
@@ -62,21 +67,24 @@ public class GameWorld
 
    //Game speeds
    private int GAME_SPEED;
+   private int seed;
    private static final int FAST_SPEED = 45;
    private static final int DEFAULT_SPEED = 40;
    private static final int SLOW_SPEED = 35;
-   
-   
-   public GameWorld(GameWindow window, User user, boolean isMultiplayer)
+   final float PIXELS_TO_METERS = GameConstants.PIXEL_TO_METERS;
+      
+   public GameWorld(GameWindow window, User user, int seed, boolean isMultiplayer)
    {
       this.user = user;
       this.window = window;
       this.isMultiplayer = isMultiplayer;
       multiplayerReady = false;
       multiplayerFinished = false;
-      createNewGame(); 
+      this.rand = new Random(seed);
       this.musicPlayer = window.getMusicPlayer();
-            
+
+      createNewGame(); 
+      this.seed = seed;
       //Set up the connection once the player starts playing
       if(isMultiplayer){
          
@@ -181,11 +189,12 @@ public class GameWorld
          }).start(); // And, start the thread running
          
         
-      } else{ 
+      } else if(user.getMusic()){ 
          //start the music for singleplayer at the time of playing
          window.getMusicPlayer().play();
       }
-   }
+  
+  }
    
    public void createNewGame(){
       //Get rid of any preexisting components
@@ -203,10 +212,8 @@ public class GameWorld
       lavaDeath = false;
       blockDeath = false;
       GAME_SPEED = DEFAULT_SPEED;
-      lastHeight = -500;
       isRunning = true;
       currentScore = 21; 
-        
       //Set the input listener for this screen
       Gdx.input.setInputProcessor(new UserInputListener(this));
    }
@@ -214,7 +221,6 @@ public class GameWorld
    public void dispose(){
       if(world != null){
     	  world.dispose();
-    	  window.getMusicPlayer().dispose();
       }
       if(player != null) player.dispose();
       if(platform != null) platform.dispose();
@@ -233,6 +239,7 @@ public class GameWorld
    public boolean getRunningWorld() {
 	   return isRunning;
    }
+   
    public void update(float delta){
       
 	   if(isRunning){
@@ -240,42 +247,28 @@ public class GameWorld
       //Any updating for our world should go here
 		  if(TimeUtils.nanoTime() - lastDropTime > 1000000000.0){
 			  lastDropTime = TimeUtils.nanoTime();
-			  int heightToUse = (int) Math.min(lastHeight, player.getSprite().getY()-600);
-			  Block b = new Block(world, heightToUse);
-			  lastHeight=heightToUse;
-			  blocks.add(b);
-		  }
-		
-		  // a bullshit try at this
-		  int heightDifference = (int) (player.getY() - lava.getY());
-		  
-		  //Lava comes after 4.5 so enough time for boxes to fall
-		  if(lastDropTime >= 4500000000.0 && lastDropTime <= 25000000000.0){
 			  
-			  //Update the position of the lava by a few pixels
-			  if(heightDifference >= -600)
-			  {
-				  lava.setPosition(lava.getX(), lava.getY() - (38 * delta));
-			  }
-			  else{
-			     lava.setPosition(lava.getX(), lava.getY() - (35 * delta));
-			  }
-		  }
+			  int heightToUse = (int) Math.min(player.getSprite().getY()-800, lava.getY()-1300);
+			  Block b = new Block(world, heightToUse, rand);
+			  blocks.add(b);
+		  }		
+		  // a bullshit try at this
+		  float heightDifference = (player.getY() - lava.getY()/PIXELS_TO_METERS);
+		//  System.out.println(heightDifference);
 		  
-		  //Increases difficulty of world through increase of velocity
+		  
 		  if(lastDropTime > 25000000000.0){
 			  
-			  if(heightDifference >= -600)
+			  if(heightDifference <= -10)
 			  {
-				  lava.setPosition(lava.getX(), lava.getY() - (35 * delta));
+				  lava.setPosition(lava.getX(), lava.getY() - (60 * delta));
 			  }
 			  else{
-			     lava.setPosition(lava.getX(), lava.getY() - (33 * delta));
+			     lava.setPosition(lava.getX(), lava.getY()- (40 * delta));
 			  }
 		  }
 	   }
 
-	  
    }
    
    //Method to start the menu screen from game

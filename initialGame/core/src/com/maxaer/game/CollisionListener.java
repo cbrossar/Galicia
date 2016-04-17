@@ -46,6 +46,7 @@ public class CollisionListener implements ContactListener {
     		  if(obj1.getBody().equals(world.getPlayerBody())) {
     			  Vector2 vfalling = v.get(i).getBody().getPosition();
     			  Vector2 vplayer = world.getPlayerBody().getPosition();
+
     			  double yDiff = vplayer.y - vfalling.y;
     			  double xDiff = vplayer.x - vfalling.x;
 //    			  System.out.println("\nvbottom = " + vfalling.x + ", " + vfalling.y);
@@ -63,6 +64,7 @@ public class CollisionListener implements ContactListener {
     					  world.setGameOver(true);
     				  }	  
     			  }
+
     		  }
     		  break;
     	  }
