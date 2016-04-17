@@ -70,7 +70,7 @@ public class Player
    public Sprite getSprite(){
       return sprite;
    }
-   
+
    public Body getBody()
    {
       return body;

@@ -35,7 +35,6 @@ public class GameScreen implements Screen
       
       renderer = new GameRenderer(world);
    }
-
    @Override
    public void resize(int width, int height) {
    }
@@ -58,7 +57,7 @@ public class GameScreen implements Screen
 
    @Override
    public void dispose() {
-      //Clean up clean up
+	   //Clean up clean up
        world.dispose();
    }
 
@@ -71,10 +70,10 @@ public class GameScreen implements Screen
    
    @Override
    public void render(float delta)
-   {  
+   {
       //Only update the world when it's single player, or the multiplayer is ready
       if(!world.isMultiplayer() || (world.isMultiplayer() && world.isMultiplayerReady()))
-         world.update(delta); 
+    	  world.update(delta); 
       
       boolean wasPaused = false;
       if(!world.getRunningWorld()){

@@ -49,11 +49,7 @@ public class CollisionListener implements ContactListener {
 
     			  double yDiff = vplayer.y - vfalling.y;
     			  double xDiff = vplayer.x - vfalling.x;
-//    			  System.out.println("\nvbottom = " + vfalling.x + ", " + vfalling.y);
-//    			  System.out.println("vplayer = " + vplayer.x + ", " + vplayer.y);
-//    			  System.out.println("vplayer.y - vbottom.y = " + yDiff);
-//    			  System.out.println("vplayer.x - vbottom.x = " + xDiff);
-    			  
+
     			  //check if on top of a block and for deaths
     			  if((!v.get(i).isSmall() && yDiff < -.7) || 
     					  (v.get(i).isSmall() && yDiff < -.4)) {
@@ -64,7 +60,6 @@ public class CollisionListener implements ContactListener {
     					  world.setGameOver(true);
     				  }	  
     			  }
-
     		  }
     		  break;
     	  }

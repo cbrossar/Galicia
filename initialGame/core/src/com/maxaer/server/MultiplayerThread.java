@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Random;
 
 public class MultiplayerThread extends Thread
 {
@@ -54,6 +55,13 @@ public class MultiplayerThread extends Thread
       {
          p1OutStream.writeBoolean(true);
          p2OutStream.writeBoolean(true);
+         
+         //Give each player the same world to play on
+         Random rand = new Random();
+         int randSeed = rand.nextInt(10000);
+         p1OutStream.writeInt(randSeed);
+         p2OutStream.writeInt(randSeed);
+         
          
          p1OutStream.flush();
          p2OutStream.flush();

@@ -34,9 +34,7 @@ public class UserInputListener implements InputProcessor
 	   			player.applyForceToCenter(0f, -2.5f,true);
 	   			world.getPlayer().setJumpability(false);
 	   		}
-	   	}
-	   	
-	   	
+	   	}   	
 	   	
 	   	if(keycode == Input.Keys.RIGHT && !world.isGameOver()){   		
 	        player.setLinearVelocity(3f, player.getLinearVelocity().y);
@@ -55,6 +53,7 @@ public class UserInputListener implements InputProcessor
    public boolean keyUp(int keycode) {
       
       //If the game is over, the user can press space to create a new game session
+   
       if(keycode == Input.Keys.SPACE && world.isGameOver() && !world.isMultiplayer()){
          world.createNewGame(); 
       } 
@@ -99,8 +98,6 @@ public class UserInputListener implements InputProcessor
     		   player.applyForceToCenter(0f, -2.5f,true);
        }
        
-          
-
        return true;
    }
 

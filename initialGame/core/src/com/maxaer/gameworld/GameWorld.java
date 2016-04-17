@@ -56,16 +56,17 @@ public class GameWorld
    private GameWindow window;
    private boolean lavaDeath, blockDeath;
    private Music musicPlayer;
-   private Random rand;
+   private volatile Random rand;
    
    private User user;
    
+   private boolean createdNewGame;
+
    private boolean isRunning, isMultiplayer;
    private volatile boolean multiplayerReady, multiplayerFinished;
    private volatile int currentScore;
    private volatile int opponentsScore; 
 
-   private int seed;
    final float PIXELS_TO_METERS = GameConstants.PIXEL_TO_METERS;
       
    public GameWorld(GameWindow window, User user, int seed, boolean isMultiplayer)
@@ -79,7 +80,8 @@ public class GameWorld
       this.musicPlayer = window.getMusicPlayer();
 
       createNewGame(); 
-      this.seed = seed;
+      createdNewGame = false;
+
       //Set up the connection once the player starts playing
       if(isMultiplayer){
          
@@ -104,6 +106,7 @@ public class GameWorld
                    
                    //Wait for the signal to start the game here
                    multiplayerReady = is.readBoolean();
+                   rand = new Random(is.readInt());
                    //Play the music once we are ready to go
                    getMusicPlayer().play();
                    //Set the initial game status
@@ -188,7 +191,10 @@ public class GameWorld
          //start the music for singleplayer at the time of playing
          window.getMusicPlayer().play();
       }
-  
+      
+      
+      
+      
   }
    
    public void createNewGame(){
@@ -207,7 +213,9 @@ public class GameWorld
       lavaDeath = false;
       blockDeath = false;
       isRunning = true;
+
       currentScore = 21; 
+      
       //Set the input listener for this screen
       Gdx.input.setInputProcessor(new UserInputListener(this));
    }
@@ -215,11 +223,22 @@ public class GameWorld
    public void dispose(){
       if(world != null){
     	  world.dispose();
+
+    	  //window.getMusicPlayer().dispose();
+
       }
       if(player != null) player.dispose();
       if(platform != null) platform.dispose();
    }
+
+   public void setCreatedGame(boolean created) {
+	   createdNewGame = created;
+   }
    
+   public boolean getCreatedGame() {
+	   return createdNewGame;
+   }
+
    public Music getMusicPlayer()
    {
       return musicPlayer;
@@ -237,7 +256,7 @@ public class GameWorld
    public void update(float delta){
       
 	   if(isRunning){
-		   
+		
       //Any updating for our world should go here
 		  if(TimeUtils.nanoTime() - lastDropTime > 1000000000.0){
 			  lastDropTime = TimeUtils.nanoTime();
@@ -408,6 +427,7 @@ public class GameWorld
    {
       return opponentsScore;
    }
+
    
    
 
