@@ -49,7 +49,6 @@ public class GameWorld
    //private Block block;
    private Vector<Block> blocks;
    private float lastDropTime = TimeUtils.nanoTime();
-   private float lastHeight = -500;
    private volatile boolean gameOver;
 
    private boolean justDied;
