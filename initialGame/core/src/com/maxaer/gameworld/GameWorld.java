@@ -106,6 +106,7 @@ public class GameWorld
                    //Wait for the signal to start the game here
                    multiplayerReady = is.readBoolean();
                    rand = new Random(is.readInt());
+                   
                    //Play the music once we are ready to go
                    getMusicPlayer().play();
                    //Set the initial game status
@@ -212,7 +213,7 @@ public class GameWorld
       lavaDeath = false;
       blockDeath = false;
       isRunning = true;
-
+      createdNewGame = true;
       currentScore = 21; 
       
       //Set the input listener for this screen
