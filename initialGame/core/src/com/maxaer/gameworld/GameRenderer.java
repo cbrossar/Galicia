@@ -274,29 +274,36 @@ public class GameRenderer
 
       if(checkLavaDeath() || world.isGameOver()){
          //Update the delay time by adding the time passed since the last delay 
-         world.setGameOver(true);
 
-         if(world.getCreatedGame()) {
-            elapsedTime = 0;
-            world.setCreatedGame(false);
-         }
-         world.getPlayer().setJumpability(false);
+    	  world.setGameOver(true);
 
-         elapsedTime += Gdx.graphics.getDeltaTime();
+    	  if(world.getCreatedGame()) {
+    		  elapsedTime = 0;
+    		  world.setCreatedGame(false);
+    	  }
+    	  world.getPlayer().setJumpability(false);
+    	
+    	  elapsedTime += Gdx.graphics.getDeltaTime();
 
-         if(!animation.isAnimationFinished(elapsedTime)) {
+    	  if(!animation.isAnimationFinished(elapsedTime)) {
 
 
-            Gdx.gl.glClearColor(1,0,0,1);
-            Gdx.gl.glClear(GL20.GL_DEPTH_BUFFER_BIT); 
-            world.getPlayerBody().setLinearVelocity(0,0);
-            world.getPlayerSprite().setTexture(new Texture("45x60player_gone.png"));
+    	     Gdx.gl.glClearColor(1,0,0,1);
+    	     Gdx.gl.glClear(GL20.GL_DEPTH_BUFFER_BIT); 
+    	     world.getPlayerBody().setLinearVelocity(0,0);
+    	     world.getPlayerSprite().setTexture(new Texture("45x60player_gone.png"));
 
-            batch.begin();
+    	     batch.begin();
 
-            batch.draw(animation.getKeyFrame(elapsedTime, true), world.getPlayer().getX()*GameConstants.PIXEL_TO_METERS - 40, world.getPlayer().getY()*GameConstants.PIXEL_TO_METERS- 85);
-            batch.end();
-         }
+    	     batch.draw(animation.getKeyFrame(elapsedTime, true), world.getPlayer().getX()*GameConstants.PIXEL_TO_METERS - 40, world.getPlayer().getY()*GameConstants.PIXEL_TO_METERS- 85);
+    	     batch.end();
+    	  }
+
+    	  //If the player has just died, we'll go ahead and send their score to SQL right now on a separate thread
+
+
+    	  batch.draw(animation.getKeyFrame(elapsedTime, true), world.getPlayer().getX()*GameConstants.PIXEL_TO_METERS - 40, world.getPlayer().getY()*GameConstants.PIXEL_TO_METERS- 85);
+    	  batch.end();
 
          //If the player has just died, we'll go ahead and send their score to SQL right now on a separate thread
 
