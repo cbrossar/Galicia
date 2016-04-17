@@ -53,13 +53,10 @@ public class GameRenderer
    private int score = 21;
    private Vector<Block> blocks;
    private float elapsedTime;
-   private AnimatedSprite animatedSprite;
-   
+
    private Texture img;
    private TextureRegion[] animationFrames;
    private Animation animation;
-   
-   private int count;
    
    
    public GameRenderer(GameWorld world){
@@ -120,7 +117,6 @@ public class GameRenderer
 	   animation = new Animation(1/10f, animationFrames);
 	   animation.setPlayMode(PlayMode.NORMAL);
 	   elapsedTime = 0;
-	   count = 0;
    }
    
    public void setElapsedTime(float elapsedTime2) {
@@ -148,6 +144,7 @@ public class GameRenderer
       Gdx.gl.glClearColor(1, 1, 1, 1);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
       
+     
       //If the player has moved off the screen on the left, move him to the right
       if(world.getPlayerSprite().getX() + world.getPlayerSprite().getWidth() < 0){
          
@@ -171,7 +168,7 @@ public class GameRenderer
       //Have the camera follow the player, but only in the y position
       batch.setProjectionMatrix(camera.combined);
       camera.position.set(camera.position.x, world.getPlayerSprite().getY() - 75, 0);
-
+      
       camera.update();
       
       //Begin batching sprites here. This will include blocks and the player
@@ -183,7 +180,7 @@ public class GameRenderer
 
       debugMatrix = batch.getProjectionMatrix().cpy().scale(100f,
             100f, 0);
-      
+ 
 	      //Render the Player sprite here
 	      batch.draw(world.getPlayerSprite(), world.getPlayerSprite().getX(), world.getPlayerSprite().getY(),world.getPlayerSprite().getOriginX(),
 	            world.getPlayerSprite().getOriginY(),
@@ -275,7 +272,7 @@ public class GameRenderer
       
       debug.render(world.getWorld(), debugMatrix);
       
-      
+ 
    }
    
    public void renderBackground(){

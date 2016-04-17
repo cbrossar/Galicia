@@ -56,9 +56,12 @@ public class GameWorld
       this.window = window;
       createNewGame(); 
       createdNewGame = false;
-  
-  }
+   }
    
+   public GameWindow getGameWindow() {
+	   return window;
+   }
+  
    public void createNewGame(){
       //Get rid of any preexisting components
       dispose();

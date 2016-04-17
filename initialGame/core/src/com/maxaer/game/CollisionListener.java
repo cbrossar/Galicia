@@ -62,6 +62,7 @@ public class CollisionListener implements ContactListener {
       if(obj1.getBody().equals(world.getPlayerBody())){
     	  for(int i = 0; i < v.size(); i++) {
         	  if(!obj2.getBody().equals(v.get(i).getBottomBlock())) {  
+        		  
         		  world.getPlayer().setJumpability(true);
         	  }
     	  }
@@ -71,6 +72,7 @@ public class CollisionListener implements ContactListener {
       //It's here--do something with it
       else if(obj2.getBody().equals(world.getPlayerBody())){
     	 world.getPlayer().setJumpability(true);
+
     	  
          Gdx.app.log("Player", "We have the player in obj2");
          obj1.getBody().setLinearVelocity(0, 0);
@@ -104,11 +106,15 @@ public class CollisionListener implements ContactListener {
 		 Fixture obj2 = contact.getFixtureB();
 		 
 		 //Resetting gravity
-		 if (obj1.getBody().equals(world.getPlayerBody()))
+		 if (obj1.getBody().equals(world.getPlayerBody())) {
 			 obj1.getBody().setGravityScale(7);
-		 else if(obj2.getBody().equals(world.getPlayerBody()))
+		 }
+		 
+		 else if(obj2.getBody().equals(world.getPlayerBody())) {
 			 obj2.getBody().setGravityScale(7);
+		 }
 			 
+		 
 	}
 
 	@Override

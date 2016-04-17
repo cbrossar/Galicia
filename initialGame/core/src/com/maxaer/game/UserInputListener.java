@@ -37,14 +37,24 @@ public class UserInputListener implements InputProcessor
 	   	
 	   	if(keycode == Input.Keys.ENTER && world.isGameOver()){
 	   	   world.showMenuScreen(); 
+	   	   world.getGameWindow().getMusicPlayer().dispose();
 	   	}
 	   	
 	   	if(keycode == Input.Keys.RIGHT && !world.isGameOver()){   		
 	        player.setLinearVelocity(3f, player.getLinearVelocity().y);
+	        if(world.getPlayer().canJump() && world.getPlayerBody().getLinearVelocity().y != 0) {
+		        world.getPlayerBody().setTransform(world.getPlayerBody().getPosition(), -75);
+		    	world.getPlayerSprite().rotate(30);
+	        }
 	    }
 	      
 	    if(keycode == Input.Keys.LEFT && !world.isGameOver()){
 	        player.setLinearVelocity(-3f,player.getLinearVelocity().y);
+	        if(world.getPlayer().canJump() && world.getPlayerBody().getLinearVelocity().y != 0) {
+		        world.getPlayerBody().setTransform(world.getPlayerBody().getPosition(), 75);
+		    	world.getPlayerSprite().rotate(-30);
+	        }
+	    
 	    }
 	     
 	    return true;
@@ -74,10 +84,19 @@ public class UserInputListener implements InputProcessor
     
        if(keycode == Input.Keys.RIGHT && !world.isGameOver()){
     	   player.setLinearVelocity(0, player.getLinearVelocity().y * 1f);
+    	   if(world.getPlayer().canJump() && world.getPlayerBody().getLinearVelocity().y != 0) {
+	    	   world.getPlayerBody().setTransform(world.getPlayerBody().getPosition(), 0);
+	    	   world.getPlayerSprite().rotate(-30);
+    	   }
        }
-       if(keycode == Input.Keys.LEFT && !world.isGameOver())
+       if(keycode == Input.Keys.LEFT && !world.isGameOver()) {
     	  player.setLinearVelocity(0, player.getLinearVelocity().y * 1f);
-
+    	  if(world.getPlayer().canJump() && world.getPlayerBody().getLinearVelocity().y != 0) {
+			  world.getPlayerBody().setTransform(world.getPlayerBody().getPosition(), 0);
+			  world.getPlayerSprite().rotate(30);
+    	  }
+       }
+      
        if(keycode == Input.Keys.UP && !world.isGameOver()){
     	   if(player.getLinearVelocity().y == 0)
     		   player.applyForceToCenter(0f, -2.5f,true);

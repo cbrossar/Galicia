@@ -68,6 +68,9 @@ public class Player
 	   jumpability = b;
    }
    
+   public boolean getJumpability(){
+	   return jumpability;
+   }
    public Sprite getSprite(){
       return sprite;
    }
