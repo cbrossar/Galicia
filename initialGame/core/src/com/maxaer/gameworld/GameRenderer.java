@@ -250,7 +250,7 @@ public class GameRenderer
          hudBatch.begin();
 
          //If the other user is dead and we are also dead, then show the final screen
-         if(!world.isMultiplayerFinished()){
+         if(!world.isMultiplayerFinished() && !world.isGameOver()){
             font.setColor(Color.BLACK);
             if(world.getOpponentsScore() != 0){
                layout.setText(font, "Opponent's score " + world.getOpponentsScore());
@@ -387,6 +387,10 @@ public class GameRenderer
          deathFont.draw(hudBatch, "Hit Enter to return the the menu", (Gdx.graphics.getWidth() - layout.width)/2, Gdx.graphics.getHeight()/2 - layout.height - 5);
          
       } else{
+         if(world.isMultiplayer()) {
+            layout.setText(deathFont, "Opponent's score " + world.getOpponentsScore());
+            deathFont.draw(hudBatch, "Opponent's score " + world.getOpponentsScore(), (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight())/2 + layout.height);
+         }
          layout.setText(deathFont, "Game over");
          spacing = layout.height;
          deathFont.draw(hudBatch, "Game over", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - spacing)/2);

@@ -45,7 +45,7 @@ public class GameModeScreen implements Screen
       
       //FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.local("data/MonaKo.ttf"));
 
-      Texture background = new Texture(Gdx.files.internal("Backgrounds/600x600ScoreBackground.png"));
+      Texture background = new Texture(Gdx.files.internal("Backgrounds/600x600GameModeBackground.png"));
       backgroundSprite = new Sprite(background);
       backgroundSprite.setPosition(0, 0);
       

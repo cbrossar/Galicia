@@ -106,6 +106,9 @@ public class GameWorld
                    //Wait for the signal to start the game here
                    multiplayerReady = is.readBoolean();
                    rand = new Random(is.readInt());
+                   for(Block b: blocks){
+                      world.destroyBody(b.getBody());
+                   }
                    blocks.clear();
                    
                    //Play the music once we are ready to go
