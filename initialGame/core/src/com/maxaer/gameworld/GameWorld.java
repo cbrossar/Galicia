@@ -24,7 +24,6 @@ import com.maxaer.gameobjects.Block;
 import com.maxaer.gameobjects.Platform;
 import com.maxaer.gameobjects.Player;
 import com.maxaer.screens.MenuScreen;
-import com.maxaer.server.ServerConstants;
 
 
 /*
@@ -77,9 +76,7 @@ public class GameWorld
       multiplayerFinished = false;
       createNewGame(); 
       this.musicPlayer = window.getMusicPlayer();
-      window.getMusicPlayer().play();
-      
-      
+            
       //Set up the connection once the player starts playing
       if(isMultiplayer){
          
@@ -104,7 +101,8 @@ public class GameWorld
                    
                    //Wait for the signal to start the game here
                    multiplayerReady = is.readBoolean();
-                   
+                   //Play the music once we are ready to go
+                   getMusicPlayer().play();
                    //Set the initial game status
                    multiplayerFinished = false;
                    float oppX = 0; 
@@ -150,8 +148,6 @@ public class GameWorld
                    os.writeFloat(player.getSprite().getY());
                    os.flush();
                    
-                   
-                   System.out.println("Multiplayer finished against" + opponentsScore);
                    //The multiplayer game is now finished. And so is our communication with the server. 
                    multiplayerFinished = true;
                    
@@ -185,6 +181,9 @@ public class GameWorld
          }).start(); // And, start the thread running
          
         
+      } else{ 
+         //start the music for singleplayer at the time of playing
+         window.getMusicPlayer().play();
       }
    }
    

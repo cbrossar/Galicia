@@ -31,14 +31,13 @@ public class GameServer
             System.out.println("Player 2 connected.");
             //We won't start the multiplayer thread until the second user accepts our connection, and both users mantain connection
            
-            MultiplayerThread st = new MultiplayerThread(client1, client2, this);
+            MultiplayerThread st = new MultiplayerThread(client1, client2);
             clients.add(st);
          }
       }
       catch (IOException e)
       {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
+         System.out.println("client disconnected " + e.getMessage());
       } finally{
          if(socket != null){
 
@@ -49,20 +48,14 @@ public class GameServer
             catch (IOException e)
             {
                // TODO Auto-generated catch block
-               e.printStackTrace();
+               System.out.println("Error closing server socket in GameServer");
             }
          }
       }
 
 
    
-   }
-   
-   //Function to delete threads
-   public void removeMultiplayerThread(MultiplayerThread thread){
-      clients.remove(thread);
-   }
-   
+   } 
    
    public static void main(String[] args)
    {

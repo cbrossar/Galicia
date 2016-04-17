@@ -8,7 +8,6 @@ import java.net.Socket;
 public class MultiplayerThread extends Thread
 {
    
-   private GameServer server;
    private DataOutputStream p1OutStream, p2OutStream;
    private DataInputStream p1InStream, p2InStream;
    
@@ -18,7 +17,7 @@ public class MultiplayerThread extends Thread
     * Purpose: A middle man between two game clients that receieves their X and Y coordinates, sends them to the other user, 
     *   and keeps track of multiplayer games
     */
-   public MultiplayerThread(Socket player1, Socket player2, GameServer server)
+   public MultiplayerThread(Socket player1, Socket player2)
    {
       
       try
@@ -29,7 +28,6 @@ public class MultiplayerThread extends Thread
           *     2. Receive enemies location
           *     3. Send game over true/false
           */
-         this.server = server;
          //Get connections to the clients
          p1OutStream = new DataOutputStream(player1.getOutputStream());
          p1InStream = new DataInputStream(player1.getInputStream());
@@ -42,7 +40,7 @@ public class MultiplayerThread extends Thread
       catch (IOException e)
       {
          // TODO Auto-generated catch block
-         e.printStackTrace();
+         System.out.println("Error creating the streams in the multiplayer thread");
       }
    }
    
@@ -64,6 +62,7 @@ public class MultiplayerThread extends Thread
       {
          // TODO Auto-generated catch block
          System.out.println("Error starting the game ");
+         
       }
       
       boolean gameRunning = true;
@@ -117,7 +116,19 @@ public class MultiplayerThread extends Thread
             // TODO Auto-generated catch block
             e.printStackTrace();
          } finally{
-            server.removeMultiplayerThread(this);
+            try
+            {
+               p1InStream.close();
+               p1OutStream.close();
+               p2InStream.close();
+               p2OutStream.close();
+            }
+            catch (IOException e)
+            {
+               // TODO Auto-generated catch block
+               System.out.println("Error closing streams");
+            }
+            
          }
       }
    }

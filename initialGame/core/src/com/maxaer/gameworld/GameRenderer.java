@@ -18,7 +18,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.maxaer.constants.GameConstants;
 import com.maxaer.gameobjects.Block;
@@ -43,11 +42,13 @@ public class GameRenderer
    private ShapeRenderer shapeRenderer;
    private Box2DDebugRenderer debug;
    private Matrix4 debugMatrix;
-   private BitmapFont font, deathFont, nameFont, settingFont;
+   private BitmapFont font, deathFont, settingFont;
    private GlyphLayout layout; 
    private int score = 21;
    private int finalScore;
    private Vector<Block> blocks;
+   
+   private float spacing, spacing1;
    
    
    public GameRenderer(GameWorld world){
@@ -78,9 +79,6 @@ public class GameRenderer
       parameter.size = 24;
       deathFont = generator.generateFont(parameter);
       
-      parameter.size = 20;
-      parameter.color = Color.BLACK;
-      nameFont = generator.generateFont(parameter);
       
       parameter.size = 12;
       settingFont = generator.generateFont(parameter);
@@ -211,9 +209,16 @@ public class GameRenderer
 
          //If the other user is dead and we are also dead, then show the final screen
          if(!world.isMultiplayerFinished()){
-            layout.setText(font, "Opponent's score " + world.getOpponentsScore());
-            font.draw(hudBatch, "Opponent's score " + world.getOpponentsScore(), (Gdx.graphics.getWidth() - layout.width)/2, Gdx.graphics.getHeight() - 40);
-            
+            font.setColor(Color.BLACK);
+            if(world.getOpponentsScore() != 0){
+               layout.setText(font, "Opponent's score " + world.getOpponentsScore());
+               font.draw(hudBatch, "Opponent's score " + world.getOpponentsScore(), (Gdx.graphics.getWidth() - layout.width)/2, Gdx.graphics.getHeight() - 10);
+            } else{
+               layout.setText(font, "Opponent disconnected");
+               font.draw(hudBatch, "Opponent disconnected", (Gdx.graphics.getWidth() - layout.width)/2, Gdx.graphics.getHeight() - 10);
+               
+            }
+            font.setColor(Color.WHITE);
          }
          hudBatch.end();
       }
@@ -273,8 +278,8 @@ public class GameRenderer
       renderWaitingBackground();
       deathFont.setColor(Color.BLACK);
       layout.setText(deathFont, "Waiting for opponent...");
-      float h1 = layout.height;
-      deathFont.draw(hudBatch, "Waiting for opponent", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - h1)/2);
+      spacing = layout.height;
+      deathFont.draw(hudBatch, "Waiting for opponent", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - spacing)/2);
       hudBatch.end();
    }
    
@@ -282,8 +287,8 @@ public class GameRenderer
 	   hudBatch.begin();
 	   deathFont.setColor(Color.BLACK);
 	   layout.setText(deathFont, "Game Paused");
-	   float h1 = layout.height;
-	   deathFont.draw(hudBatch, "Game Paused", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - h1)/2);
+	   spacing = layout.height;
+	   deathFont.draw(hudBatch, "Game Paused", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - spacing)/2);
 	   hudBatch.end();
 	   
    }
@@ -292,7 +297,6 @@ public class GameRenderer
 	   layout.reset();
    }
    public void renderGameOverScreen(){
-//      //Clear the screen here
       hudBatch.begin();
       
       deathFont.setColor(Color.BLACK);
@@ -315,13 +319,13 @@ public class GameRenderer
          
       } else{
          layout.setText(deathFont, "Game over");
-         float h1 = layout.height;
-         deathFont.draw(hudBatch, "Game over", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - h1)/2);
+         spacing = layout.height;
+         deathFont.draw(hudBatch, "Game over", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - spacing)/2);
          layout.setText(deathFont, "Score: " + score);
-         float h2 = layout.height;
-         deathFont.draw(hudBatch, "Score: " + finalScore, (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - h1)/2 - h2 - 15);
+         spacing1 = layout.height;
+         deathFont.draw(hudBatch, "Score: " + finalScore, (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - spacing)/2 - spacing1 - 15);
          layout.setText(deathFont, "Hit space to restart, enter for main menu");
-         deathFont.draw(hudBatch, "Hit space to restart, enter for main menu", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - h1)/2 - h2 - layout.height - 30);
+         deathFont.draw(hudBatch, "Hit space to restart, enter for main menu", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - spacing)/2 - spacing1 - layout.height - 30);
         
       }
       
