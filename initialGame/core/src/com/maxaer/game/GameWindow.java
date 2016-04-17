@@ -28,5 +28,10 @@ public class GameWindow extends Game{
     {
     	return music;
     }
+    
+    @Override
+    public void dispose() {
+    	music.dispose();
+    }
 
 }
