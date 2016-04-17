@@ -12,9 +12,9 @@ import com.maxaer.constants.GameConstants;
 
 public class Player
 {
-   private Sprite sprite, deathSprite;
+   private Sprite sprite;
    private Body body;
-   private Texture texture, deathTexture;
+   private Texture texture;
    private BodyDef bodyDef;
    private Boolean jumpability;
    private int touchCount; 
@@ -27,9 +27,7 @@ public class Player
       jumpability = true;
       touchCount = 0; 
       texture = new Texture("45x60player.png");
-      deathTexture = new Texture("45x60player_mesh1.png");
       sprite = new Sprite(texture);
-      deathSprite = new Sprite(deathTexture);
       //Initialize with position in the middle of the screen      
       sprite.setPosition(Gdx.graphics.getWidth()/2 - sprite.getWidth()/2, 
             (Gdx.graphics.getHeight() - sprite.getHeight() - 200));
@@ -71,11 +69,7 @@ public class Player
    public Sprite getSprite(){
       return sprite;
    }
-   
-   public Sprite getDeathSprite() {
-	   return deathSprite;
-   }
-   
+
    public Body getBody()
    {
       return body;

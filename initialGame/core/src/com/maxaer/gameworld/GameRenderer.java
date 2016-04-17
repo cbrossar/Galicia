@@ -24,7 +24,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.maxaer.constants.GameConstants;
-import com.maxaer.gameobjects.AnimatedSprite;
 import com.maxaer.gameobjects.Block;
 import com.maxaer.threaded.SQLScoreUpdater;
 
@@ -53,15 +52,11 @@ public class GameRenderer
    private int score = 21;
    private Vector<Block> blocks;
    private float elapsedTime;
-   private AnimatedSprite animatedSprite;
    
    private Texture img;
    private TextureRegion[] animationFrames;
    private Animation animation;
-   
-   private int count;
-   
-   
+  
    public GameRenderer(GameWorld world){
       //Create the reference to the game world
       this.world = world;
@@ -120,7 +115,6 @@ public class GameRenderer
 	   animation = new Animation(1/10f, animationFrames);
 	   animation.setPlayMode(PlayMode.NORMAL);
 	   elapsedTime = 0;
-	   count = 0;
    }
    
    public void setElapsedTime(float elapsedTime2) {

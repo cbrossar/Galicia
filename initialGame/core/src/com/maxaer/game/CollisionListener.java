@@ -10,7 +10,6 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.maxaer.gameobjects.Block;
-import com.maxaer.gameobjects.DeathAnimations;
 import com.maxaer.gameworld.GameWorld;
 
 /*
@@ -20,7 +19,6 @@ import com.maxaer.gameworld.GameWorld;
  */
 public class CollisionListener implements ContactListener {
 	GameWorld world;
-	private DeathAnimations da;
 
 	public CollisionListener(GameWorld world) {
 		this.world = world;
