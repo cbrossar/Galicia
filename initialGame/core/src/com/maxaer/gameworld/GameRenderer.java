@@ -329,9 +329,14 @@ public class GameRenderer
          layout.setText(deathFont, "Score: " + score);
          spacing1 = layout.height;
          deathFont.draw(hudBatch, "Score: " + finalScore, (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - spacing)/2 - spacing1 - 15);
-         layout.setText(deathFont, "Hit space to restart, enter for main menu");
-         deathFont.draw(hudBatch, "Hit space to restart, enter for main menu", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - spacing)/2 - spacing1 - layout.height - 30);
-        
+         if(world.isMultiplayer()) {
+        	 layout.setText(deathFont, "Hit Enter to return to the main menu");
+             deathFont.draw(hudBatch, "Hit Enter to return to the main menu", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - spacing)/2 - spacing1 - layout.height - 30);
+            
+         } else {
+        	 layout.setText(deathFont, "Hit space to restart, enter for main menu");
+             deathFont.draw(hudBatch, "Hit space to restart, enter for main menu", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - spacing)/2 - spacing1 - layout.height - 30);
+         }
       }
       
       hudBatch.end();
