@@ -27,6 +27,8 @@ import com.maxaer.gameobjects.Block;
 import com.maxaer.gameobjects.Platform;
 import com.maxaer.gameobjects.Player;
 import com.maxaer.screens.MenuScreen;
+import com.maxaer.server.ServerConstants;
+import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 
 
 /*
@@ -58,6 +60,8 @@ public class GameWorld
    private volatile Random rand;
    
    private User user;
+   private volatile String opponentID;
+   private String userID;
    
    private boolean createdNewGame;
 
@@ -77,6 +81,8 @@ public class GameWorld
       multiplayerFinished = false;
       this.rand = new Random(seed);
       this.musicPlayer = window.getMusicPlayer();
+      this.userID = user.getUserName();
+      this.opponentID = "";
 
       createNewGame(); 
       createdNewGame = false;
@@ -99,7 +105,7 @@ public class GameWorld
                  try
                 {
                    //Connect to the server and set up our streams
-                   client = new Socket("104.131.153.145", 6789);
+                   client = new Socket("localhost", 6789);
                    is = new DataInputStream(client.getInputStream());
                    os = new DataOutputStream(client.getOutputStream());
                    
@@ -110,6 +116,11 @@ public class GameWorld
                       world.destroyBody(b.getBody());
                    }
                    blocks.clear();
+                   //Write out our user name
+                   os.writeUTF(userID);
+                   os.flush();
+                   
+                   opponentID = is.readUTF();
                    
                    //Play the music once we are ready to go
                    getMusicPlayer().play();
@@ -119,17 +130,27 @@ public class GameWorld
                    float oppY = 0; 
                    
                    /*
-                    * There are three conditions where we should continue talking with the server
-                    *   1. !gameOver -- meaning we are still alive
-                    *   2. checkScore > 0 -- meaning the opponent has not yet died
-                    *   3. currentScore > 0 -- this allows us to know exactly when we have died
+                    * While the opponent's score is greater than 0, they are not dead, so get their positioning
                     */
-                   while(!gameOver || checkScore > 0 || currentScore > 0){
+                   while(!multiplayerFinished){
+                      
+                      //Read from the server if the multiplayer code is finished or not
+                      multiplayerFinished = is.readBoolean();
+                      
+                      if(multiplayerFinished) break; // Then end the server code here
+                      
                       /*
                        * Write the information necessary to the server
-                       *    1. currentScore
-                       *    2. X and Y coordinates of our player
+                       *    1. If we are dead or alive
+                       *    2. currentScore
+                       *    3. X and Y coordinates of our player
                        */
+                      if(gameOver){
+                         os.writeInt(ServerConstants.IS_DEAD);
+                      } else{
+                         os.writeInt(ServerConstants.IS_ALIVE);
+                      }
+                      
                       os.writeInt(currentScore);
                       os.writeFloat(player.getSprite().getX());
                       os.writeFloat(player.getSprite().getY());
@@ -146,20 +167,12 @@ public class GameWorld
                       
                       //Update the opponents position to be re-rendered and the score
                       opponent.setPosition(oppX, oppY);
-                      
-                      
+
                       //if the score is negative, don't update it.
                       if(checkScore > 0) opponentsScore = checkScore;
                       
                    }
-                   //Finally send our final information to the opponent
-                   os.writeInt(currentScore);
-                   os.writeFloat(player.getSprite().getX());
-                   os.writeFloat(player.getSprite().getY());
-                   os.flush();
                    
-                   //The multiplayer game is now finished. And so is our communication with the server. 
-                   multiplayerFinished = true;
                    
                 }
                 catch (UnknownHostException e)
@@ -275,32 +288,36 @@ public class GameWorld
  		  
 		  
 		  if(lastDropTime > 25000000000.0){
+		     
+		     if(player.getY() - 500 <= lava.getY()){
+		        if(heightDifference <= -10)
+	              {
+	                  if(user.getDifficulty() == 1) {
+	                      lava.setPosition(lava.getX(), lava.getY() - (60 * delta));
+	                  }
+	                  else  if(user.getDifficulty() == 2) {
+	                      lava.setPosition(lava.getX(), lava.getY() - (65 * delta));
+	                  }
+	                  else {
+	                      lava.setPosition(lava.getX(), lava.getY() - (70 * delta));
+	                  }
+	                  
+	              }
+	              else{
+	                  if(user.getDifficulty() == 1) {
+	                      lava.setPosition(lava.getX(), lava.getY()- (40 * delta));
+	                  }
+	                  else if(user.getDifficulty() == 2) {
+	                      lava.setPosition(lava.getX(), lava.getY() - (45 * delta));
+	                  }
+	                  else {
+	                      lava.setPosition(lava.getX(), lava.getY() - (50 * delta));
+	                  }
+	                 
+	              }
+		     } 
 			  
-			  if(heightDifference <= -10)
-			  {
-				  if(user.getDifficulty() == 1) {
-					  lava.setPosition(lava.getX(), lava.getY() - (60 * delta));
-				  }
-				  else  if(user.getDifficulty() == 2) {
-					  lava.setPosition(lava.getX(), lava.getY() - (65 * delta));
-				  }
-				  else {
-					  lava.setPosition(lava.getX(), lava.getY() - (70 * delta));
-				  }
-				  
-			  }
-			  else{
-				  if(user.getDifficulty() == 1) {
-					  lava.setPosition(lava.getX(), lava.getY()- (40 * delta));
-				  }
-				  else if(user.getDifficulty() == 2) {
-					  lava.setPosition(lava.getX(), lava.getY() - (45 * delta));
-				  }
-				  else {
-					  lava.setPosition(lava.getX(), lava.getY() - (50 * delta));
-				  }
-			     
-			  }
+			 
 		  }
 	   }
 
@@ -430,6 +447,11 @@ public class GameWorld
    public int getOpponentsScore()
    {
       return opponentsScore;
+   }
+   
+   public String getOpponentID()
+   {
+      return opponentID;
    }
 
    

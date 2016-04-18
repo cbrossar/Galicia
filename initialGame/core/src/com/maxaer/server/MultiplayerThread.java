@@ -62,6 +62,13 @@ public class MultiplayerThread extends Thread
          p1OutStream.writeInt(randSeed);
          p2OutStream.writeInt(randSeed);
          
+         //Get and send user names
+         String user1Name = p1InStream.readUTF();
+         String user2Name = p2InStream.readUTF();
+         
+         p1OutStream.writeUTF(user2Name);
+         p2OutStream.writeUTF(user1Name);
+         
          
          p1OutStream.flush();
          p2OutStream.flush();
@@ -78,53 +85,85 @@ public class MultiplayerThread extends Thread
       float p1X = 0; float p1Y = 0;
       float p2X = 0; float p2Y = 0; 
       int p1Score = 0; int p2Score = 0;
+      int p1Status = ServerConstants.IS_ALIVE; int p2Status = ServerConstants.IS_ALIVE;
       
-      //The server thread will just receieve information, send information, and then 
+      //The server thread will just receive information, send information, and then 
       while(gameRunning){
          try
          {
+            //Every time this runs, the game is not yet finished
+            p1OutStream.writeBoolean(false);
+            p2OutStream.writeBoolean(false);
+            p1OutStream.flush();
+            p2OutStream.flush();
+
+            //Read information from the players
+            p1Status = p1InStream.readInt();
+            p1Score = p1InStream.readInt();
+            p1X = p1InStream.readFloat();
+            p1Y = p1InStream.readFloat();
+
+            p2Status = p2InStream.readInt();
+            p2Score = p2InStream.readInt();
+            p2X = p2InStream.readFloat();
+            p2Y = p2InStream.readFloat();
             
-            //Only read from the streams if they are available to use
-            if(p1InStream.available() > 0 && p2InStream.available() > 0){
-               
-               /*
-                * Read the necessary information
-                */
-               p1Score = p1InStream.readInt();
-               p1X = p1InStream.readFloat();
-               p1Y = p1InStream.readFloat();
-               
-               p2Score = p2InStream.readInt();
-               p2X = p2InStream.readFloat();
-               p2Y = p2InStream.readFloat();
+            /*
+             * Write the information out to the opponents
+             */
+            p2OutStream.writeInt(p1Score);
+            p2OutStream.writeFloat(p1X);
+            p2OutStream.writeFloat(p1Y);
+            p2OutStream.flush();
 
-               /*
-                * Write the information 
-                */
-               p2OutStream.writeInt(p1Score);
-               p2OutStream.writeFloat(p1X);
-               p2OutStream.writeFloat(p1Y);
-               p2OutStream.flush();
+            p1OutStream.writeInt(p2Score);
+            p1OutStream.writeFloat(p2X);
+            p1OutStream.writeFloat(p2Y);
+            p1OutStream.flush();
 
-
-               p1OutStream.writeInt(p2Score);
-               p1OutStream.writeFloat(p2X);
-               p1OutStream.writeFloat(p2Y);
-               p1OutStream.flush();
-
-               
-            } 
-
-           
-          
+            //end the game when both have died
+            if(p1Status == ServerConstants.IS_DEAD && p2Status == ServerConstants.IS_DEAD){
+               gameRunning = false;
+            }
 
          }
          catch (IOException e)
          {
+            
             gameRunning = false;
-            System.out.println("Error in the multiplayer thread. Ending the thread");
+            System.out.println("Error in the multiplayer thread. Ending the thread " + e.getMessage());
+            //After the game is over. Tell the players this
+            try
+            {
+               p1OutStream.writeBoolean(true);
+               p2OutStream.writeBoolean(true);
+               p1OutStream.flush();
+               p2OutStream.flush();
+            }
+            catch (IOException err)
+            {
+               // TODO Auto-generated catch block
+               System.out.println("Exception caught. We are finishing the game inside an exception " + err.getMessage());
+            }
          }
       } 
+      
+      //After the game is over. Tell the players this
+      try
+      {
+         System.out.println("Game over. Ending thread ");
+         p1OutStream.writeBoolean(true);
+         p2OutStream.writeBoolean(true);
+         p1OutStream.flush();
+         p2OutStream.flush();
+      }
+      catch (IOException e)
+      {
+         // TODO Auto-generated catch block
+         System.out.println("Error finishing game " + e.getMessage());
+      }
+
+
    }
 
 }

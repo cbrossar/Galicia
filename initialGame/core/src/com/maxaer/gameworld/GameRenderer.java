@@ -203,9 +203,6 @@ public class GameRenderer
                b.getSprite().getScaleY(),b.getSprite().getRotation());
       }
 
-
-      score = Math.max(score,  (int)Math.floor(4.7*(4.7-world.getPlayerBody() .getPosition().y)));
-
       if(!world.isGameOver()){
          score = Math.max(score,  (int)Math.floor(4.7*(4.7-world.getPlayerBody() .getPosition().y)));
          world.setCurrentScore(score);
@@ -252,9 +249,17 @@ public class GameRenderer
          //If the other user is dead and we are also dead, then show the final screen
          if(!world.isMultiplayerFinished() && !world.isGameOver()){
             font.setColor(Color.BLACK);
+            deathFont.setColor(Color.BLACK);
             if(world.getOpponentsScore() != 0){
-               layout.setText(font, "Opponent's score " + world.getOpponentsScore());
-               font.draw(hudBatch, "Opponent's score " + world.getOpponentsScore(), (Gdx.graphics.getWidth() - layout.width)/2, Gdx.graphics.getHeight() - 10);
+               
+               if(world.getOpponentID().equals("")){
+                  layout.setText(deathFont, "Opponent's score " + world.getOpponentsScore());
+                  deathFont.draw(hudBatch, "Opponent's score " + world.getOpponentsScore(), (Gdx.graphics.getWidth() - layout.width)/2, Gdx.graphics.getHeight() - 10);
+               } else{
+                  layout.setText(deathFont, world.getOpponentID() + "'s score " + world.getOpponentsScore());
+                  deathFont.draw(hudBatch, world.getOpponentID() + "'s score " + world.getOpponentsScore(), (Gdx.graphics.getWidth() - layout.width)/2, Gdx.graphics.getHeight() - 10);
+
+               }
             } else{
                layout.setText(font, "Opponent disconnected");
                font.draw(hudBatch, "Opponent disconnected", (Gdx.graphics.getWidth() - layout.width)/2, Gdx.graphics.getHeight() - 10);
@@ -370,6 +375,7 @@ public class GameRenderer
       hudBatch.begin();
 
       deathFont.setColor(Color.BLACK);
+      //Render the final multiplayer results here
       if(world.isMultiplayer() && world.isMultiplayerFinished()){
          if(world.getOpponentsScore() < finalScore){
             layout.setText(deathFont, "You win! " + finalScore + " - " + world.getOpponentsScore());
@@ -387,25 +393,42 @@ public class GameRenderer
          deathFont.draw(hudBatch, "Hit Enter to return the the menu", (Gdx.graphics.getWidth() - layout.width)/2, Gdx.graphics.getHeight()/2 - layout.height - 5);
          
       } else{
+         //If the world is multiplayer but it's not yet over, then render a different screen.
          if(world.isMultiplayer()) {
-            layout.setText(deathFont, "Opponent's score " + world.getOpponentsScore());
-            deathFont.draw(hudBatch, "Opponent's score " + world.getOpponentsScore(), (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight())/2 + layout.height);
-         }
-         layout.setText(deathFont, "Game over");
-         spacing = layout.height;
-         deathFont.draw(hudBatch, "Game over", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - spacing)/2);
-         layout.setText(deathFont, "Score: " + score);
-         spacing1 = layout.height;
-         deathFont.draw(hudBatch, "Score: " + finalScore, (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - spacing)/2 - spacing1 - 15);
-         if(world.isMultiplayer()) {
-        	 layout.setText(deathFont, "Hit Enter to return to the main menu");
-             deathFont.draw(hudBatch, "Hit Enter to return to the main menu", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - spacing)/2 - spacing1 - layout.height - 30);
+            if(world.getOpponentID().equals("")){
+               layout.setText(deathFont, "Opponent's score " + world.getOpponentsScore());
+               deathFont.draw(hudBatch, "Opponent's score " + world.getOpponentsScore(), (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight())/2 + layout.height);
+            } else{
+               layout.setText(deathFont, world.getOpponentID() + "'s score " + world.getOpponentsScore());
+               deathFont.draw(hudBatch, world.getOpponentID() + "'s score " + world.getOpponentsScore(), (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight())/2 + layout.height);  
+            }
             
-         } else {
-        	 layout.setText(deathFont, "Hit space to restart, enter for main menu");
-             deathFont.draw(hudBatch, "Hit space to restart, enter for main menu", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - spacing)/2 - spacing1 - layout.height - 30);
-         }
+            layout.setText(deathFont, "You died. Waiting for your opponent to die...");
+            spacing = layout.height;
+            deathFont.draw(hudBatch, "You died. Waiting for your opponent to die...", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - spacing)/2 - 10);
+            layout.setText(deathFont, "Your Score: " + finalScore);
+            spacing1 = layout.height;
+            deathFont.draw(hudBatch, "Your Score: " + finalScore, (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - spacing)/2 - spacing1 - 25);
+         
+            
+         } else{ //If it was never multiplayer, render a normal game over screen
+            layout.setText(deathFont, "Game over");
+            spacing = layout.height;
+            deathFont.draw(hudBatch, "Game over", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - spacing)/2);
+            layout.setText(deathFont, "Score: " + score);
+            spacing1 = layout.height;
+            deathFont.draw(hudBatch, "Score: " + finalScore, (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - spacing)/2 - spacing1 - 15);
+            if(world.isMultiplayer()) {
+                layout.setText(deathFont, "Hit Enter to return to the main menu");
+                deathFont.draw(hudBatch, "Hit Enter to return to the main menu", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - spacing)/2 - spacing1 - layout.height - 30);
+               
+            } else {
+                layout.setText(deathFont, "Hit space to restart, enter for main menu");
+                deathFont.draw(hudBatch, "Hit space to restart, enter for main menu", (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight() - spacing)/2 - spacing1 - layout.height - 30);
+            }
 
+         }
+         
       }
 
       hudBatch.end();
