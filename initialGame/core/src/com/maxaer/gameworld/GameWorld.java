@@ -105,7 +105,7 @@ public class GameWorld
                  try
                 {
                    //Connect to the server and set up our streams
-                   client = new Socket("localhost", 6789);
+                   client = new Socket("104.131.153.145", 6789);
                    is = new DataInputStream(client.getInputStream());
                    os = new DataOutputStream(client.getOutputStream());
                    
