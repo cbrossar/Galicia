@@ -68,7 +68,9 @@ public class GameWorld
    private boolean isRunning, isMultiplayer;
    private volatile boolean multiplayerReady, multiplayerFinished;
    private volatile int currentScore;
-   private volatile int opponentsScore; 
+   private volatile int opponentsScore;
+   
+   private int lastHeight = 0;
 
    final float PIXELS_TO_METERS = GameConstants.PIXEL_TO_METERS;
       
@@ -272,13 +274,14 @@ public class GameWorld
    
    public void update(float delta){
       
+	   
 	   if(isRunning){
-		
+		   
       //Any updating for our world should go here
 		  if(TimeUtils.nanoTime() - lastDropTime > 1000000000.0){
 			  lastDropTime = TimeUtils.nanoTime();
-			  
-			  int heightToUse = (int) Math.min(player.getSprite().getY()-800, lava.getY()-1300);
+			  int heightToUse = (int) Math.min(lastHeight, Math.min(player.getSprite().getY()-800, lava.getY()-1600));
+			  lastHeight = heightToUse;
 			  Block b = new Block(world, heightToUse, rand);
 			  b.getBody().setLinearVelocity(0, user.getDifficulty()*3f);
 			  blocks.add(b);
@@ -290,7 +293,7 @@ public class GameWorld
 		  if(lastDropTime > 25000000000.0){
 		     
 		     if(player.getY() - 500 <= lava.getY()){
-		        if(heightDifference <= -10)
+		        if(heightDifference <= -8)
 	              {
 	                  if(user.getDifficulty() == 1) {
 	                      lava.setPosition(lava.getX(), lava.getY() - (60 * delta));
@@ -305,13 +308,13 @@ public class GameWorld
 	              }
 	              else{
 	                  if(user.getDifficulty() == 1) {
-	                      lava.setPosition(lava.getX(), lava.getY()- (40 * delta));
+	                      lava.setPosition(lava.getX(), lava.getY()- (35 * delta));
 	                  }
 	                  else if(user.getDifficulty() == 2) {
-	                      lava.setPosition(lava.getX(), lava.getY() - (45 * delta));
+	                      lava.setPosition(lava.getX(), lava.getY() - (40 * delta));
 	                  }
 	                  else {
-	                      lava.setPosition(lava.getX(), lava.getY() - (50 * delta));
+	                      lava.setPosition(lava.getX(), lava.getY() - (45 * delta));
 	                  }
 	                 
 	              }
@@ -452,6 +455,10 @@ public class GameWorld
    public String getOpponentID()
    {
       return opponentID;
+   }
+
+   public void setLastHeight(int i) {
+		lastHeight = i;
    }
 
    

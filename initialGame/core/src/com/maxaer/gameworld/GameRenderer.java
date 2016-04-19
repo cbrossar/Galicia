@@ -281,6 +281,7 @@ public class GameRenderer
          //Update the delay time by adding the time passed since the last delay 
 
     	  world.setGameOver(true);
+    	  world.setLastHeight(0);
 
     	  if(world.getCreatedGame()) {
     		  elapsedTime = 0;
