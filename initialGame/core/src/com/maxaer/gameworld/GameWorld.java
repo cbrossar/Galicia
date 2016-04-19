@@ -225,7 +225,7 @@ public class GameWorld
       player = new Player(world);
       platform = new Platform(world);
       //Create the lava as a rectangle with the width of the screen and with 
-      lava = new Rectangle(0, Gdx.graphics.getHeight() + 300,Gdx.graphics.getWidth(), Gdx.graphics.getHeight() + 1000);
+      lava = new Rectangle(0, Gdx.graphics.getHeight() + 400,Gdx.graphics.getWidth(), Gdx.graphics.getHeight() + 1000);
       blocks = new Vector<Block>();
       gameOver = false;
       justDied = true;
@@ -284,6 +284,19 @@ public class GameWorld
 			  lastHeight = heightToUse;
 			  Block b = new Block(world, heightToUse, rand);
 			  b.getBody().setLinearVelocity(0, user.getDifficulty()*3f);
+			  if(user.getDifficulty() == 1) {
+				  b.getBody().setLinearVelocity(0, 4f);
+				  float speed = rand.nextInt(2);
+				  b.getBody().setLinearVelocity(0, 4f - speed);
+			  } else if (user.getDifficulty() == 2) {
+				  float speed = rand.nextInt(3);
+				  b.getBody().setLinearVelocity(0, 6f - speed);
+			  } else {
+				  float speed = rand.nextInt(4);
+				  b.getBody().setLinearVelocity(0, 9f - speed);
+			  }
+			  
+			  
 			  blocks.add(b);
 		  }		
 
@@ -291,36 +304,35 @@ public class GameWorld
  		  
 		  
 		  if(lastDropTime > 25000000000.0){
-		     
-		     if(player.getY() - 500 <= lava.getY()){
-		        if(heightDifference <= -8)
+
+			      if(heightDifference <= -10)
 	              {
 	                  if(user.getDifficulty() == 1) {
 	                      lava.setPosition(lava.getX(), lava.getY() - (60 * delta));
 	                  }
 	                  else  if(user.getDifficulty() == 2) {
-	                      lava.setPosition(lava.getX(), lava.getY() - (65 * delta));
+	                      lava.setPosition(lava.getX(), lava.getY() - (63 * delta));
 	                  }
 	                  else {
-	                      lava.setPosition(lava.getX(), lava.getY() - (70 * delta));
+	                      lava.setPosition(lava.getX(), lava.getY() - (66 * delta));
 	                  }
 	                  
 	              }
 	              else{
 	                  if(user.getDifficulty() == 1) {
-	                      lava.setPosition(lava.getX(), lava.getY()- (35 * delta));
+
+	                      lava.setPosition(lava.getX(), lava.getY()- (38 * delta));
 	                  }
 	                  else if(user.getDifficulty() == 2) {
 	                      lava.setPosition(lava.getX(), lava.getY() - (40 * delta));
 	                  }
 	                  else {
-	                      lava.setPosition(lava.getX(), lava.getY() - (45 * delta));
+
+	                      lava.setPosition(lava.getX(), lava.getY() - (42 * delta));
 	                  }
 	                 
 	              }
-		     } 
-			  
-			 
+			  			 
 		  }
 	   }
 
