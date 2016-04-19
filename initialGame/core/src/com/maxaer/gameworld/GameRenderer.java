@@ -378,16 +378,16 @@ public class GameRenderer
       deathFont.setColor(Color.BLACK);
       //Render the final multiplayer results here
       if(world.isMultiplayer() && world.isMultiplayerFinished()){
-         if(world.getOpponentsScore() < finalScore){
-            layout.setText(deathFont, "You win! " + finalScore + " - " + world.getOpponentsScore());
-            deathFont.draw(hudBatch, "You win! " + finalScore + " - " + world.getOpponentsScore(), (Gdx.graphics.getWidth() - layout.width)/2, Gdx.graphics.getHeight()/2);
-         } else if(world.getOpponentsScore() == finalScore){
-            layout.setText(deathFont, "You tied! " + finalScore + " - " + world.getOpponentsScore());
-            deathFont.draw(hudBatch, "You tied! " + finalScore + " - " + world.getOpponentsScore(), (Gdx.graphics.getWidth() - layout.width)/2, Gdx.graphics.getHeight()/2);
+         if(world.getOpponentsScore()*world.getUser().getDifficulty() < finalScore){
+            layout.setText(deathFont, "You win! " + finalScore + " - " + world.getOpponentsScore()*world.getUser().getDifficulty());
+            deathFont.draw(hudBatch, "You win! " + finalScore + " - " + world.getOpponentsScore()*world.getUser().getDifficulty(), (Gdx.graphics.getWidth() - layout.width)/2, Gdx.graphics.getHeight()/2);
+         } else if(world.getOpponentsScore()*world.getUser().getDifficulty() == finalScore){
+            layout.setText(deathFont, "You tied! " + finalScore + " - " + world.getOpponentsScore()*world.getUser().getDifficulty());
+            deathFont.draw(hudBatch, "You tied! " + finalScore + " - " + world.getOpponentsScore()*world.getUser().getDifficulty(), (Gdx.graphics.getWidth() - layout.width)/2, Gdx.graphics.getHeight()/2);
 
          } else {
-            layout.setText(deathFont, "You lost :( " + finalScore + " - " + world.getOpponentsScore());
-            deathFont.draw(hudBatch, "You lost :( " + finalScore + " - " + world.getOpponentsScore(), (Gdx.graphics.getWidth() - layout.width)/2, Gdx.graphics.getHeight()/2);
+            layout.setText(deathFont, "You lost :( " + finalScore + " - " + world.getOpponentsScore()*world.getUser().getDifficulty());
+            deathFont.draw(hudBatch, "You lost :( " + finalScore + " - " + world.getOpponentsScore()*world.getUser().getDifficulty(), (Gdx.graphics.getWidth() - layout.width)/2, Gdx.graphics.getHeight()/2);
          }
          
          layout.setText(deathFont, "Hit Enter to return the the menu");
@@ -397,11 +397,11 @@ public class GameRenderer
          //If the world is multiplayer but it's not yet over, then render a different screen.
          if(world.isMultiplayer()) {
             if(world.getOpponentID().equals("")){
-               layout.setText(deathFont, "Opponent's score " + world.getOpponentsScore());
-               deathFont.draw(hudBatch, "Opponent's score " + world.getOpponentsScore(), (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight())/2 + layout.height);
+               layout.setText(deathFont, "Opponent's score " + world.getOpponentsScore()*world.getUser().getDifficulty());
+               deathFont.draw(hudBatch, "Opponent's score " + world.getOpponentsScore()*world.getUser().getDifficulty(), (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight())/2 + layout.height);
             } else{
-               layout.setText(deathFont, world.getOpponentID() + "'s score " + world.getOpponentsScore());
-               deathFont.draw(hudBatch, world.getOpponentID() + "'s score " + world.getOpponentsScore(), (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight())/2 + layout.height);  
+               layout.setText(deathFont, world.getOpponentID() + "'s score " + world.getOpponentsScore()*world.getUser().getDifficulty());
+               deathFont.draw(hudBatch, world.getOpponentID() + "'s score " + world.getOpponentsScore()*world.getUser().getDifficulty(), (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight())/2 + layout.height);  
             }
             
             layout.setText(deathFont, "You died. Waiting for your opponent to die...");
