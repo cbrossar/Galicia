@@ -44,7 +44,7 @@ public class Block extends Shape {
 		
 		//Randomize drop location on screen
 
-		int pos = rand.nextInt(Gdx.graphics.getWidth() + 50);
+		int pos = rand.nextInt(Gdx.graphics.getWidth());
 		bodyDef.position.set((pos) / PIXELS_TO_METERS,
               (sprite.getY() + sprite.getHeight()/2) / PIXELS_TO_METERS);
       

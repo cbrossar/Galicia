@@ -78,8 +78,6 @@ public class UserSettingsScreen implements Screen{
 	    easyBtn = new TextButton("EASY", skin);
 	    easyBtn.setPosition(musicOnOffBtn.getX(), musicOnOffBtn.getY() - musicOnOffBtn.getHeight() - 7*BTN_SPACING);
 	    easyBtn.setWidth(170);
-	    buttonGroup.add(easyBtn);
-	    easyBtn.setChecked(true);
 	    stage.addActor(easyBtn);
 	    
 	    
@@ -88,14 +86,17 @@ public class UserSettingsScreen implements Screen{
 	    mediumBtn = new TextButton("MEDIUM", skin);
 	    mediumBtn.setPosition(easyBtn.getX(), easyBtn.getY() - easyBtn.getHeight() - BTN_SPACING);
 	    mediumBtn.setWidth(170);
-	    buttonGroup.add(mediumBtn);
+	    
 	    stage.addActor(mediumBtn);
 	    
 	    hardBtn = new TextButton("HARD", skin);
 	    hardBtn.setPosition(mediumBtn.getX(), mediumBtn.getY() - mediumBtn.getHeight() - BTN_SPACING);
 	    hardBtn.setWidth(170);
-	    buttonGroup.add(hardBtn);
 	    stage.addActor(hardBtn);
+	    
+	    buttonGroup.add(mediumBtn);
+	    buttonGroup.add(easyBtn);
+	    buttonGroup.add(hardBtn);
 		
 	    addActions();
 	}
