@@ -123,7 +123,6 @@ public class Block extends Shape {
 	
 	private String randomBlockImage(){
 	   int randomNum = rand.nextInt((8 - 1) + 1) + 1;
-	   System.out.println(pckage);
 	   if(pckage == 1){
 		   switch(randomNum){
 		   case 1:
