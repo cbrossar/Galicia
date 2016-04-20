@@ -12,6 +12,7 @@ public class GameConstants
    public static final short MASK_PLATFORM = CATEGORY_BLOCK | CATEGORY_PLAYER;
    
    //Image resources 
+   //Cookie package
    public static final String ThinMintImg = "Cookies/ThinMint.png";
    public static final String DoSiDoImg = "Cookies/DoSiDo.png";
    public static final String BerryImg = "Cookies/Berry.png";
@@ -20,6 +21,16 @@ public class GameConstants
    public static final String SamoaImg = "Cookies/SamoaFlake.png";
    public static final String ThanksALotImg = "Cookies/ThanksALot.png";
    public static final String TrefoilImg = "Cookies/Trefoil.png";
+   
+   //Professor package
+   public static final String KempeImg = "Professors/Kempe.png";
+   public static final String CoteImg = "Professors/Cote.png";
+   public static final String MillerImg = "Professors/Berry.png";
+   public static final String ShindlerImg = "Professors/Shindler.png";
+   public static final String RedekoppImg = "Professors/Redekopp.png";
+   public static final String SukhatmeImg = "Professors/Sukhatme.png";
+   public static final String RosenbloomImg = "Professors/Rosenbloom.png";
+   public static final String DughmiImg = "Professors/Dughmi.png";
    
    public static final int DEATH_SCORE = -1; 
    

@@ -19,10 +19,12 @@ public class Block extends Shape {
 	final float PIXELS_TO_METERS = GameConstants.PIXEL_TO_METERS;
 	private Boolean isSmall = false;
 	private Random rand;
+	private int pckage;
 	
-	public Block(World world, int height, Random rand)
+	public Block(World world, int height, Random rand, int pckage)
 	{
 		this.rand = rand;
+		this.pckage = pckage;
 		
 		//Create the player to have the block image
 		texture = new Texture(randomBlockImage());
@@ -109,31 +111,67 @@ public class Block extends Shape {
 		return null;
 	}
 	
+	public void setPackage(int i) {
+		   pckage = i;
+	 }
+	   
+	 public int getPackage() {
+		   return pckage;
+	 }
+
+	
 	
 	private String randomBlockImage(){
 	   int randomNum = rand.nextInt((8 - 1) + 1) + 1;
-	   switch(randomNum){
-	   case 1:
-	      return GameConstants.ThinMintImg;
-	   case 2:
-	      return GameConstants.BerryImg;
-	   case 3:
-	      return GameConstants.ThanksALotImg;
-	   case 4:
-	      return GameConstants.TrefoilImg;
-	   case 5:
-	      return GameConstants.DoSiDoImg;
-	   case 6:
-	      return GameConstants.TagalongImg;
-	   case 7:
-	      return GameConstants.LemonImg;
-	   case 8:
-	      return GameConstants.SamoaImg;
-	      
-	   default:
-	      return GameConstants.SamoaImg;
-
-	   }
+	   System.out.println(pckage);
+	   if(pckage == 1){
+		   switch(randomNum){
+		   case 1:
+			   return GameConstants.ThinMintImg;
+		   case 2:
+			   return GameConstants.BerryImg;
+		   case 3:
+			   return GameConstants.ThanksALotImg;
+		   case 4:
+			   return GameConstants.TrefoilImg;
+		   case 5:
+			   return GameConstants.DoSiDoImg;
+		   case 6:
+			   return GameConstants.TagalongImg;
+		   case 7:
+			   return GameConstants.LemonImg;
+		   case 8:
+			   return GameConstants.SamoaImg;
+			   
+		   default:
+			   return GameConstants.SamoaImg;
+		   	}
+		} else if (pckage == 2){
+			switch(randomNum){
+			   case 1:
+				   return GameConstants.KempeImg;
+			   case 2:
+				   return GameConstants.MillerImg;
+			   case 3:
+				   return GameConstants.CoteImg;
+			   case 4:
+				   return GameConstants.ShindlerImg;
+			   case 5:
+				   return GameConstants.DughmiImg;
+			   case 6:
+				   return GameConstants.SukhatmeImg;
+			   case 7:
+				   return GameConstants.RosenbloomImg;
+			   case 8:
+				   return GameConstants.RedekoppImg;
+				   
+			   default:
+				   return GameConstants.SamoaImg;
+			   	}
+		}
+		
+	   //should never execute
+	   return "";
 	}
 
 }

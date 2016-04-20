@@ -282,7 +282,8 @@ public class GameWorld
 			  lastDropTime = TimeUtils.nanoTime();
 			  int heightToUse = (int) Math.min(lastHeight, Math.min(player.getSprite().getY()-800, lava.getY()-1600));
 			  lastHeight = heightToUse;
-			  Block b = new Block(world, heightToUse, rand);
+			  Block b = new Block(world, heightToUse, rand, user.getPackage());
+			  b.setPackage(user.getPackage());
 			  if(user.getDifficulty() == 1) {
 				  b.getBody().setLinearVelocity(0, 4f);
 				  float speed = rand.nextInt(2);

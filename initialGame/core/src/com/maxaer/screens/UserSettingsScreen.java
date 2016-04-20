@@ -32,7 +32,7 @@ public class UserSettingsScreen implements Screen{
 	private OrthographicCamera cam;
 	private SpriteBatch batch;
 	private Sprite backgroundSprite;
-	private TextButton musicOnOffBtn, easyBtn, mediumBtn, hardBtn;
+	private TextButton musicOnOffBtn, easyBtn, mediumBtn, hardBtn, cookieBtn, profBtn;
 	private Stage stage;
 	private BitmapFont font, fieldFont;
 	private Skin skin;
@@ -71,7 +71,7 @@ public class UserSettingsScreen implements Screen{
 	    
 	    ButtonGroup<TextButton> buttonGroup = new ButtonGroup<TextButton>();
 	   
-	    musicOnOffBtn.setPosition(Gdx.graphics.getWidth()/2 + Gdx.graphics.getWidth()/9, Gdx.graphics.getHeight()/2 +  Gdx.graphics.getHeight()/8);
+	    musicOnOffBtn.setPosition(Gdx.graphics.getWidth()/2 + Gdx.graphics.getWidth()/9, Gdx.graphics.getHeight()/2 +  Gdx.graphics.getHeight()/3);
 	    musicOnOffBtn.setWidth(170);
 	    stage.addActor(musicOnOffBtn);
 	    	    
@@ -93,6 +93,16 @@ public class UserSettingsScreen implements Screen{
 	    hardBtn.setPosition(mediumBtn.getX(), mediumBtn.getY() - mediumBtn.getHeight() - BTN_SPACING);
 	    hardBtn.setWidth(170);
 	    stage.addActor(hardBtn);
+	    
+	    cookieBtn = new TextButton("COOKIES", skin);
+	    cookieBtn.setPosition(hardBtn.getX(), hardBtn.getY() - hardBtn.getHeight() - 7*BTN_SPACING);
+	    cookieBtn.setWidth(170);
+	    stage.addActor(cookieBtn);
+	    
+	    profBtn = new TextButton("PROFESSORS", skin);
+	    profBtn.setPosition(cookieBtn.getX(), cookieBtn.getY() - cookieBtn.getHeight() - BTN_SPACING);
+	    profBtn.setWidth(170);
+	    stage.addActor(profBtn);
 	    
 	    buttonGroup.add(mediumBtn);
 	    buttonGroup.add(easyBtn);
@@ -198,6 +208,24 @@ public class UserSettingsScreen implements Screen{
 			}
    			
    		});
+   		
+   		cookieBtn.addListener(new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				user.setPackage(1);
+			}
+   			
+   		});
+   		
+   		profBtn.addListener(new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				user.setPackage(2);
+			}
+   			
+   		});
 	}
 	   
 	   
@@ -223,6 +251,7 @@ public class UserSettingsScreen implements Screen{
 	    
 	    font.draw(batch, "Music", musicOnOffBtn.getX(), musicOnOffBtn.getY() + musicOnOffBtn.getHeight() + 20);
 	    font.draw(batch, "Difficulty", easyBtn.getX(), easyBtn.getY() + easyBtn.getHeight() + 20);
+	    font.draw(batch, "Package", easyBtn.getX(), cookieBtn.getY() + cookieBtn.getHeight() + 20);
         
 	    batch.end();
        

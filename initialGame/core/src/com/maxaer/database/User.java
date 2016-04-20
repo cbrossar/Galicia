@@ -15,6 +15,7 @@ public class User extends Thread
    private int totalDistanceTraveled;
    private boolean playMusic = true;
    private int difficulty;
+   int pckage;
    
    public User(String userName, String passHash, boolean isGuest)
    {
@@ -28,6 +29,7 @@ public class User extends Thread
       smushDeaths = 0; 
       totalDistanceTraveled = 0; 
       difficulty = 2;
+      pckage = 1;
       start();
    }
    
@@ -137,8 +139,16 @@ public class User extends Thread
 	   difficulty = i;
    }
    
+   public void setPackage(int i) {
+	   pckage = i;
+   }
+   
    public int getDifficulty() {
 	   return difficulty;
+   }
+   
+   public int getPackage() {
+	   return pckage;
    }
 
 }
