@@ -3,6 +3,7 @@ package com.maxaer.game;
 import java.util.Vector;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -117,6 +118,23 @@ public class CollisionListener implements ContactListener {
 
 	@Override
 	public void postSolve(Contact contact, ContactImpulse impulse) {
+		 Fixture obj1 = contact.getFixtureA();
+		 Fixture obj2 = contact.getFixtureB();
+		 float playerHeight = obj1.getBody().getWorldCenter().y;
+		 float objHeight = obj2.getBody().getWorldCenter().y;
+		 //EDGESSSSS
+		 if(playerHeight > objHeight && world.getPlayer().canJump() && obj1.getBody().equals(world.getPlayerBody())){
+			 if(obj1.getBody().getWorldCenter().x < obj2.getBody().getWorldCenter().x){
+				 if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+					 obj1.getBody().setLinearVelocity(0f, .5f);
+				 }
+			 } else {
+				 if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+					 obj1.getBody().setLinearVelocity(0f, .5f);
+				 }
+			 }
+		 }
+			 
 		
 	}
 
