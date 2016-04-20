@@ -31,7 +31,7 @@ public class UserInputListener implements InputProcessor
 	   
 	   	if(keycode == Input.Keys.UP && !world.isGameOver()){
 	   		if(world.getPlayer().canJump()){
-	   			player.applyForceToCenter(0f, -2f,true);
+	   			player.applyForceToCenter(0f, -2.2f,true);
 	   			world.getPlayer().setJumpability(false);
 	   		}
 	   	}   	
