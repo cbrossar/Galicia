@@ -94,6 +94,22 @@ public class CollisionListener implements ContactListener {
 	
    @Override
    public void preSolve(Contact contact, Manifold oldManifold) {
+	   Fixture obj1 = contact.getFixtureA();
+	   Fixture obj2 = contact.getFixtureB();
+	   float playerHeight = obj1.getBody().getWorldCenter().y;
+	   float objHeight = obj2.getBody().getWorldCenter().y;
+	   //EDGESSSSS
+	   if(playerHeight > objHeight && world.getPlayer().canJump() && obj1.getBody().equals(world.getPlayerBody())){
+		   if(obj1.getBody().getWorldCenter().x < obj2.getBody().getWorldCenter().x){
+			   if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+				   obj1.getBody().setLinearVelocity(0f, .5f);
+			   }
+		   } else {
+			   if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+				   obj1.getBody().setLinearVelocity(0f, .5f);
+			   }
+		   }
+	   }
 
    }
 
@@ -117,24 +133,7 @@ public class CollisionListener implements ContactListener {
 	}
 
 	@Override
-	public void postSolve(Contact contact, ContactImpulse impulse) {
-		 Fixture obj1 = contact.getFixtureA();
-		 Fixture obj2 = contact.getFixtureB();
-		 float playerHeight = obj1.getBody().getWorldCenter().y;
-		 float objHeight = obj2.getBody().getWorldCenter().y;
-		 //EDGESSSSS
-		 if(playerHeight > objHeight && world.getPlayer().canJump() && obj1.getBody().equals(world.getPlayerBody())){
-			 if(obj1.getBody().getWorldCenter().x < obj2.getBody().getWorldCenter().x){
-				 if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-					 obj1.getBody().setLinearVelocity(0f, .5f);
-				 }
-			 } else {
-				 if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-					 obj1.getBody().setLinearVelocity(0f, .5f);
-				 }
-			 }
-		 }
-			 
+	public void postSolve(Contact contact, ContactImpulse impulse) { 
 		
 	}
 
