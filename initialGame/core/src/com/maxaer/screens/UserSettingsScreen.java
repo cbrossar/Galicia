@@ -109,8 +109,8 @@ public class UserSettingsScreen implements Screen{
 	    trumpBtn.setWidth(170);
 	    stage.addActor(trumpBtn);
 	    
-	    buttonGroup.add(mediumBtn);
 	    buttonGroup.add(easyBtn);
+	    buttonGroup.add(mediumBtn);
 	    buttonGroup.add(hardBtn);
 		
 	    addActions();

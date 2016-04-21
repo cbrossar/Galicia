@@ -28,7 +28,7 @@ public class User extends Thread
       lavaDeaths = 0; 
       smushDeaths = 0; 
       totalDistanceTraveled = 0; 
-      difficulty = 2;
+      difficulty = 1;
       pckage = 1;
       start();
    }
