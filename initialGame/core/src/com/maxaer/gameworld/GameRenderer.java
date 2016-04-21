@@ -252,7 +252,7 @@ public class GameRenderer
             deathFont.setColor(Color.BLACK);
             if(world.getOpponentsScore() != 0){
                
-               if(world.getOpponentID().length() > 0){
+               if(world.getOpponentID().length() == 0){
                   layout.setText(deathFont, "Opponent's score " + world.getOpponentsScore());
                   deathFont.draw(hudBatch, "Opponent's score " + world.getOpponentsScore(), (Gdx.graphics.getWidth() - layout.width)/2, Gdx.graphics.getHeight() - 10);
                } else{
