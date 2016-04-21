@@ -252,7 +252,7 @@ public class GameRenderer
             deathFont.setColor(Color.BLACK);
             if(world.getOpponentsScore() != 0){
                
-               if(world.getOpponentID().equals("")){
+               if(world.getOpponentID().length() > 0){
                   layout.setText(deathFont, "Opponent's score " + world.getOpponentsScore());
                   deathFont.draw(hudBatch, "Opponent's score " + world.getOpponentsScore(), (Gdx.graphics.getWidth() - layout.width)/2, Gdx.graphics.getHeight() - 10);
                } else{
@@ -396,7 +396,7 @@ public class GameRenderer
       } else{
          //If the world is multiplayer but it's not yet over, then render a different screen.
          if(world.isMultiplayer()) {
-            if(world.getOpponentID().equals("")){
+            if(world.getOpponentID().length() > 0){
                layout.setText(deathFont, "Opponent's score " + world.getOpponentsScore()*world.getUser().getDifficulty());
                deathFont.draw(hudBatch, "Opponent's score " + world.getOpponentsScore()*world.getUser().getDifficulty(), (Gdx.graphics.getWidth() - layout.width)/2, (Gdx.graphics.getHeight())/2 + layout.height);
             } else{
