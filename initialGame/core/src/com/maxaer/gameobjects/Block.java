@@ -165,7 +165,29 @@ public class Block extends Shape {
 				   return GameConstants.RedekoppImg;
 				   
 			   default:
-				   return GameConstants.SamoaImg;
+				   return GameConstants.RedekoppImg;
+			   	}
+		} else if (pckage == 3){
+			switch(randomNum){
+			   case 1:
+				   return GameConstants.SideTrumpImg;
+			   case 2:
+				   return GameConstants.StraightTrumpImg;
+			   case 3:
+				   return GameConstants.TrumpImg;
+			   case 4:
+				   return GameConstants.TrumpAlongImg;
+			   case 5:
+				   return GameConstants.SmirkImg;
+			   case 6:
+				   return GameConstants.TrumpALotImg;
+			   case 7:
+				   return GameConstants.TrumpMouthImg;
+			   case 8:
+				   return GameConstants.TrumpBerryImg;
+				   
+			   default:
+				   return GameConstants.TrumpBerryImg;
 			   	}
 		}
 		

@@ -32,7 +32,7 @@ public class UserSettingsScreen implements Screen{
 	private OrthographicCamera cam;
 	private SpriteBatch batch;
 	private Sprite backgroundSprite;
-	private TextButton musicOnOffBtn, easyBtn, mediumBtn, hardBtn, cookieBtn, profBtn;
+	private TextButton musicOnOffBtn, easyBtn, mediumBtn, hardBtn, cookieBtn, profBtn, trumpBtn;
 	private Stage stage;
 	private BitmapFont font, fieldFont;
 	private Skin skin;
@@ -76,7 +76,7 @@ public class UserSettingsScreen implements Screen{
 	    stage.addActor(musicOnOffBtn);
 	    	    
 	    easyBtn = new TextButton("EASY", skin);
-	    easyBtn.setPosition(musicOnOffBtn.getX(), musicOnOffBtn.getY() - musicOnOffBtn.getHeight() - 7*BTN_SPACING);
+	    easyBtn.setPosition(musicOnOffBtn.getX(), musicOnOffBtn.getY() - musicOnOffBtn.getHeight() - 4*BTN_SPACING);
 	    easyBtn.setWidth(170);
 	    stage.addActor(easyBtn);
 	    
@@ -95,7 +95,7 @@ public class UserSettingsScreen implements Screen{
 	    stage.addActor(hardBtn);
 	    
 	    cookieBtn = new TextButton("COOKIES", skin);
-	    cookieBtn.setPosition(hardBtn.getX(), hardBtn.getY() - hardBtn.getHeight() - 7*BTN_SPACING);
+	    cookieBtn.setPosition(hardBtn.getX(), hardBtn.getY() - hardBtn.getHeight() - 4*BTN_SPACING);
 	    cookieBtn.setWidth(170);
 	    stage.addActor(cookieBtn);
 	    
@@ -103,6 +103,11 @@ public class UserSettingsScreen implements Screen{
 	    profBtn.setPosition(cookieBtn.getX(), cookieBtn.getY() - cookieBtn.getHeight() - BTN_SPACING);
 	    profBtn.setWidth(170);
 	    stage.addActor(profBtn);
+	    
+	    trumpBtn = new TextButton("TRUMP", skin);
+	    trumpBtn.setPosition(profBtn.getX(), profBtn.getY()-profBtn.getHeight()-BTN_SPACING);
+	    trumpBtn.setWidth(170);
+	    stage.addActor(trumpBtn);
 	    
 	    buttonGroup.add(mediumBtn);
 	    buttonGroup.add(easyBtn);
@@ -223,6 +228,15 @@ public class UserSettingsScreen implements Screen{
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				user.setPackage(2);
+			}
+   			
+   		});
+   		
+   		trumpBtn.addListener(new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				user.setPackage(3);
 			}
    			
    		});

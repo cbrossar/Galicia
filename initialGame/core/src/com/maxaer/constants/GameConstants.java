@@ -32,6 +32,16 @@ public class GameConstants
    public static final String RosenbloomImg = "Professors/Rosenbloom.png";
    public static final String DughmiImg = "Professors/Dughmi.png";
    
+   //Trump package
+   public static final String SideTrumpImg = "Trump/SideTrump.png";
+   public static final String StraightTrumpImg = "Trump/StraightTrump.png";
+   public static final String TrumpImg = "Trump/Trump.png";
+   public static final String TrumpAlongImg = "Trump/TrumpAlong.png";
+   public static final String SmirkImg = "Trump/Smirk.png";
+   public static final String TrumpALotImg = "Trump/TrumpALot.png";
+   public static final String TrumpMouthImg = "Trump/TrumpMouth.png";
+   public static final String TrumpBerryImg = "Trump/TrumpBerry.png";
+   
    public static final int DEATH_SCORE = -1; 
    
    
