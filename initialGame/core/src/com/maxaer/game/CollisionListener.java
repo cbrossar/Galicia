@@ -1,6 +1,6 @@
 package com.maxaer.game;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -39,7 +39,7 @@ public class CollisionListener implements ContactListener {
       }
       
       //Death by blocks attempt #2      
-      Vector<Block> v = world.getBlocks();
+      ArrayList<Block> v = world.getBlocks();
       
       //check all bottom blocks for death conditions
       for(int i = 0; i < v.size(); i++) {

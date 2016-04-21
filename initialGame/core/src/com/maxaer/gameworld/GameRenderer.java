@@ -1,6 +1,6 @@
 package com.maxaer.gameworld;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -49,7 +49,7 @@ public class GameRenderer
    private GlyphLayout layout; 
    private int score = 21;
    private int finalScore;
-   private Vector<Block> blocks;
+   private ArrayList<Block> blocks;
    private float elapsedTime;
 
    private Texture img;

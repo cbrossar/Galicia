@@ -6,8 +6,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Random;
-import java.util.Vector;
 
 
 import com.badlogic.gdx.Gdx;
@@ -49,7 +49,7 @@ public class GameWorld
    private Rectangle lava, opponent;
    private Sprite background;
    //private Block block;
-   private Vector<Block> blocks;
+   private ArrayList<Block> blocks;
    private float lastDropTime = TimeUtils.nanoTime();
    private volatile boolean gameOver;
 
@@ -226,7 +226,7 @@ public class GameWorld
       platform = new Platform(world);
       //Create the lava as a rectangle with the width of the screen and with 
       lava = new Rectangle(0, Gdx.graphics.getHeight() + 400,Gdx.graphics.getWidth(), Gdx.graphics.getHeight() + 1000);
-      blocks = new Vector<Block>();
+      blocks = new ArrayList<Block>();
       gameOver = false;
       justDied = true;
       lavaDeath = false;
@@ -379,7 +379,7 @@ public class GameWorld
       return player;
    }
    
-   public Vector<Block> getBlocks(){
+   public ArrayList<Block> getBlocks(){
 	   return blocks;
    }
    
