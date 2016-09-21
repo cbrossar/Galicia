@@ -19,4 +19,5 @@ How to play:
 Server Status:
 
 - Down
-- Only single player as a guest allowed
+- Only single player mode allowed
+- Can not log in to save high scores 
