@@ -12,7 +12,7 @@ Requirements:
 
 How to play:
 
-- Launch Jar file labled maxaer.jar
+- Launch Jar file labled maxaer.jar by cloning from above or download from here: https://drive.google.com/open?id=0B_un9hwZtr98cUJrLUY5XzBTOVE
 - Might say "maxaer.jar is from an unidentified developer. Are you sure you want to open it?"
 - Click Open
 
